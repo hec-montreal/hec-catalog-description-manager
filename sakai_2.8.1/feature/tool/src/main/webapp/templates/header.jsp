@@ -7,6 +7,18 @@
     <link media="all" href="/library/skin/default/tool.css" rel="stylesheet" type="text/css" />
 
     <script src="/library/js/headscripts.js" language="JavaScript" type="text/javascript"></script>
+    <script type="text/javascript" src="../js/jquery-1.7.2.min.js"></script>
+    <script type="text/javascript">
+    function doAjax() {
+      $.ajax({
+        url: 'time.html',
+        data: ({name : "me"}),
+        success: function(data) {
+          $('#time').html(data);
+        }
+      });
+    }
+  </script>
 
     <title>Sakai-Spring</title>
 </head>

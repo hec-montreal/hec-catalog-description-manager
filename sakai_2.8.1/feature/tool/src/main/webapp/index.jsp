@@ -3,5 +3,7 @@
 Hello World Servlet </br>
 Current Site ID : ${currentSiteId} </br>
 User Display Name : ${userDisplayName}
+
+<button id="demo" onclick="doAjax()" title="Button">Get the time!</button>
 <jsp:directive.include file="/templates/footer.jsp"/>
 
