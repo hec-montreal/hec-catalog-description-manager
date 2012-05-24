@@ -17,4 +17,7 @@
 		<property name="sakaiProxy" ref="ca.hec.cdm.logic.SakaiProxy"/>
 	</bean>
 	
+	<bean parent="org.sakaiproject.entitybroker.entityprovider.AbstractEntityProvider" 
+		class="ca.hec.cdm.entityprovider.CatalogDescriptionEntityProviderImpl"/>
+	
 </beans>
