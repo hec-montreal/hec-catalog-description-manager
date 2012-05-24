@@ -129,12 +129,10 @@
 					<include>**/*</include>
 				</includes>
 			</resource>
-			"tool/src/main/java/ca/hec/cdm/tool/controller/TestAjaxController.java"
 		</resources>
 		<plugins>
 			<!-- configure the war plugin to correctly use the standard maven structure -->
 			<plugin>
-				"tool/src/main/java/ca/hec/cdm/tool/controller/HelloWorldController.java"
 				<groupId>org.apache.maven.plugins</groupId>
 				<artifactId>maven-war-plugin</artifactId>
 				<configuration>
