@@ -23,7 +23,8 @@ package ca.hec.cdm.entityprovider;
 
 import java.util.ArrayList;
 import java.util.List;
-import java.util.Map;
+
+import lombok.Data;
 
 import org.sakaiproject.entitybroker.EntityReference;
 import org.sakaiproject.entitybroker.entityprovider.CoreEntityProvider;
@@ -38,7 +39,7 @@ import org.sakaiproject.entitybroker.util.AbstractEntityProvider;
 public class CatalogDescriptionEntityProviderImpl extends AbstractEntityProvider 
 	implements CoreEntityProvider, AutoRegisterEntityProvider, Resolvable, CollectionResolvable, Outputable {
 
-	public final static String ENTITY_PREFIX = "cdm";
+	public final static String ENTITY_PREFIX = "catalog-description";
 	
 	public String getEntityPrefix() {
 		return ENTITY_PREFIX;
@@ -49,12 +50,18 @@ public class CatalogDescriptionEntityProviderImpl extends AbstractEntityProvider
 	}
 
 	public List<?> getEntities(EntityReference ref, Search search) {
-		List<String> entities = new ArrayList<String>();
-		entities.add("first catalog description");
-		entities.add("second catalog description");
-		entities.add("third catalog description");
-		entities.add("fourth catalog description");
-		return entities;
+		List<DecoratedCatalogDescription> decoratedCatalogDescriptions = new ArrayList<DecoratedCatalogDescription>();
+		
+		//convert raw CatalogDescriptions into decorated catalog descriptions
+		for (int i = 0; i < 5; i++)
+		{
+			DecoratedCatalogDescription dcd = 
+					new DecoratedCatalogDescription("Catalog Description " + i, "Teh descriptions!!");
+			dcd.setRequirements("these are teh requirements");
+			decoratedCatalogDescriptions.add(dcd);
+		}
+
+		return decoratedCatalogDescriptions;
 	}
 
 	public Object getEntity(EntityReference ref) {
@@ -64,4 +71,21 @@ public class CatalogDescriptionEntityProviderImpl extends AbstractEntityProvider
 	public boolean entityExists(String id) {
 		return false;
 	}
+	
+	@Data
+	public class DecoratedCatalogDescription implements Comparable<Object>{
+		private final String title;
+		private final String description;
+		
+		private String requirements;
+		
+		public int compareTo(Object o) {
+			// TODO Auto-generated method stub
+			// sort order by 
+			return 0;
+		}
+		
+	
+	}
+
 }
