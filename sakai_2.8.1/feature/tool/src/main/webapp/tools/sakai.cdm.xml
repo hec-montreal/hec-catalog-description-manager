@@ -5,9 +5,12 @@
 		description="Tools that manages descriptions of catalog courses">
 
 		<category name="course" />
-      	<category name="project" />
-
-		<configuration name="functions.require" /> 
+		<category name="project" />
+		<category name="portfolio" />
+		<category name="myworkspace" />
+		<category name="GradToolsStudent" />
+		<category name="GradToolsDepartment" />
+		<category name="GradToolsRackham" />
 		
     </tool>
 </registration>
