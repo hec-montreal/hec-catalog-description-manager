@@ -1,23 +1,42 @@
 <jsp:directive.include file="/templates/includes.jsp"/>
 <jsp:directive.include file="/templates/header.jsp"/>
-Hello World Servlet </br>
-Current Site ID : ${currentSiteId} </br>
-User Display Name : ${userDisplayName}
+<h3>Descriptions annuaires éditables par l'utilisateur : ${userDisplayName}</h3>
 
+<br/> 
 <div id="cdm_editor">
+<div>
+<div class="first_div" > 
+<h2 class="tableau_title">Description du cours</h2></td>
+<textarea id="editor_area"></textarea>
+</div>
+<div class="second_div" style="" border="1">
+<h2 class="tableau_title"> Informations du cours</h2>
 <table>
-  <tr>
-    <td>Titre du cours: </td>
-    <td><span id="course_title" name="title"/></td>
-  </tr>
-  <tr class="row_space" />
-  <tr>
-    <td>Description du cours</td>
-    <td><textarea id="editor_area"></textarea></td>    
-  </tr>
-  <tr class="row_space" />
-</table>
-<div id ="div_buttons">
+			  <tr class="row_space" />
+			  <tr>
+				<td><span class="td_title">Responsable: </span></td>
+				<td>Management</td>
+			  </tr>
+			  <tr class="row_space" />
+			  <tr>
+				<td><span class="td_title">Programme d'étude: </span></td>
+				<td>B.A.A</td>
+			  </tr>
+			  <tr class="row_space" />
+			  <tr>
+				<td><span class="td_title">Crédits: </span></td>
+				<td>3</td>
+			  </tr>
+			  <tr class="row_space" />
+			  <tr>
+				<td><span class="td_title">Exigences: </span></td>
+				<td>non</td>
+			  </tr>
+			</table>
+</div>
+</div>  
+<div id ="div_buttons" style="clear:both;">
+<br/>
 <span id="save_button" class="button">Sauvegarder</span>
 <span id="cancel_button" class="button">Annuler</span>
 </div>
@@ -65,6 +84,7 @@ User Display Name : ${userDisplayName}
         </tr>
     </tbody>
 </table>
+
 
 
 <div id="ajaxMessage">

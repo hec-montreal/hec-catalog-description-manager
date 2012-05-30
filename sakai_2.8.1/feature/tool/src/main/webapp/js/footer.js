@@ -2,8 +2,7 @@ var myToolbar = [
 	{ name: 'document', items : [ 'Source','-','Save','NewPage','DocProps','Preview','Print','-','Templates' ] },
 	{ name: 'clipboard', items : [ 'Cut','Copy','Paste','PasteText','PasteFromWord','-','Undo','Redo' ] },
 	{ name: 'editing', items : [ 'Find','Replace','-','SelectAll','-','SpellChecker', 'Scayt' ] },
-	{ name: 'forms', items : [ 'Form', 'Checkbox', 'Radio', 'TextField', 'Textarea', 'Select', 'Button', 'ImageButton', 
-        'HiddenField' ] },
+	//{ name: 'forms', items : [ 'Form', 'Checkbox', 'Radio', 'TextField', 'Textarea', 'Select', 'Button', 'ImageButton', 'HiddenField' ] },
 	'/',
 	{ name: 'basicstyles', items : [ 'Bold','Italic','Underline','Strike','Subscript','Superscript','-','RemoveFormat' ] },
 	{ name: 'paragraph', items : [ 'NumberedList','BulletedList','-','Outdent','Indent','-','Blockquote','CreateDiv',
@@ -20,6 +19,9 @@ var myToolbar = [
         // 2. Create a config var to hold your toolbar
         var config =
         {
+			height: 180,
+			width: 620,			
+			position: ['center','center'],
             toolbar_mySimpleToolbar: myToolbar,
             toolbar: 'mySimpleToolbar'        
         };
@@ -28,7 +30,7 @@ var myToolbar = [
         $('#editor_area').ckeditor(config);
 		 
 		var frame = parent.document.getElementById( window.name );
-		$(frame).css('height',600);
+		$(frame).css('height',550);
 		
 	
 		
@@ -39,19 +41,22 @@ var myToolbar = [
 	});
 } );
 
- $("#cdm_editor").dialog({autoOpen: false,modal:true,width: 800,draggable: true, position: top, resizable: true});
+ $("#cdm_editor").dialog({autoOpen: false,modal:true,width: 1000,draggable: true, position: top, resizable: true});
  $("#save_button").button();
  $("#cancel_button").button();
 
 $('#table_id').on("click", "tbody tr",function(event){
 
 	var title = $(this).children("td:nth-child(1)").text() + ' - ' + $(this).children("td:nth-child(2)").text()
-	$('#course_title').html(title);
+	$("#cdm_editor").dialog('option', 'title', title);
+	$('#editor_area').val('');
 	$("#cdm_editor").dialog('open');
 });
 
 $("#save_button").on("click",function(event){
 	$("#cdm_editor").dialog('close');
+	$("#infoMessage").html("Here's an info message with dynamic content.");
+	
 });
 
 $("#cancel_button").on("click",function(event){
