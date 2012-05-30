@@ -388,12 +388,38 @@ button.ui-button::-moz-focus-inner { border: 0; padding: 0; } /* reset extra pad
 
 
 .row_space{
-	height: 30px;
+	height: 15px;
 }
 
 .hidden_description_flag{
 	visibility: hidden;
 }
+
+.tableau_title{
+	text-align: center;
+}
+
+.td_title{
+	font-weight: bold;
+	text-decoration: underline;	
+}
+
+.first_div{
+	float: left;
+	width: 650px;
+	border-right:1px solid;
+}
+
+.second_div{
+	float: right;
+	width: 300px;
+}
+
+ 
+
+
+
+
 
 
 
