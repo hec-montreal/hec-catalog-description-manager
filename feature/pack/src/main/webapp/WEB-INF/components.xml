@@ -2,12 +2,13 @@
 <!DOCTYPE beans PUBLIC "-//SPRING//DTD BEAN//EN" "http://www.springframework.org/dtd/spring-beans.dtd">
 
 <beans>
+	<!-- import the hibernate related beans -->
+<!-- 	<import resource="spring-hibernate.xml" /> -->
 
 	<!--  SakaiProxy -->
  	<bean id="ca.hec.cdm.logic.SakaiProxy"
     	class="ca.hec.cdm.logic.SakaiProxyImpl"
         init-method="init">
-        <!-- API injection -->
         <property name="securityService" ref="org.sakaiproject.authz.api.SecurityService" />
         <property name="sessionManager" ref="org.sakaiproject.tool.api.SessionManager" />
         <property name="toolManager" ref="org.sakaiproject.tool.api.ToolManager" />
@@ -16,7 +17,7 @@
 		<property name="serverConfigurationService" ref="org.sakaiproject.component.api.ServerConfigurationService" />
 		<property name="siteService" ref="org.sakaiproject.site.api.SiteService" />
 		
-	</bean>
+ 	</bean> 
 	
 	<!-- ProjectLogic -->
 	<bean id="ca.hec.cdm.logic.ProjectLogic"
@@ -25,14 +26,15 @@
 	
 	<!--  CatalogDescriptionService -->
 	<bean id="ca.hec.cdm.api.CatalogDescriptionService"
-			class="ca.hec.cdm.impl.DbCatalogDescriptionService"
+			class="ca.hec.cdm.impl.CatalogDescriptionServiceImpl"
 			init-method="init"
-			destroy-method="destroy"
 			singleton="true">
 			
+<!--  		<property name="catalogDescriptionDao" ref="ca.hec.cdm.dao.CatalogDescriptionDao"/> -->
+<!-- 		<property name="sessionManager" ref="org.sakaiproject.tool.api.SessionManager"/> -->
+
 <!-- 			de AnnouncementService -->
 <!-- 		<property name="memoryService"><ref bean="org.sakaiproject.memory.api.MemoryService"/></property> -->
-<!-- 		<property name="sqlService"><ref bean="org.sakaiproject.db.api.SqlService"/></property> -->
 <!-- 		<property name="contentHostingService"><ref bean="org.sakaiproject.content.api.ContentHostingService"/></property> -->
 <!-- 		<property name="notificationService"><ref bean="org.sakaiproject.event.api.NotificationService"/></property> -->
 <!-- 		<property name="serverConfigurationService"><ref bean="org.sakaiproject.component.api.ServerConfigurationService"/></property> -->
