@@ -18,7 +18,17 @@ public class CatalogDescriptionServiceImpl implements CatalogDescriptionService 
 	@Setter	private CatalogDescriptionDao catalogDescriptionDao;
 	
 	public List getCatalogDescriptions() {
-		return new ArrayList<CatalogDescription>();
+		
+		List catalogDescriptions = new ArrayList<CatalogDescription>();
+		
+		CatalogDescription cd = new CatalogDescription();
+		
+		cd.setTitle("Le Titre du cours");
+		cd.setDescription("La description du cours");
+		
+		catalogDescriptions.add(cd);
+		
+		return catalogDescriptions;
 	}
 
 	public void init() {
