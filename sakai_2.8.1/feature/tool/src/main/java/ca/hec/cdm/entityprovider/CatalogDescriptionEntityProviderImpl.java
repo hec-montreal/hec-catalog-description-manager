@@ -37,13 +37,15 @@ import org.sakaiproject.entitybroker.entityprovider.capabilities.ActionsExecutab
 import org.sakaiproject.entitybroker.entityprovider.capabilities.AutoRegisterEntityProvider;
 import org.sakaiproject.entitybroker.entityprovider.capabilities.Outputable;
 import org.sakaiproject.entitybroker.entityprovider.capabilities.Resolvable;
+import org.sakaiproject.entitybroker.entityprovider.capabilities.Sampleable;
 import org.sakaiproject.entitybroker.entityprovider.extension.Formats;
 import org.sakaiproject.entitybroker.util.AbstractEntityProvider;
 
 import ca.hec.cdm.api.CatalogDescriptionService;
+import ca.hec.cdm.model.CatalogDescription;
 
 public class CatalogDescriptionEntityProviderImpl extends AbstractEntityProvider 
-	implements CoreEntityProvider, AutoRegisterEntityProvider, Resolvable, Outputable, ActionsExecutable {
+	implements CoreEntityProvider, AutoRegisterEntityProvider, Resolvable, Sampleable, Outputable, ActionsExecutable {
 
 	public final static String ENTITY_PREFIX = "catalog-description";
 	
@@ -69,15 +71,17 @@ public class CatalogDescriptionEntityProviderImpl extends AbstractEntityProvider
 			throw new IllegalArgumentException("Department must be set in order to get the catalog descriptions via the URL /catalog-description/department/departmentId");
 		}
 
+		List<CatalogDescription> catalogDescriptions = new ArrayList<CatalogDescription>();
+		catalogDescriptions.addAll(catalogDescriptionService.getCatalogDescriptions());
+		
 		List<SimpleCatalogDescription> decoratedCatalogDescriptions = new ArrayList<SimpleCatalogDescription>();
 		
-		String test = catalogDescriptionService.getLabel();
 		//convert raw CatalogDescriptions into decorated catalog descriptions
 		for (int i = 0; i < 5; i++)
 		{
 			SimpleCatalogDescription dcd = 
-					new SimpleCatalogDescription("Catalog Description " + i, "La description du plan de cours annuaire");
-			dcd.setRequirements("label: " + test );
+					new SimpleCatalogDescription();
+			dcd.setRequirements("requirements");
 			dcd.setDepartment(department);
 			dcd.setCareer("career");
 			decoratedCatalogDescriptions.add(dcd);
@@ -99,13 +103,14 @@ public class CatalogDescriptionEntityProviderImpl extends AbstractEntityProvider
 
 		List<SimpleCatalogDescription> decoratedCatalogDescriptions = new ArrayList<SimpleCatalogDescription>();
 		
-		String test = catalogDescriptionService.getLabel();
 		//convert raw CatalogDescriptions into decorated catalog descriptions
 		for (int i = 0; i < 5; i++)
 		{
 			SimpleCatalogDescription dcd = 
-					new SimpleCatalogDescription("Catalog Description " + i, "La description du plan de cours annuaire");
-			dcd.setRequirements("label: " + test );
+					new SimpleCatalogDescription();
+			
+			dcd.setTitle("Catalog Description " + i);
+			dcd.setDescription("La description du plan de cours annuaire");
 			dcd.setDepartment("department");
 			dcd.setCareer(career);
 			decoratedCatalogDescriptions.add(dcd);
@@ -127,8 +132,8 @@ public class CatalogDescriptionEntityProviderImpl extends AbstractEntityProvider
 	 */
 	@Data
 	public class SimpleCatalogDescription implements Comparable<Object>{
-		private final String title;
-		private final String description;
+		private String title;
+		private String description;
 		
 		private String department;
 		private String career;
@@ -138,5 +143,9 @@ public class CatalogDescriptionEntityProviderImpl extends AbstractEntityProvider
 			// TODO Auto-generated method stub
 			return 0;
 		}
+	}
+
+	public Object getSampleEntity() {
+		return new SimpleCatalogDescription();
 	}
 }
