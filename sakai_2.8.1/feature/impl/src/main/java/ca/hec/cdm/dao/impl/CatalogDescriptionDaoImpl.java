@@ -3,18 +3,19 @@ package ca.hec.cdm.dao.impl;
 import java.util.ArrayList;
 import java.util.List;
 
-import org.apache.commons.logging.Log;
-import org.apache.commons.logging.LogFactory;
+//import org.apache.commons.logging.Log;
+//import org.apache.commons.logging.LogFactory;
 import org.springframework.orm.hibernate3.support.HibernateDaoSupport;
 
-import ca.hec.cdm.dao.CatalogDescriptionDao;
+//import ca.hec.cdm.dao.CatalogDescriptionDao;
 import ca.hec.cdm.model.CatalogDescription;
 
 
-public class CatalogDescriptionDaoImpl extends HibernateDaoSupport implements
-		CatalogDescriptionDao {
+public class CatalogDescriptionDaoImpl extends HibernateDaoSupport 
+//implements CatalogDescriptionDao 
+{
 
-    private static Log log = LogFactory.getLog(CatalogDescriptionDaoImpl.class);
+//    private static Log log = LogFactory.getLog(CatalogDescriptionDaoImpl.class);
 
 	public List<CatalogDescription> getCatalogDescriptions() {
 		
