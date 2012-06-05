@@ -19,15 +19,24 @@ import org.w3c.dom.Element;
  * </p>
  */
 @Data
-public class CatalogDescription implements Entity, Comparable {
+public class CatalogDescription implements Comparable {
 	
+	private Long id;
 	private String courseId;
 	private String title;
 	private String description;
 	private String department;
 	private String career;
 	private String requirements;
+	
+	private Float credits;
+	private Date effectiveDate;
+	private Character status;
+	private Long ancestorId;
 	private String language;
+
+	private String lastModifiedBy;
+	private Date lastModifiedDate;
 	
 	private String createdBy;
 	private Date createdDate; 
@@ -36,41 +45,5 @@ public class CatalogDescription implements Entity, Comparable {
 		// TODO Auto-generated method stub
 		return 0;
 	}
-
-	public String getUrl() {
-		// TODO Auto-generated method stub
-		return null;
-	}
-
-	public String getReference() {
-		// TODO Auto-generated method stub
-		return null;
-	}
-
-	public String getUrl(String rootProperty) {
-		// TODO Auto-generated method stub
-		return null;
-	}
-
-	public String getReference(String rootProperty) {
-		// TODO Auto-generated method stub
-		return null;
-	}
-
-	public String getId() {
-		// TODO Auto-generated method stub
-		return null;
-	}
-
-	public ResourceProperties getProperties() {
-		// TODO Auto-generated method stub
-		return null;
-	}
-
-	public Element toXml(Document doc, Stack stack) {
-		// TODO Auto-generated method stub
-		return null;
-	}
-
 
 }
