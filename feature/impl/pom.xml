@@ -12,7 +12,6 @@
   <name>catalog-description-manager-impl</name>
 	<packaging>jar</packaging>
 	<dependencies>
-
 		<dependency>
 			<groupId>ca.hec.cdm</groupId>
 			<artifactId>cdm-api</artifactId>
@@ -40,6 +39,15 @@
 			<artifactId>sakai-kernel-util</artifactId>
 		</dependency>
 
+		<!-- spring and hibernate -->
+		<dependency>
+			<groupId>org.springframework</groupId>
+			<artifactId>spring</artifactId>
+		</dependency>
+		<dependency>
+			<groupId>org.hibernate</groupId>
+			<artifactId>hibernate</artifactId>
+		</dependency>
 	</dependencies>
 	<build>
 		<!-- configure the build to use the standard maven structure -->
