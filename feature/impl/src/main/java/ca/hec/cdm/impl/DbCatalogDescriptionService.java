@@ -1,13 +1,13 @@
-package ca.hec.cdm.impl;
-
-public class DbCatalogDescriptionService extends BaseCatalogDescriptionService {
-
-	
-	/**
-	 * Final initialization, once all dependencies are set.
-	 */
-	public void init()
-	{
+//package ca.hec.cdm.impl;
+//
+//public class DbCatalogDescriptionService extends BaseCatalogDescriptionService {
+//
+//	
+//	/**
+//	 * Final initialization, once all dependencies are set.
+//	 */
+//	public void init()
+//	{
 //		try
 //		{
 //			// if we are auto-creating our schema, check and create
@@ -39,6 +39,6 @@ public class DbCatalogDescriptionService extends BaseCatalogDescriptionService {
 //		{
 //			M_log.warn("init(): ", t);
 //		}
-	}
-	
-}
+//	}
+//	
+//}
