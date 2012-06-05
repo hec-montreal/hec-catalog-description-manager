@@ -1,5 +1,12 @@
 package ca.hec.cdm.logic;
 
+import java.util.List;
+
+import lombok.Getter;
+import lombok.Setter;
+import ca.hec.cdm.api.CatalogDescriptionService;
+import ca.hec.cdm.model.CatalogDescription;
+
 /**
  * An interface to abstract all Sakai related API calls in a central method that can be injected into our app.
  * 
@@ -7,7 +14,20 @@ package ca.hec.cdm.logic;
  *
  */
 public interface SakaiProxy {
-
+	
+	/**
+	 * save catalogDescription
+	 * @return
+	 */
+	public void saveCatalogDescription(Integer id, String description);
+	
+	/**
+	 * get catalogDescription
+	 * @return
+	 */
+	public List<CatalogDescription> getListCatalogDescriptionByDepartment(String department);
+	
+	
 	/**
 	 * Get current siteid
 	 * @return
