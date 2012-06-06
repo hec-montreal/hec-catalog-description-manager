@@ -1,24 +1,3 @@
- /**********************************************************************************
- * $URL: https://source.sakaiproject.org/svn/announcement/trunk/announcement-tool/tool/src/java/org/sakaiproject/announcement/entityprovider/AnnouncementEntityProviderImpl.java $
- * $Id: AnnouncementEntityProviderImpl.java 87813 2011-01-28 13:42:17Z savithap@umich.edu $
- ***********************************************************************************
- *
- * Copyright (c) 2003, 2004, 2005, 2006, 2007, 2008, 2009 The Sakai Foundation
- *
- * Licensed under the Educational Community License, Version 2.0 (the "License");
- * you may not use this file except in compliance with the License.
- * You may obtain a copy of the License at
- *
- *       http://www.osedu.org/licenses/ECL-2.0
- *
- * Unless required by applicable law or agreed to in writing, software
- * distributed under the License is distributed on an "AS IS" BASIS,
- * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
- * See the License for the specific language governing permissions and
- * limitations under the License.
- *
- **********************************************************************************/
-
 package ca.hec.cdm.entityprovider;
 
 import java.util.ArrayList;
@@ -49,6 +28,7 @@ public class CatalogDescriptionEntityProviderImpl extends AbstractEntityProvider
 
 	public final static String ENTITY_PREFIX = "catalog-description";
 	
+	// should this be the proxy?
 	@Setter 
 	private CatalogDescriptionService catalogDescriptionService;
 	
@@ -71,53 +51,38 @@ public class CatalogDescriptionEntityProviderImpl extends AbstractEntityProvider
 			throw new IllegalArgumentException("Department must be set in order to get the catalog descriptions via the URL /catalog-description/department/departmentId");
 		}
 
-		List<CatalogDescription> catalogDescriptions = new ArrayList<CatalogDescription>();
-		catalogDescriptions.addAll(catalogDescriptionService.getCatalogDescriptions());
-		
-		List<SimpleCatalogDescription> decoratedCatalogDescriptions = new ArrayList<SimpleCatalogDescription>();
-		
-		//convert raw CatalogDescriptions into decorated catalog descriptions
-		for (int i = 0; i < 5; i++)
-		{
-			SimpleCatalogDescription dcd = 
-					new SimpleCatalogDescription();
-			dcd.setRequirements("requirements");
-			dcd.setDepartment(department);
-			dcd.setCareer("career");
-			decoratedCatalogDescriptions.add(dcd);
-		}
-
-		return decoratedCatalogDescriptions;
+		return simplifyCatalogDescriptions(
+				catalogDescriptionService.getCatalogDescriptionsByDepartment(department));
 	}
 
-	@EntityCustomAction(action="program", viewKey=EntityView.VIEW_LIST)
-	public List<?> getCatalogDescriptionsByProgram(EntityView view, Map<String, Object> params) {
-
-		// get program
-		String career = view.getPathSegment(2);
-
-		//check that department is supplied
-		if (StringUtils.isBlank(career)) {
-			throw new IllegalArgumentException("Program must be set in order to get the catalog descriptions via the URL /catalog-description/program/programId");
-		}
-
-		List<SimpleCatalogDescription> decoratedCatalogDescriptions = new ArrayList<SimpleCatalogDescription>();
-		
-		//convert raw CatalogDescriptions into decorated catalog descriptions
-		for (int i = 0; i < 5; i++)
-		{
-			SimpleCatalogDescription dcd = 
-					new SimpleCatalogDescription();
-			
-			dcd.setTitle("Catalog Description " + i);
-			dcd.setDescription("La description du plan de cours annuaire");
-			dcd.setDepartment("department");
-			dcd.setCareer(career);
-			decoratedCatalogDescriptions.add(dcd);
-		}
-
-		return decoratedCatalogDescriptions;
-	}
+//	@EntityCustomAction(action="program", viewKey=EntityView.VIEW_LIST)
+//	public List<?> getCatalogDescriptionsByProgram(EntityView view, Map<String, Object> params) {
+//
+//		// get program
+//		String career = view.getPathSegment(2);
+//
+//		//check that department is supplied
+//		if (StringUtils.isBlank(career)) {
+//			throw new IllegalArgumentException("Program must be set in order to get the catalog descriptions via the URL /catalog-description/program/programId");
+//		}
+//
+//		List<SimpleCatalogDescription> decoratedCatalogDescriptions = new ArrayList<SimpleCatalogDescription>();
+//		
+//		//convert raw CatalogDescriptions into decorated catalog descriptions
+//		for (int i = 0; i < 5; i++)
+//		{
+//			SimpleCatalogDescription dcd = 
+//					new SimpleCatalogDescription();
+//			
+//			dcd.setTitle("Catalog Description " + i);
+//			dcd.setDescription("La description du plan de cours annuaire");
+//			dcd.setDepartment("department");
+//			dcd.setCareer(career);
+//			decoratedCatalogDescriptions.add(dcd);
+//		}
+//
+//		return decoratedCatalogDescriptions;
+//	}
 
 	public Object getEntity(EntityReference ref) {
 		return new String("a single entity");
@@ -125,6 +90,27 @@ public class CatalogDescriptionEntityProviderImpl extends AbstractEntityProvider
 
 	public boolean entityExists(String id) {
 		return false;
+	}
+	
+	public List<SimpleCatalogDescription> simplifyCatalogDescriptions(List<CatalogDescription> catalogDescriptions) {
+		List<SimpleCatalogDescription> simpleCatalogDescriptions = new ArrayList<SimpleCatalogDescription>();
+
+		//convert raw CatalogDescriptions into decorated catalog descriptions
+		for (CatalogDescription cd : catalogDescriptions)
+		{
+			SimpleCatalogDescription scd = 
+					new SimpleCatalogDescription();
+						
+			scd.setTitle(cd.getTitle());
+			scd.setDescription(cd.getDescription());
+			scd.setDepartment(cd.getDepartment());
+			scd.setCareer(cd.getCareer());
+			scd.setRequirements(cd.getRequirements());
+			
+			simpleCatalogDescriptions.add(scd);
+		}
+
+		return simpleCatalogDescriptions;
 	}
 	
 	/**
