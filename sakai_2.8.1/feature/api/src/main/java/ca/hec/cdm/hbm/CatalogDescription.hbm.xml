@@ -1,0 +1,63 @@
+<?xml version="1.0"?>
+<!DOCTYPE hibernate-mapping PUBLIC
+      "-//Hibernate/Hibernate Mapping DTD 3.0//EN"
+          "http://hibernate.sourceforge.net/hibernate-mapping-3.0.dtd">
+
+<hibernate-mapping>
+	<class name="ca.hec.cdm.model.CatalogDescription" table="CATALOG_DESCRIPTION">
+		<id name="id" type="long" column="ID">
+	    	<generator class="native">
+                 <param name="sequence">CATALOG_DESCRIPTION_ID_SEQ</param>
+        	</generator>
+		</id>
+
+		<property name="courseId" type="string" length="100" not-null="true">
+            <column name="COURSE_ID"/>
+        </property>
+		<property name="title" type="string" length="255" not-null="true">
+            <column name="TITLE"/>
+        </property>
+		<property name="description" type="text">
+            <column name="DESCRIPTION"/>
+        </property>
+
+		<property name="department" type="string" length="255" not-null="true">
+            <column name="ACAD_DEPARTMENT"/>
+        </property>
+		<property name="career" type="string" length="255" not-null="true">
+            <column name="ACAD_CAREER"/>
+        </property>
+		<property name="requirements" type="text">
+            <column name="REQUIREMENTS"/>
+        </property>
+		<property name="credits" type="float" not-null="true">
+            <column name="CREDITS"/>
+        </property>
+		<property name="effectiveDate" type="date" not-null="true">
+            <column name="EFFECTIVE_DATE"/>
+        </property>
+		<property name="status" type="character" not-null="true">
+            <column name="STATUS"/>
+        </property>
+		<property name="ancestorId" type="long">
+            <column name="ANCESTOR_ID"/>
+        </property>
+		<property name="language" type="string" length="10">
+            <column name="LANG"/>
+        </property>
+        
+		<property name="lastModifiedBy" type="string" length="255">
+            <column name="LAST_MODIFIED_BY"/>
+        </property>
+		<property name="lastModifiedDate" type="date">
+            <column name="LAST_MODIFIED_DATE"/>
+        </property>
+        
+		<property name="createdBy" type="string" length="255" not-null="true">
+            <column name="CREATED_BY"/>
+        </property>
+		<property name="createdDate" type="date">
+            <column name="CREATED_DATE"/>
+        </property>
+     </class>
+</hibernate-mapping>
