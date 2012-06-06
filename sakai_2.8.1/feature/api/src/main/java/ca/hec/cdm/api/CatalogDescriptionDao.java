@@ -16,18 +16,18 @@ public interface CatalogDescriptionDao {
 	public void init();
 	
 	/**
+     * Return a catalog description based on the database id
      * 
-     * 
-     * @param 
-     * @return
+     * @param id - the database id of the catalog description
+     * @return - the CatalogDescription
      */
 	public CatalogDescription getCatalogDescription(Long id);
 
 	/**
+     * Return a list of CatalogDescriptions by department
      * 
-     * 
-     * @param 
-     * @return
+     * @param department - the department for which the catalog descriptions should be returned
+     * @return - the list of CatalogDescriptions
      */
 	public List<CatalogDescription> getCatalogDescriptionsByDepartment(String department);
 	

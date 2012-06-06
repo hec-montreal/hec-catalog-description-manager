@@ -16,7 +16,6 @@ import ca.hec.cdm.model.CatalogDescription;
 
 public class CatalogDescriptionDaoImpl extends HibernateDaoSupport implements CatalogDescriptionDao 
 {
-
     private static Log log = LogFactory.getLog(CatalogDescriptionDaoImpl.class);
 
 	public void init() {
@@ -45,5 +44,4 @@ public class CatalogDescriptionDaoImpl extends HibernateDaoSupport implements Ca
 			return false;
 		}
 	}
-
 }
