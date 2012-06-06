@@ -25,7 +25,7 @@ public interface SakaiProxy {
 	 * get catalogDescription
 	 * @return
 	 */
-	public List<CatalogDescription> getListCatalogDescriptionByDepartment(String department);
+	public List<CatalogDescription> getListCatalogDescription();
 	
 	
 	/**
