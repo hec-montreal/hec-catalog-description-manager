@@ -17,6 +17,10 @@
 			<id>spring-json</id>
 			<url>http://spring-json.sourceforge.net/repository</url>
 		</repository>
+		<repository>
+			<id>codehaus</id>
+			<url>http://repository.codehaus.org/org/codehaus</url>
+		</repository>
 	</repositories>
 
 	<dependencies>
@@ -57,6 +61,11 @@
 			<artifactId>json-lib-ext-spring</artifactId>
 			<version>1.0.2</version>
 		</dependency>
+		<dependency>
+			<groupId>org.codehaus.jackson</groupId>
+			<artifactId>jackson-mapper-asl</artifactId>
+			<version>1.8.5</version>
+		</dependency>
 
 
 		<!-- project dependencies -->
@@ -85,17 +94,18 @@
 				</exclusion>
 			</exclusions>
 		</dependency>
-		
-	    <dependency>
-    		<groupId>org.sakaiproject.entitybroker</groupId>
-      		<artifactId>entitybroker-api</artifactId>
-    	</dependency>
-		<!--  TODO why do I need a version when announcement does not? and api does not? -->
-    	<dependency>
-      		<groupId>org.sakaiproject.entitybroker</groupId>
-      		<artifactId>entitybroker-utils</artifactId>
-      		<version>1.4.3</version>
-    	</dependency>
+
+		<dependency>
+			<groupId>org.sakaiproject.entitybroker</groupId>
+			<artifactId>entitybroker-api</artifactId>
+		</dependency>
+		<!-- TODO why do I need a version when announcement does not? and api does 
+			not? -->
+		<dependency>
+			<groupId>org.sakaiproject.entitybroker</groupId>
+			<artifactId>entitybroker-utils</artifactId>
+			<version>1.4.3</version>
+		</dependency>
 
 		<!-- third party dependencies -->
 
