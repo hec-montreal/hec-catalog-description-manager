@@ -7,3 +7,14 @@ function doAjax() {
         }
       });
     }
+
+function save(description) {
+    $.ajax({
+      url: 'save.htm',
+      data: 'description=' + description,  
+      datatype:   'json',
+      success: function(data) {
+        $('#ajaxMessage').html(data.message);
+      }
+    });
+  }
