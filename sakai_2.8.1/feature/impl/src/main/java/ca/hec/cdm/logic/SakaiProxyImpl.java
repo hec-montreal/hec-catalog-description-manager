@@ -1,6 +1,5 @@
 package ca.hec.cdm.logic;
 
-import java.util.ArrayList;
 import java.util.List;
 
 import lombok.Getter;
@@ -14,6 +13,7 @@ import org.sakaiproject.site.api.SiteService;
 import org.sakaiproject.tool.api.SessionManager;
 import org.sakaiproject.tool.api.ToolManager;
 import org.sakaiproject.user.api.UserDirectoryService;
+import org.springframework.beans.factory.annotation.Autowired;
 
 import ca.hec.cdm.api.CatalogDescriptionService;
 import ca.hec.cdm.model.CatalogDescription;
