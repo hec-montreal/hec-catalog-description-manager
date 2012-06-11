@@ -24,6 +24,14 @@ public interface CatalogDescriptionDao {
 	public CatalogDescription getCatalogDescription(Long id);
 
 	/**
+     * Return a list of CatalogDescriptions by career
+     * 
+     * @param career - the career for which the catalog descriptions should be returned
+     * @return - the list of CatalogDescriptions
+     */
+	public List<CatalogDescription> getCatalogDescriptionsByCareer(String career);
+	
+	/**
      * Return a list of CatalogDescriptions by department
      * 
      * @param department - the department for which the catalog descriptions should be returned
