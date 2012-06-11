@@ -31,5 +31,13 @@
 	<build>
 		<!-- configure the build to use the standard maven structure -->
 		<sourceDirectory>src/main/java</sourceDirectory>
+		<resources>
+			<resource>
+				<directory>${basedir}/src/main/java</directory>
+				<includes>
+					<include>**/*.hbm.xml</include>
+				</includes>
+			</resource>
+		</resources>
 	</build>
 </project>
