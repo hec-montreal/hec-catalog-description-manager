@@ -43,7 +43,6 @@ public class CatalogDescriptionEntityProviderImpl extends AbstractEntityProvider
 	@EntityCustomAction(action="department", viewKey=EntityView.VIEW_LIST)
 	public List<?> getCatalogDescriptionsByDepartment(EntityView view, Map<String, Object> params) {
 
-		// get department
 		String department = view.getPathSegment(2);
 
 		//check that department is supplied
@@ -55,34 +54,19 @@ public class CatalogDescriptionEntityProviderImpl extends AbstractEntityProvider
 				catalogDescriptionService.getCatalogDescriptionsByDepartment(department));
 	}
 
-//	@EntityCustomAction(action="program", viewKey=EntityView.VIEW_LIST)
-//	public List<?> getCatalogDescriptionsByProgram(EntityView view, Map<String, Object> params) {
-//
-//		// get program
-//		String career = view.getPathSegment(2);
-//
-//		//check that department is supplied
-//		if (StringUtils.isBlank(career)) {
-//			throw new IllegalArgumentException("Program must be set in order to get the catalog descriptions via the URL /catalog-description/program/programId");
-//		}
-//
-//		List<SimpleCatalogDescription> decoratedCatalogDescriptions = new ArrayList<SimpleCatalogDescription>();
-//		
-//		//convert raw CatalogDescriptions into decorated catalog descriptions
-//		for (int i = 0; i < 5; i++)
-//		{
-//			SimpleCatalogDescription dcd = 
-//					new SimpleCatalogDescription();
-//			
-//			dcd.setTitle("Catalog Description " + i);
-//			dcd.setDescription("La description du plan de cours annuaire");
-//			dcd.setDepartment("department");
-//			dcd.setCareer(career);
-//			decoratedCatalogDescriptions.add(dcd);
-//		}
-//
-//		return decoratedCatalogDescriptions;
-//	}
+	@EntityCustomAction(action="career", viewKey=EntityView.VIEW_LIST)
+	public List<?> getCatalogDescriptionsByCareer(EntityView view, Map<String, Object> params) {
+
+		String career = view.getPathSegment(2);
+
+		//check that department is supplied
+		if (StringUtils.isBlank(career)) {
+			throw new IllegalArgumentException("Career must be set in order to get the catalog descriptions via the URL /catalog-description/career/careerId");
+		}
+
+		return simplifyCatalogDescriptions(
+				catalogDescriptionService.getCatalogDescriptionsByCareer(career));
+	}
 
 	public Object getEntity(EntityReference ref) {
 		return new String("a single entity");
