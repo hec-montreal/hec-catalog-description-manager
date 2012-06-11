@@ -17,16 +17,15 @@ public interface SakaiProxy {
 	
 	/**
 	 * save catalogDescription
-	 * @return
+	 * @return - true for success, false if failure
 	 */
-	public void saveCatalogDescription(Integer id, String description);
+	public Boolean updateCatalogDescription(Long id, String description);
 	
 	/**
 	 * get catalogDescription
-	 * @return
+	 * @return - the list of catalog descriptions for the current user
 	 */
-	public List<CatalogDescription> getListCatalogDescription();
-	
+	public List<CatalogDescription> getCatalogDescriptionsForUser();
 	
 	/**
 	 * Get current siteid
