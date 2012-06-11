@@ -15,60 +15,23 @@ import org.sakaiproject.tool.api.SessionManager;
 import org.sakaiproject.tool.api.ToolManager;
 import org.sakaiproject.user.api.UserDirectoryService;
 
+import ca.hec.cdm.api.CatalogDescriptionService;
 import ca.hec.cdm.model.CatalogDescription;
 
 /**
  * Implementation of {@link SakaiProxy}
- * 
- * @author Steve Swinsburg (steve.swinsburg@anu.edu.au)
- * 
  */
 public class SakaiProxyImpl implements SakaiProxy {
 
     private static final Logger log = Logger.getLogger(SakaiProxyImpl.class);
 
-    public void saveCatalogDescription(Integer id, String description) {
+    public Boolean updateCatalogDescription(Long id, String description) {
+    	return catalogDescriptionService.updateDescription(id, description);
     }
 
-    public List<CatalogDescription> getListCatalogDescription() {
-	List<CatalogDescription> catalogDescriptions = new ArrayList<CatalogDescription>();
-
-	CatalogDescription cd1 = new CatalogDescription();
-	CatalogDescription cd2 = new CatalogDescription();
-	CatalogDescription cd3 = new CatalogDescription();
-
-	cd1.setId(new Long(1));
-	cd1.setTitle("titre1");
-	cd1.setDescription("description1");
-	cd1.setDepartment("department1");
-	cd1.setCareer("career1");
-	cd1.setRequirements("requirements1");
-	cd1.setCredits(new Float(1));
-	cd1.setLanguage("language1");
-
-	cd2.setId(new Long(2));
-	cd2.setTitle("titre2");
-	cd2.setDescription("description2");
-	cd1.setDepartment("department2");
-	cd1.setCareer("career2");
-	cd1.setRequirements("requirements2");
-	cd1.setCredits(new Float(2));
-	cd1.setLanguage("language2");
-
-	cd3.setId(new Long(3));
-	cd3.setTitle("titre3");
-	cd3.setDescription("description3");
-	cd1.setDepartment("department3");
-	cd1.setCareer("career3");
-	cd1.setRequirements("requirements3");
-	cd1.setCredits(new Float(3));
-	cd1.setLanguage("language3");
-
-	catalogDescriptions.add(cd1);
-	catalogDescriptions.add(cd2);
-	catalogDescriptions.add(cd3);
-
-	return catalogDescriptions;
+    public List<CatalogDescription> getCatalogDescriptionsForUser() {
+    	// je mets finance pour tester, mais un jour il faudra que ce soit specifique au service de l'usager
+    	return catalogDescriptionService.getCatalogDescriptionsByDepartment("FINANCE");
     }
 
     /**
@@ -134,8 +97,12 @@ public class SakaiProxyImpl implements SakaiProxy {
      * init - perform any actions required here for when this bean starts up
      */
     public void init() {
-	log.info("init");
+    	log.info("init");
     }
+
+    @Getter
+    @Setter
+    private CatalogDescriptionService catalogDescriptionService;
 
     @Getter
     @Setter

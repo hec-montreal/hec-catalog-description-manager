@@ -19,13 +19,20 @@ public class CatalogDescriptionDaoImpl extends HibernateDaoSupport implements Ca
     private static Log log = LogFactory.getLog(CatalogDescriptionDaoImpl.class);
 
 	public void init() {
-		// TODO Auto-generated method stub
+		log.info("init");
 	}
 
 	public CatalogDescription getCatalogDescription(Long id) {
 		return (CatalogDescription)getHibernateTemplate().get(CatalogDescription.class, id);
 	}
 	
+	public List<CatalogDescription> getCatalogDescriptionsByCareer(String career) {
+		DetachedCriteria dc = DetachedCriteria.forClass(CatalogDescription.class)
+				.add(Restrictions.eq("career", career));
+		
+		return getHibernateTemplate().findByCriteria(dc);
+	}
+
 	public List<CatalogDescription> getCatalogDescriptionsByDepartment(String department) {
 		DetachedCriteria dc = DetachedCriteria.forClass(CatalogDescription.class)
 				.add(Restrictions.eq("department", department));
