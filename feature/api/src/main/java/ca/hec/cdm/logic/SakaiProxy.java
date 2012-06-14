@@ -2,9 +2,6 @@ package ca.hec.cdm.logic;
 
 import java.util.List;
 
-import lombok.Getter;
-import lombok.Setter;
-import ca.hec.cdm.api.CatalogDescriptionService;
 import ca.hec.cdm.model.CatalogDescription;
 
 /**
