@@ -1,5 +1,7 @@
 package ca.hec.cdm.logic;
 
+import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.List;
 
 import lombok.Getter;
@@ -13,7 +15,6 @@ import org.sakaiproject.site.api.SiteService;
 import org.sakaiproject.tool.api.SessionManager;
 import org.sakaiproject.tool.api.ToolManager;
 import org.sakaiproject.user.api.UserDirectoryService;
-import org.springframework.beans.factory.annotation.Autowired;
 
 import ca.hec.cdm.api.CatalogDescriptionService;
 import ca.hec.cdm.model.CatalogDescription;
@@ -22,6 +23,8 @@ import ca.hec.cdm.model.CatalogDescription;
  * Implementation of {@link SakaiProxy}
  */
 public class SakaiProxyImpl implements SakaiProxy {
+	private static final String[] SECRETARY_CODES = { "BU0034", "BU0040", "BU0044", "BU0045", "BU0046", "BU0050", "BU0051", 
+			"BU0053", "BU0054", "BU0072", "BU0078", "BU0079", "BU0088", "BU0093" };
 
     private static final Logger log = Logger.getLogger(SakaiProxyImpl.class);
 
@@ -29,13 +32,50 @@ public class SakaiProxyImpl implements SakaiProxy {
     	return catalogDescriptionService.updateDescription(id, description);
     }
 
+    public CatalogDescription getCatalogDescriptionsById(Long id) {
+    	return catalogDescriptionService.getCatalogDescription(id);
+    }
+
     public List<CatalogDescription> getCatalogDescriptionsForUser() {
-    	// je mets finance pour tester, mais un jour il faudra que ce soit specifique au service de l'usager
-    	return catalogDescriptionService.getCatalogDescriptionsByDepartment("FINANCE");
+		List<CatalogDescription> catalogDescriptions = new ArrayList<CatalogDescription>();
+    	
+    	// add the catalog descriptions for all departments
+  		for(String dept : getUserDepartments())
+   		{
+			catalogDescriptions.addAll(catalogDescriptionService.getCatalogDescriptionsByDepartment(dept));
+   		}
+  		
+		return catalogDescriptions;
     }
     
-    public CatalogDescription getCatalogDescriptionsById(Long id) {
-	return catalogDescriptionService.getCatalogDescription(id);
+    private List<String> getUserDepartments() {
+    	List<String> departments = new ArrayList<String>();
+    	List<String> posteActifs = userDirectoryService.getCurrentUser().getProperties().getPropertyList("posteActif");
+    	
+    	if (!userDirectoryService.getCurrentUser().getType().equals("secretary")) {
+    		// TODO do more?
+    		log.fatal("User not a secretary");
+    	}
+    	
+    	// posteActifs is null if the property is not present
+    	if (null != posteActifs)
+    	{
+    		for(String posteActif : posteActifs)
+    		{
+    			// split the posteActif parameter at | 
+    			String[] posteSplit = posteActif.split("\\|");
+    			
+    			// only add the department if the posteActif code indicates 
+    			// that this user is a secretary of that department  TODO is this necessary?! 
+    			if (Arrays.asList(SECRETARY_CODES).contains(posteSplit[0]))
+    			{
+    				// department is the parameter at index 1
+    				departments.add(posteSplit[1]);
+    			}
+    		}
+    	}
+    	
+    	return departments;
     }
 
     /**

@@ -20,11 +20,11 @@ public class CatalogDescriptionServiceImpl implements CatalogDescriptionService 
 		return catalogDescriptionDao.getCatalogDescription(id);
 	}
 	
-	public List getCatalogDescriptionsByCareer(String career) {
+	public List<CatalogDescription> getCatalogDescriptionsByCareer(String career) {
 		return catalogDescriptionDao.getCatalogDescriptionsByCareer(career);
 	}
 	
-	public List getCatalogDescriptionsByDepartment(String department) {
+	public List<CatalogDescription> getCatalogDescriptionsByDepartment(String department) {
 		return catalogDescriptionDao.getCatalogDescriptionsByDepartment(department);
 	}
 	
