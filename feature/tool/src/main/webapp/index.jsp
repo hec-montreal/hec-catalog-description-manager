@@ -54,46 +54,19 @@
 			<th>CourseId</th>
 			<th>Title</th>
 			<th>Department</th>
-			<th>Career</th>		
-			<th>Language</th>			
+			<th>Career</th>
+			<th>Language</th>
 			<th>Description</th>
 		</tr>
 	</thead>
 	<tbody>
-<!-- 		<tr> -->
-<!-- 			<td>1-404-96</td> -->
-<!-- 			<td>Sociologie de l'entreprise</td> -->
-<!-- 			<td>B.A.A</td> -->
-<!-- 			<td><span class="hidden_description_flag">1</span></td> -->
-<!-- 		</tr> -->
-<!-- 		<tr> -->
-<!-- 			<td>1-901-06</td> -->
-<!-- 			<td>Présentation de l'information comptable</td> -->
-<!-- 			<td>B.A.A</td> -->
-<!-- 			<td><span class="hidden_description_flag">1</span></td> -->
-<!-- 		</tr> -->
-<!-- 		<tr> -->
-<!-- 			<td>1-928-05</td> -->
-<!-- 			<td>Using Accounting Information (offert en anglais)</td> -->
-<!-- 			<td>B.A.A</td> -->
-<!-- 			<td><span class="hidden_description_flag">0</span></td> -->
-<!-- 		</tr> -->
-<!-- 		<tr> -->
-<!-- 			<td>2-014-07</td> -->
-<!-- 			<td>Commerce international</td> -->
-<!-- 			<td>B.A.A</td> -->
-<!-- 			<td><span class="hidden_description_flag">0</span></td> -->
-<!-- 		</tr> -->
-<!-- 		<tr> -->
-<!-- 			<td>2-024-07</td> -->
-<!-- 			<td>Marketing international</td> -->
-<!-- 			<td>B.A.A</td> -->
-<!-- 			<td><span class="hidden_description_flag">0</span></td> -->
-<!-- 		</tr> -->
 	</tbody>
 </table>
+<input type="hidden" id="course_id" />
 
 
 
-<div id="ajaxMessage">
-	<jsp:directive.include file="/templates/footer.jsp" />
+<div id="ajaxReturn">
+	<div id="ajaxMessage" class="return_message"></div>
+</div>
+<jsp:directive.include file="/templates/footer.jsp" />

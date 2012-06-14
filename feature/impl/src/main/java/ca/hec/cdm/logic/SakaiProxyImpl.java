@@ -33,6 +33,10 @@ public class SakaiProxyImpl implements SakaiProxy {
     	// je mets finance pour tester, mais un jour il faudra que ce soit specifique au service de l'usager
     	return catalogDescriptionService.getCatalogDescriptionsByDepartment("FINANCE");
     }
+    
+    public CatalogDescription getCatalogDescriptionsById(Long id) {
+	return catalogDescriptionService.getCatalogDescription(id);
+    }
 
     /**
      * {@inheritDoc}
@@ -99,6 +103,8 @@ public class SakaiProxyImpl implements SakaiProxy {
     public void init() {
     	log.info("init");
     }
+
+    
 
     @Getter
     @Setter

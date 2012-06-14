@@ -22,10 +22,16 @@ public interface SakaiProxy {
 	public Boolean updateCatalogDescription(Long id, String description);
 	
 	/**
-	 * get catalogDescription
+	 * get the list of catalogDescription for current user
 	 * @return - the list of catalog descriptions for the current user
 	 */
 	public List<CatalogDescription> getCatalogDescriptionsForUser();
+	
+	/**
+	 * get catalogDescription
+	 * @return - the catalog description corresponding to the Id
+	 */
+	public CatalogDescription getCatalogDescriptionsById(Long id);
 	
 	/**
 	 * Get current siteid

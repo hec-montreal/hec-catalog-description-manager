@@ -15,8 +15,7 @@
 <script type="text/javascript" src="js/datatables-1.9.1/jquery.dataTables.min.js"></script>
 <script type="text/javascript" src="js/jquery-ui-redmont-1.8.1/jquery-ui.min.js"></script>
 <script type="text/javascript" src="js/ckeditor/ckeditor.js"></script>
-<script type="text/javascript" src="js/ckeditor/adapters/jquery.js">
-<script type="text/javascript" src="js/header.js"></script>
+<script type="text/javascript" src="js/ckeditor/adapters/jquery.js"></script>
 
 <title>Sakai-Spring</title>
 </head>

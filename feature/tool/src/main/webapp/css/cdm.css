@@ -987,6 +987,29 @@ td.details {
 	text-decoration: underline;	
 }
 
+.return_message{ 
+
+	text-align: center;
+}
+
+.error{
+ 
+
+	margin: 10px auto;
+	padding:   10px ;
+	border: 1px solid #cd0a0a;
+	color: #cd0a0a;
+	background: #fef1ect; 
+}
+
+
+.info{
+	margin: 10px auto; 
+	padding:   10px ;
+	border: 1px solid #A7C1DF;
+	color: #2E6E9E;
+	background: #DFEEFF;
+}
  
 
 
