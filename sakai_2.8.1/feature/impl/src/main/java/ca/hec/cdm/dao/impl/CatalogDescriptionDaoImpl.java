@@ -1,5 +1,6 @@
 package ca.hec.cdm.dao.impl;
 
+import java.util.ArrayList;
 import java.util.List;
 
 import org.apache.commons.logging.Log;
@@ -28,16 +29,21 @@ public class CatalogDescriptionDaoImpl extends HibernateDaoSupport implements Ca
 	
 	public List<CatalogDescription> getCatalogDescriptionsByCareer(String career) {
 		DetachedCriteria dc = DetachedCriteria.forClass(CatalogDescription.class)
-				.add(Restrictions.eq("career", career));
+				.add(Restrictions.eq("career", career.toUpperCase()));
 		
 		return getHibernateTemplate().findByCriteria(dc);
 	}
 
 	public List<CatalogDescription> getCatalogDescriptionsByDepartment(String department) {
 		DetachedCriteria dc = DetachedCriteria.forClass(CatalogDescription.class)
-				.add(Restrictions.eq("department", department));
+				.add(Restrictions.eq("department", department.toUpperCase()));
 		
-		return getHibernateTemplate().findByCriteria(dc);
+		List<CatalogDescription> catalogDescriptions = new ArrayList<CatalogDescription>();
+		for (Object o : getHibernateTemplate().findByCriteria(dc))
+		{
+			catalogDescriptions.add((CatalogDescription)o);
+		}
+		return catalogDescriptions;
 	}
 
 	public boolean saveCatalogDescription(CatalogDescription cd) {
