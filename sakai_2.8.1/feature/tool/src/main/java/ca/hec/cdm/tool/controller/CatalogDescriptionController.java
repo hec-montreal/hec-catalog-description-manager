@@ -34,18 +34,21 @@ public class CatalogDescriptionController {
 	String description = request.getParameter("description");
 	String id = request.getParameter("id");
 	Long id_long = Long.decode(id);
-	String ajaxMessage = null;
+	String returnMessage = null;
+	String returnStatus = null;
 	
 	Boolean result = sakaiProxy.updateCatalogDescription(id_long, description);
 	if (result){
-	    ajaxMessage = "Sauvegarde OK  " ;
+	    returnMessage = "Sauvegarde OK  " ;
+	    returnStatus = "success" ;
 	}
 	else{
-	    ajaxMessage = "Erreur pendant lq sauvegarde  " ;
+	    returnMessage = "Erreur pendant la sauvegarde  " ;
+	    returnStatus = "failure" ;
 	}
 	Map<String,String> model = new HashMap<String,String>();
-	model.put("message", ajaxMessage);	
-	model.put("message", ajaxMessage);
+	model.put("message", returnMessage);	
+	model.put("status", returnStatus);
 	return new ModelAndView("jsonView", model);
     }
 
@@ -82,6 +85,30 @@ public class CatalogDescriptionController {
 	model.put("iTotalRecords", listCd.size());
 	model.put("iTotalDisplayRecords", listCd.size());
 
+	return new ModelAndView("jsonView", model);
+    }
+    
+    @RequestMapping(value = "/get.json")
+    public ModelAndView getCatalogDescription(HttpServletRequest request,
+	    HttpServletResponse response) throws Exception {
+	String id = request.getParameter("id");
+	Long id_long = Long.decode(id);
+	
+	CatalogDescription cd = sakaiProxy.getCatalogDescriptionsById(id_long);
+	Map<String,String> model = new HashMap<String,String>();
+	
+	
+	if (cd != null){
+	    model.put("courseid", cd.getCourseId());	
+		model.put("title", cd.getTitle());
+		model.put("description", cd.getDescription());
+		 model.put("status", "success");
+	}
+	else{
+	    model.put("status", "failure");
+	}
+	
+	
 	return new ModelAndView("jsonView", model);
     }
 }
