@@ -11,53 +11,20 @@
         	</generator>
 		</id>
 
-		<property name="courseId" type="string" length="100" not-null="true">
-            <column name="COURSE_ID"/>
-        </property>
-		<property name="title" type="string" length="255" not-null="true">
-            <column name="TITLE"/>
-        </property>
-		<property name="description" type="text">
-            <column name="DESCRIPTION"/>
-        </property>
-
-		<property name="department" type="string" length="255" not-null="true">
-            <column name="ACAD_DEPARTMENT"/>
-        </property>
-		<property name="career" type="string" length="255" not-null="true">
-            <column name="ACAD_CAREER"/>
-        </property>
-		<property name="requirements" type="text">
-            <column name="REQUIREMENTS"/>
-        </property>
-		<property name="credits" type="float" not-null="true">
-            <column name="CREDITS"/>
-        </property>
-		<property name="effectiveDate" type="date" not-null="true">
-            <column name="EFFECTIVE_DATE"/>
-        </property>
-		<property name="status" type="character" not-null="true">
-            <column name="STATUS"/>
-        </property>
-		<property name="ancestorId" type="long">
-            <column name="ANCESTOR_ID"/>
-        </property>
-		<property name="language" type="string" length="10">
-            <column name="LANG"/>
-        </property>
-        
-		<property name="lastModifiedBy" type="string" length="255">
-            <column name="LAST_MODIFIED_BY"/>
-        </property>
-		<property name="lastModifiedDate" type="date">
-            <column name="LAST_MODIFIED_DATE"/>
-        </property>
-        
-		<property name="createdBy" type="string" length="255" not-null="true">
-            <column name="CREATED_BY"/>
-        </property>
-		<property name="createdDate" type="date">
-            <column name="CREATED_DATE"/>
-        </property>
+		<property name="courseId" type="string" column="COURSE_ID" length="100" not-null="true" index="COURSE_ID"/>
+		<property name="title" type="string" column="TITLE" length="255" not-null="true"/>
+		<property name="description" type="text" column="DESCRIPTION" not-null="false"/>
+		<property name="department" type="string" column="ACAD_DEPARTMENT" length="255" not-null="true"/>
+		<property name="career" type="string" column="ACAD_CAREER" length="255" not-null="true"/>
+		<property name="requirements" type="text" column="REQUIREMENTS" not-null="false"/>
+		<property name="credits" type="float" column="CREDITS" not-null="true"/>
+		<property name="effectiveDate" type="date" column="EFFECTIVE_DATE" not-null="true"/>
+		<property name="status" type="character" column="STATUS" not-null="true"/>
+		<property name="ancestorId" type="long" column="ANCESTOR_ID" not-null="false"/>
+		<property name="language" type="string" column="LANG" length="10" not-null="false"/>
+		<property name="lastModifiedBy" type="string" column="LAST_MODIFIED_BY" length="255" not-null="false"/>
+		<property name="lastModifiedDate" type="date" column="LAST_MODIFIED_DATE" not-null="false"/>
+		<property name="createdBy" type="string" column="CREATED_BY" length="255" not-null="true"/>
+		<property name="createdDate" type="date" column="CREATED_DATE" not-null="true"/>
      </class>
 </hibernate-mapping>
