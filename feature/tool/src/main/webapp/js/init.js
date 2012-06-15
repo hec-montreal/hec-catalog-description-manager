@@ -1,8 +1,3 @@
-
-
-
-
-
 /*****************************Initialisation of frame sizes  **********************************/
 var iframeHeight = 500;
 var dialogWidth = $(window).width() * 0.9;
@@ -42,48 +37,54 @@ var config = {
 $('#editor_area').ckeditor(config);
 
 /*****************************Initialisation of Catalog Description datatable  **********************************/
-$(document)
-		.ready(
-				function() {
+$(document).ready(function() {
 
-					oTable = $('#catalog_description_table')
-							.dataTable(
-									{
-										"bJQueryUI" : true,
-										"bProcessing" : true,
-										"sAjaxSource" : 'list.json',
-										"sPaginationType" : "full_numbers",
-										"bDestroy":true,
-										"aoColumns" : [
-										/* Id */{
-											"bSearchable" : false,
-											"bVisible" : false
-										},
-										/* CourseId */null,
-										/* Title */null,
-										/* Department */{
-											"bSearchable" : false,
-											"bVisible" : false
-										},
-										/* Career */{
-											"bSearchable" : false,
-											"bVisible" : false
-										},
-										/* Language */{
-											"bSearchable" : false,
-											"bVisible" : false
-										},
-										/* Description */null ],
+	oTable = $('#catalog_description_table').dataTable({
+		"bJQueryUI" : true,
+		"bProcessing" : true,
+		"sAjaxSource" : 'list.json',
+		"sPaginationType" : "full_numbers",
+		"bDestroy" : true,
+		"fnServerData" : function(sSource, aoData, fnCallback) {
+			$.ajax({
+				"dataType" : 'json',
+				"type" : "POST",
+				"url" : sSource,
+				"data" : aoData,
+				"success" : fnCallback,
+				"error" : function(xhr, ajaxOptions, thrownError) {
+					var genericError = $('#genericError').val();
+					$('#ajaxMessage').html(genericError);
+					$('#ajaxReturn').addClass("error");
+				}
+			});
+		},
+		"aoColumns" : [
+		/* Id */{
+			"bSearchable" : false,
+			"bVisible" : false
+		},
+		/* CourseId */null,
+		/* Title */null,
+		/* Department */{
+			"bSearchable" : false,
+			"bVisible" : false
+		},
+		/* Career */{
+			"bSearchable" : false,
+			"bVisible" : false
+		},
+		/* Description */null ],
 
-										/* after init is complete, we set the last_column value :
-										 * - with a tick image if description is not null
-										 * - with an alert image if description is null
-										 */
-										"fnInitComplete" : function(oSettings,
-												json) {
-												initDescriptionTable();},
-									});									
-				});
+		/* after init is complete, we set the last_column value :
+		 * - with a tick image if description is not null
+		 * - with an alert image if description is null
+		 */
+		"fnInitComplete" : function(oSettings, json) {
+			initDescriptionTable();
+		},
+	});
+});
 
 /*****************************Initialisation of Editor dialog box  **********************************/
 $("#cdm_editor").dialog({
@@ -106,19 +107,16 @@ $("#accordeonWrap").accordion({
 });
 
 /***************************** Binding 'click' event on a table row (open dialog_box) **********************************/
-$('#catalog_description_table').on(
-		"click",
-		"tbody tr",
-		function(event) {
-		
-			var id_row = oTable.fnGetData(this)[0];
-			$('#course_id').val(id_row);
-			openDialogCatalogDescriptionCurrentRow(id_row);			
-		});
+$('#catalog_description_table').on("click", "tbody tr", function(event) {
+
+	var id_row = oTable.fnGetData(this)[0];
+	$('#course_id').val(id_row);
+	openDialogCatalogDescriptionCurrentRow(id_row);
+});
 
 /***************************** Binding 'click' event on table buttons (save and cancel) **********************************/
 $("#save_button").on("click", function(event) {
-	save($('#editor_area').val(),$('#course_id').val());
+	save($('#editor_area').val(), $('#course_id').val());
 	$("#cdm_editor").dialog('close');
 });
 
