@@ -1,48 +1,60 @@
 <jsp:directive.include file="/templates/includes.jsp" />
 <jsp:directive.include file="/templates/header.jsp" />
-<h3>Descriptions annuaires éditables par l'utilisateur :
-	${userDisplayName}</h3>
+<h3>
+	<c:out value="${msgs.message_home}" />
+</h3>
 
 <br />
 <div id="cdm_editor">
 	<div id="accordeonWrap">
 		<h3>
-			<a href="#">Description du cours</a>
+			<a href="#"><c:out value="${msgs.label_description}" /></a>
 		</h3>
 		<div>
 			<textarea id="editor_area"></textarea>
 		</div>
 		<h3>
-			<a href="#">Informations du cours</a>
+			<a href="#"><c:out value="${msgs.label_course_info}" /></a>
 		</h3>
 		<div>
 			<table>
 				<tr class="row_space" />
 				<tr>
-					<td><span class="td_title">Responsable: </span></td>
-					<td>Management</td>
+					<td><span class="td_title"><c:out
+								value="${msgs.label_acad_department}" /> </span></td>
+					<td id="selected_course_acad_department" />
 				</tr>
 				<tr class="row_space" />
 				<tr>
-					<td><span class="td_title">Programme d'étude: </span></td>
-					<td>B.A.A</td>
+					<td><span class="td_title"><c:out
+								value="${msgs.label_acad_career}" /> </span></td>
+					<td id="selected_course_acad_career" />
 				</tr>
 				<tr class="row_space" />
 				<tr>
-					<td><span class="td_title">Crédits: </span></td>
-					<td>3</td>
+					<td><span class="td_title"><c:out
+								value="${msgs.label_credits}" /> </span></td>
+					<td id="selected_course_credits" />
 				</tr>
 				<tr class="row_space" />
 				<tr>
-					<td><span class="td_title">Exigences: </span></td>
-					<td>non</td>
+					<td><span class="td_title"><c:out
+								value="${msgs.label_requirements}" /> </span></td>
+					<td id="selected_course_requirements" />
+				</tr>
+				<tr class="row_space" />
+				<tr>
+					<td><span class="td_title"><c:out
+								value="${msgs.label_language}" /> </span></td>
+					<td id="selected_course_language" />
 				</tr>
 			</table>
 		</div>
 	</div>
 	<div id="div_buttons" style="clear: both;">
-		<br /> <span id="save_button" class="button">Sauvegarder</span> <span
-			id="cancel_button" class="button">Annuler</span>
+		<br /> <span id="save_button" class="button"><c:out
+				value="${msgs.button_save}" /></span> <span id="cancel_button"
+			class="button"><c:out value="${msgs.button_cancel}" /></span>
 	</div>
 </div>
 
@@ -51,18 +63,20 @@
 	<thead>
 		<tr>
 			<th>Id</th>
-			<th>CourseId</th>
-			<th>Title</th>
-			<th>Department</th>
-			<th>Career</th>
-			<th>Language</th>
-			<th>Description</th>
+			<th><c:out value="${msgs.header_course_id}" /></th>
+			<th><c:out value="${msgs.header_course_title}" /></th>
+			<th><c:out value="${msgs.header_acad_career}" /></th>
+			<th><c:out value="${msgs.header_acad_department}" /></th>
+			<th><c:out value="${msgs.header_is_description}" /></th>
 		</tr>
 	</thead>
 	<tbody>
 	</tbody>
 </table>
 <input type="hidden" id="course_id" />
+<input type="hidden" id="genericError"
+	value="<c:out value="${msgs.message_generic_error}" />" />
+
 
 
 

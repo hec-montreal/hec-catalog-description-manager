@@ -38,5 +38,14 @@
 	<bean parent="org.sakaiproject.entitybroker.entityprovider.AbstractEntityProvider" 
 		class="ca.hec.cdm.entityprovider.CatalogDescriptionEntityProviderImpl">
 			<property name="catalogDescriptionService" ref="ca.hec.cdm.api.CatalogDescriptionService"/>
+	</bean>	
+	
+	<bean id="messageSource" class="org.springframework.context.support.ResourceBundleMessageSource">
+		<property name="basename"><value>org.theospi.portfolio.presentation.bundle.Messages</value></property>
 	</bean>
+
+  <bean id="localeResolver" class="org.sakaiproject.spring.util.SakaiLocaleResolver">
+   </bean>
+	
+	
 </beans>
