@@ -116,7 +116,7 @@ $('#catalog_description_table').on("click", "tbody tr", function(event) {
 
 /***************************** Binding 'click' event on table buttons (save and cancel) **********************************/
 $("#save_button").on("click", function(event) {
-	save($('#editor_area').val(), $('#course_id').val());
+	save(escape($('#editor_area').val()), $('#course_id').val());
 	$("#cdm_editor").dialog('close');
 });
 
