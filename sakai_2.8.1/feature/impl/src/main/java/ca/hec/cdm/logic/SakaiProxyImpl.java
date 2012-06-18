@@ -23,6 +23,7 @@ import ca.hec.cdm.model.CatalogDescription;
  * Implementation of {@link SakaiProxy}
  */
 public class SakaiProxyImpl implements SakaiProxy {
+	// These are taken from jldap-beans.xml and indicate that the user is a secretary for the given department 
 	private static final String[] SECRETARY_CODES = { "BU0034", "BU0040", "BU0044", "BU0045", "BU0046", "BU0050", "BU0051", 
 			"BU0053", "BU0054", "BU0072", "BU0078", "BU0079", "BU0088", "BU0093" };
 
@@ -50,6 +51,7 @@ public class SakaiProxyImpl implements SakaiProxy {
     
     private List<String> getUserDepartments() {
     	List<String> departments = new ArrayList<String>();
+    	// for now sakai only retrieves one value even if LDAP has many for the same property, but that could change.
     	List<String> posteActifs = userDirectoryService.getCurrentUser().getProperties().getPropertyList("posteActif");
     	
     	if (!userDirectoryService.getCurrentUser().getType().equals("secretary")) {
