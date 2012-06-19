@@ -23,10 +23,6 @@ import ca.hec.cdm.model.CatalogDescription;
  * Implementation of {@link SakaiProxy}
  */
 public class SakaiProxyImpl implements SakaiProxy {
-	// These are taken from jldap-beans.xml and indicate that the user is a secretary for the given department 
-	private static final String[] SECRETARY_CODES = { "BU0034", "BU0040", "BU0044", "BU0045", "BU0046", "BU0050", "BU0051", 
-			"BU0053", "BU0054", "BU0072", "BU0078", "BU0079", "BU0088", "BU0093" };
-
     private static final Logger log = Logger.getLogger(SakaiProxyImpl.class);
 
     public Boolean updateCatalogDescription(Long id, String description) {
@@ -51,13 +47,8 @@ public class SakaiProxyImpl implements SakaiProxy {
     
     private List<String> getUserDepartments() {
     	List<String> departments = new ArrayList<String>();
-    	// for now sakai only retrieves one value even if LDAP has many for the same property, but that could change.
+    	// for now sakai only retrieves one value even if LDAP has many for the same property, but that could change (or be changed).
     	List<String> posteActifs = userDirectoryService.getCurrentUser().getProperties().getPropertyList("posteActif");
-    	
-    	if (!userDirectoryService.getCurrentUser().getType().equals("secretary")) {
-    		// TODO do more?
-    		log.fatal("User not a secretary");
-    	}
     	
     	// posteActifs is null if the property is not present
     	if (null != posteActifs)
@@ -67,13 +58,8 @@ public class SakaiProxyImpl implements SakaiProxy {
     			// split the posteActif parameter at | 
     			String[] posteSplit = posteActif.split("\\|");
     			
-    			// only add the department if the posteActif code indicates 
-    			// that this user is a secretary of that department  TODO is this necessary?! 
-    			if (Arrays.asList(SECRETARY_CODES).contains(posteSplit[0]))
-    			{
-    				// department is the parameter at index 1
-    				departments.add(posteSplit[1]);
-    			}
+  				// department is the parameter at index 1
+   				departments.add(posteSplit[1]);
     		}
     	}
     	
