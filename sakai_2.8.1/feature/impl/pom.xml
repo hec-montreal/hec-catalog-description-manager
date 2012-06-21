@@ -48,6 +48,15 @@
 			<groupId>org.hibernate</groupId>
 			<artifactId>hibernate</artifactId>
 		</dependency>
+		
+		<!-- quartz -->
+		<dependency>
+       		<groupId>org.opensymphony.quartz</groupId>
+       		<artifactId>quartz</artifactId>
+       		<version>1.6.6</version>
+       		<scope>provided</scope>
+   		 </dependency>
+		
 	</dependencies>
 	<build>
 		<!-- configure the build to use the standard maven structure -->
