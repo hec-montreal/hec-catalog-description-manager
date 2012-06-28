@@ -17,6 +17,8 @@ import org.sakaiproject.tool.api.ToolManager;
 import org.sakaiproject.user.api.UserDirectoryService;
 
 import ca.hec.cdm.api.CatalogDescriptionService;
+import ca.hec.cdm.exception.DatabaseException;
+import ca.hec.cdm.exception.StaleDataException;
 import ca.hec.cdm.model.CatalogDescription;
 
 /**
@@ -25,11 +27,13 @@ import ca.hec.cdm.model.CatalogDescription;
 public class SakaiProxyImpl implements SakaiProxy {
     private static final Logger log = Logger.getLogger(SakaiProxyImpl.class);
 
-    public Boolean updateCatalogDescription(Long id, String description) {
-    	return catalogDescriptionService.updateDescription(id, description);
+    public void updateCatalogDescription(CatalogDescription cd) 
+    		throws StaleDataException, DatabaseException {
+    	
+   		catalogDescriptionService.updateDescription(cd);
     }
 
-    public CatalogDescription getCatalogDescriptionsById(Long id) {
+    public CatalogDescription getCatalogDescriptionById(Long id) {
     	return catalogDescriptionService.getCatalogDescription(id);
     }
 
@@ -70,43 +74,42 @@ public class SakaiProxyImpl implements SakaiProxy {
      * {@inheritDoc}
      */
     public String getCurrentSiteId() {
-	return toolManager.getCurrentPlacement().getContext();
+    	return toolManager.getCurrentPlacement().getContext();
     }
 
     /**
      * {@inheritDoc}
      */
     public String getCurrentUserId() {
-	return sessionManager.getCurrentSessionUserId();
+    	return sessionManager.getCurrentSessionUserId();
     }
 
     /**
      * {@inheritDoc}
      */
     public String getCurrentUserDisplayName() {
-	return userDirectoryService.getCurrentUser().getDisplayName();
+    	return userDirectoryService.getCurrentUser().getDisplayName();
     }
 
     /**
      * {@inheritDoc}
      */
     public boolean isSuperUser() {
-	return securityService.isSuperUser();
+    	return securityService.isSuperUser();
     }
 
     /**
      * {@inheritDoc}
      */
     public void postEvent(String event, String reference, boolean modify) {
-	eventTrackingService.post(eventTrackingService.newEvent(event,
-		reference, modify));
+    	eventTrackingService.post(eventTrackingService.newEvent(event, reference, modify));
     }
 
     /**
      * {@inheritDoc}
      */
     public String getSkinRepoProperty() {
-	return serverConfigurationService.getString("skin.repo");
+    	return serverConfigurationService.getString("skin.repo");
     }
 
     /**
@@ -114,15 +117,15 @@ public class SakaiProxyImpl implements SakaiProxy {
      */
     public String getToolSkinCSS(String skinRepo) {
 
-	String skin = siteService.findTool(
-		sessionManager.getCurrentToolSession().getPlacementId())
-		.getSkin();
+    	String skin = siteService.findTool(
+    			sessionManager.getCurrentToolSession().getPlacementId())
+    			.getSkin();
 
-	if (skin == null) {
-	    skin = serverConfigurationService.getString("skin.default");
-	}
+    	if (skin == null) {
+    		skin = serverConfigurationService.getString("skin.default");
+    	}
 
-	return skinRepo + "/" + skin + "/tool.css";
+    	return skinRepo + "/" + skin + "/tool.css";
     }
 
     /**
@@ -131,8 +134,6 @@ public class SakaiProxyImpl implements SakaiProxy {
     public void init() {
     	log.info("init");
     }
-
-    
 
     @Getter
     @Setter
