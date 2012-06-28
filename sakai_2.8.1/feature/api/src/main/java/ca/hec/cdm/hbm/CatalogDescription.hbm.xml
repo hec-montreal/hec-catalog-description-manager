@@ -10,7 +10,8 @@
                  <param name="sequence">CATALOG_DESCRIPTION_ID_SEQ</param>
         	</generator>
 		</id>
-
+		<timestamp name="lastModifiedDate" column="LAST_MODIFIED_DATE"/>
+		 
 		<property name="courseId" type="string" column="COURSE_ID" length="100" not-null="true" index="COURSE_ID"/>
 		<property name="title" type="string" column="TITLE" length="255" not-null="true"/>
 		<property name="description" type="text" column="DESCRIPTION" not-null="false"/>
@@ -23,7 +24,6 @@
 		<property name="ancestorId" type="long" column="ANCESTOR_ID" not-null="false"/>
 		<property name="language" type="string" column="LANG" length="10" not-null="false"/>
 		<property name="lastModifiedBy" type="string" column="LAST_MODIFIED_BY" length="255" not-null="false"/>
-		<property name="lastModifiedDate" type="date" column="LAST_MODIFIED_DATE" not-null="false"/>
 		<property name="createdBy" type="string" column="CREATED_BY" length="255" not-null="true"/>
 		<property name="createdDate" type="date" column="CREATED_DATE" not-null="true"/>
      </class>
