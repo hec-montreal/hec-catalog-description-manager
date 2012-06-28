@@ -9,9 +9,12 @@ import org.hibernate.criterion.DetachedCriteria;
 import org.hibernate.criterion.Restrictions;
 
 import org.springframework.dao.DataAccessException;
+import org.springframework.orm.hibernate3.HibernateOptimisticLockingFailureException;
 import org.springframework.orm.hibernate3.support.HibernateDaoSupport;
 
 import ca.hec.cdm.api.CatalogDescriptionDao;
+import ca.hec.cdm.exception.DatabaseException;
+import ca.hec.cdm.exception.StaleDataException;
 import ca.hec.cdm.model.CatalogDescription;
 
 
@@ -46,15 +49,19 @@ public class CatalogDescriptionDaoImpl extends HibernateDaoSupport implements Ca
 		return catalogDescriptions;
 	}
 
-	public boolean saveCatalogDescription(CatalogDescription cd) {
+	public void saveCatalogDescription(CatalogDescription cd) 
+			throws StaleDataException, DatabaseException {
 		try{
 			getHibernateTemplate().saveOrUpdate(cd);
-			return true;
 		}
-		catch (DataAccessException e) {
+		//TODO why arent these caught?
+		catch(HibernateOptimisticLockingFailureException e) {
 			e.printStackTrace();
-			log.error("Hibernate could not save: " + e.toString());
-			return false;
+			throw new StaleDataException();
+		}
+		catch(Exception e) {
+			e.printStackTrace();
+			throw new DatabaseException();
 		}
 	}
 }

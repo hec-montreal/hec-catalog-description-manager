@@ -2,10 +2,15 @@ package ca.hec.cdm.impl;
 
 import java.util.List;
 
+import org.springframework.dao.DataAccessException;
+import org.springframework.orm.hibernate3.HibernateOptimisticLockingFailureException;
+
 import lombok.Setter;
 
 import ca.hec.cdm.api.CatalogDescriptionDao;
 import ca.hec.cdm.api.CatalogDescriptionService;
+import ca.hec.cdm.exception.DatabaseException;
+import ca.hec.cdm.exception.StaleDataException;
 import ca.hec.cdm.model.CatalogDescription;
 
 public class CatalogDescriptionServiceImpl implements CatalogDescriptionService {
@@ -28,10 +33,15 @@ public class CatalogDescriptionServiceImpl implements CatalogDescriptionService 
 		return catalogDescriptionDao.getCatalogDescriptionsByDepartment(department);
 	}
 	
-	public boolean updateDescription(Long id, String description) {
-		CatalogDescription cd = getCatalogDescription(id);
-		cd.setDescription(description);
-		
-		return catalogDescriptionDao.saveCatalogDescription(cd);
+	public void updateDescription(CatalogDescription cd) throws StaleDataException, DatabaseException {
+		try {			
+			catalogDescriptionDao.saveCatalogDescription(cd);
+			
+	    // TODO why don't these get caught in the DAO?  ideally this would happen there.
+		} catch (HibernateOptimisticLockingFailureException e) {
+			throw new StaleDataException();
+		} catch (DataAccessException e) {
+			throw new DatabaseException();
+		}
 	}
 }
