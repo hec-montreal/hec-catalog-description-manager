@@ -2,6 +2,8 @@ package ca.hec.cdm.api;
 
 import java.util.List;
 
+import ca.hec.cdm.exception.DatabaseException;
+import ca.hec.cdm.exception.StaleDataException;
 import ca.hec.cdm.model.CatalogDescription;
 
 /**
@@ -42,8 +44,9 @@ public interface CatalogDescriptionDao {
 	/**
 	 * save the catalog description to the database
 	 * @param cd - the catalog description to save
-	 * @return - true for success, false if failure
+	 * @throws StaleDataException 
+	 * @throws DatabaseException 
 	 */
-	public boolean saveCatalogDescription(CatalogDescription cd);
+	public void saveCatalogDescription(CatalogDescription cd) throws StaleDataException, DatabaseException;
 	
 }

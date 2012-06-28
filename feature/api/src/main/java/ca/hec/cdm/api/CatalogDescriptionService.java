@@ -2,6 +2,8 @@ package ca.hec.cdm.api;
 
 import java.util.List;
 
+import ca.hec.cdm.exception.DatabaseException;
+import ca.hec.cdm.exception.StaleDataException;
 import ca.hec.cdm.model.CatalogDescription;
 
 //import org.sakaiproject.entity.api.EntityProducer;
@@ -41,8 +43,8 @@ public interface CatalogDescriptionService //extends EntityProducer
 	 * 
 	 * @param id - the database id of the catalog description to update
 	 * @param description - the description to use for the update       
-	 * 
-	 * @return true for success; false otherwise
+	 * @throws StaleDataException 
+	 * @throws DatabaseException 
 	 */
-	public boolean updateDescription(Long id, String description);
+	public void updateDescription(CatalogDescription cd) throws StaleDataException, DatabaseException;
 }

@@ -2,6 +2,8 @@ package ca.hec.cdm.logic;
 
 import java.util.List;
 
+import ca.hec.cdm.exception.DatabaseException;
+import ca.hec.cdm.exception.StaleDataException;
 import ca.hec.cdm.model.CatalogDescription;
 
 /**
@@ -14,9 +16,12 @@ public interface SakaiProxy {
 	
 	/**
 	 * save catalogDescription
-	 * @return - true for success, false if failure
+	 *
+	 * @param cd - the catalog descriptiong to update
+	 * @throws StaleDataException 
+	 * @throws DatabaseException
 	 */
-	public Boolean updateCatalogDescription(Long id, String description);
+	public void updateCatalogDescription(CatalogDescription cd) throws StaleDataException, DatabaseException;
 	
 	/**
 	 * get the list of catalogDescription for current user
@@ -26,9 +31,11 @@ public interface SakaiProxy {
 	
 	/**
 	 * get catalogDescription
+	 *
+	 * @param id - the id of teh catalog description to retrieve
 	 * @return - the catalog description corresponding to the Id
 	 */
-	public CatalogDescription getCatalogDescriptionsById(Long id);
+	public CatalogDescription getCatalogDescriptionById(Long id);
 	
 	/**
 	 * Get current siteid
