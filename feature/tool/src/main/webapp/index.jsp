@@ -74,6 +74,7 @@
 	</tbody>
 </table>
 <input type="hidden" id="course_id" />
+<input type="hidden" id="last_modified_date" />
 <input type="hidden" id="genericError"
 	value="<c:out value="${msgs.message_generic_error}" />" />
 

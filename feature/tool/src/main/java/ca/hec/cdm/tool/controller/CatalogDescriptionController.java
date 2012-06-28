@@ -1,6 +1,9 @@
 package ca.hec.cdm.tool.controller;
 
+import java.text.DateFormat;
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -14,11 +17,13 @@ import lombok.Setter;
 
 import org.sakaiproject.util.ResourceLoader;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.orm.hibernate3.HibernateOptimisticLockingFailureException;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.servlet.ModelAndView;
 
+import ca.hec.cdm.exception.StaleDataException;
 import ca.hec.cdm.logic.SakaiProxy;
 import ca.hec.cdm.model.CatalogDescription;
 
@@ -26,6 +31,8 @@ import ca.hec.cdm.model.CatalogDescription;
  */
 @Controller
 public class CatalogDescriptionController {
+	// DateFormat for serializing the last_modified_date to the level of precision required
+	DateFormat df = new SimpleDateFormat("dd MMM yyyy HH:mm:ss");
 
     @Setter
     @Getter
@@ -36,7 +43,7 @@ public class CatalogDescriptionController {
 
     @PostConstruct
     public void init() {
-	msgs = new ResourceLoader("cdm");
+    	msgs = new ResourceLoader("cdm");
     }
 
     /*
@@ -48,25 +55,40 @@ public class CatalogDescriptionController {
     @RequestMapping(value = "/save.json", method = RequestMethod.POST)
     public ModelAndView saveCatalogDescription(HttpServletRequest request,
 	    HttpServletResponse response) throws Exception {
-	String description = request.getParameter("description");
-	String id = request.getParameter("id");
-	Long id_long = Long.decode(id);
-	String returnMessage = null;
-	String returnStatus = null;
+    	
+    	String description = request.getParameter("description");
+    	// last_modified_date is important for hibernate optimistic locking
+    	String last_modified_date = request.getParameter("last_modified_date");
+    	String id = request.getParameter("id");
+    	Long id_long = Long.decode(id);
 
-	Boolean result =
-		sakaiProxy.updateCatalogDescription(id_long, description);
-	if (result) {
-	    returnMessage = msgs.getString("message_sav_ok");
-	    returnStatus = "success";
-	} else {
-	    returnMessage = msgs.getString("message_sav_nok");
-	    returnStatus = "failure";
-	}
-	Map<String, String> model = new HashMap<String, String>();
-	model.put("message", returnMessage);
-	model.put("status", returnStatus);
-	return new ModelAndView("jsonView", model);
+    	String returnMessage = null;
+    	String returnStatus = null;
+
+    	try {
+    		CatalogDescription cd = sakaiProxy.getCatalogDescriptionById(id_long);
+    		cd.setDescription(description);
+    		cd.setLastModifiedDate(df.parse(last_modified_date));
+    		
+ 			sakaiProxy.updateCatalogDescription(cd);
+    		
+   			returnMessage = msgs.getString("message_sav_ok");
+   			returnStatus = "success";
+    	}
+    	catch (StaleDataException e) {	
+    		returnMessage = msgs.getString("message_sav_stale");
+    		returnStatus = "failure";
+    	}
+    	catch (Exception e) {
+    		returnMessage = msgs.getString("message_sav_nok");
+    		returnStatus = "failure";
+    	}
+
+    	Map<String, String> model = new HashMap<String, String>();
+    	model.put("message", returnMessage);
+    	model.put("status", returnStatus);
+
+    	return new ModelAndView("jsonView", model);
     }
 
     /*
@@ -79,35 +101,34 @@ public class CatalogDescriptionController {
     public ModelAndView listCatalogDescription(HttpServletRequest request,
 	    HttpServletResponse response) throws Exception {
 
-	List<CatalogDescription> listCd =
-		sakaiProxy.getCatalogDescriptionsForUser();
+    	List<CatalogDescription> listCd =    			
+    			sakaiProxy.getCatalogDescriptionsForUser();
 
-	List<Object> tableValue = new ArrayList<Object>();
+    	List<Object> tableValue = new ArrayList<Object>();
 
-	for (CatalogDescription cd : listCd) {
+    	for (CatalogDescription cd : listCd) {
+    		List<String> array = new ArrayList<String>();
 
-	    List<String> array = new ArrayList<String>();
+    		boolean isDescription =
+    				(cd.getDescription() != null && !cd.getDescription()
+    				.isEmpty());
 
-	    boolean isDescription =
-		    (cd.getDescription() != null && !cd.getDescription()
-			    .isEmpty());
+    		array.add("" + cd.getId());
+    		array.add("" + cd.getCourseId());
+    		array.add("" + cd.getTitle());
+    		array.add("" + cd.getDepartment());
+    		array.add("" + cd.getCareer());
+    		array.add("" + isDescription);
+    		tableValue.add(array);
+    	}
 
-	    array.add("" + cd.getId());
-	    array.add("" + cd.getCourseId());
-	    array.add("" + cd.getTitle());
-	    array.add("" + cd.getDepartment());
-	    array.add("" + cd.getCareer());
-	    array.add("" + isDescription);
-	    tableValue.add(array);
-	}
+    	Map<String, Object> model = new HashMap<String, Object>();
+    	model.put("aaData", tableValue);
+    	model.put("sEcho", listCd.size());
+    	model.put("iTotalRecords", listCd.size());
+    	model.put("iTotalDisplayRecords", listCd.size());
 
-	Map<String, Object> model = new HashMap<String, Object>();
-	model.put("aaData", tableValue);
-	model.put("sEcho", listCd.size());
-	model.put("iTotalRecords", listCd.size());
-	model.put("iTotalDisplayRecords", listCd.size());
-
-	return new ModelAndView("jsonView", model);
+    	return new ModelAndView("jsonView", model);
     }
 
     /*
@@ -119,27 +140,31 @@ public class CatalogDescriptionController {
     @RequestMapping(value = "/get.json")
     public ModelAndView getCatalogDescription(HttpServletRequest request,
 	    HttpServletResponse response) throws Exception {
-	String id = request.getParameter("id");
-	Long id_long = Long.decode(id);
+	
+    	String id = request.getParameter("id");
+    	Long id_long = Long.decode(id);
 
-	CatalogDescription cd = sakaiProxy.getCatalogDescriptionsById(id_long);
-	Map<String, String> model = new HashMap<String, String>();
+    	CatalogDescription cd = sakaiProxy.getCatalogDescriptionById(id_long);
+    	
+    	Map<String, String> model = new HashMap<String, String>();
 
-	if (cd != null && cd.getId() != null) {
-	    model.put("courseid", cd.getCourseId());
-	    model.put("title", cd.getTitle());
-	    model.put("description", cd.getDescription());
-	    model.put("acad_department", cd.getDepartment());
-	    model.put("acad_career", cd.getCareer());
-	    model.put("credits", "" + cd.getCredits());
-	    model.put("requirements", cd.getRequirements());
-	    model.put("language", cd.getLanguage());
-	    model.put("status", "success");
-	} else {
-	    model.put("status", "failure");
-	    model.put("message", msgs.getString("message_get_nok"));
-	}
+    	if (cd != null && cd.getId() != null) {
+    		model.put("courseid", cd.getCourseId());
+    		model.put("last_modified_date", 
+    				df.format(cd.getLastModifiedDate()));
+    		model.put("title", cd.getTitle());
+    		model.put("description", cd.getDescription());
+    		model.put("acad_department", cd.getDepartment());
+    		model.put("acad_career", cd.getCareer());
+    		model.put("credits", "" + cd.getCredits());
+    		model.put("requirements", cd.getRequirements());
+    		model.put("language", cd.getLanguage());
+    		model.put("status", "success");
+    	} else {
+    		model.put("status", "failure");
+    		model.put("message", msgs.getString("message_get_nok"));
+    	}
 
-	return new ModelAndView("jsonView", model);
+    	return new ModelAndView("jsonView", model);
     }
 }
