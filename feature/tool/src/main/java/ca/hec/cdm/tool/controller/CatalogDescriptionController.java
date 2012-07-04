@@ -167,4 +167,24 @@ public class CatalogDescriptionController {
 
     	return new ModelAndView("jsonView", model);
     }
+
+    /*
+     * Called to get tool bundles (for use in javascript function)
+     */
+    @RequestMapping(value = "/bundle.json")
+    public ModelAndView getBundle(HttpServletRequest request,
+	    HttpServletResponse response) throws Exception {
+
+	Map<String, String> msgsBundle = new HashMap<String, String>();
+	for (Object key : msgs.keySet()) {
+	    msgsBundle.put((String) key, (String) msgs.get(key));
+	}
+
+	Map<String, Object> model = new HashMap<String, Object>();
+
+	model.put("data", msgsBundle);
+
+	return new ModelAndView("jsonView", model);
+    }
+
 }

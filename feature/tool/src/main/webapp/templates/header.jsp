@@ -12,6 +12,7 @@
 
 <script src="/library/js/headscripts.js" language="JavaScript" type="text/javascript"></script>
 <script type="text/javascript" src="js/jquery-1.7.2.min.js"></script>
+<script type="text/javascript" src="js/fluid-1.4.js"></script>
 <script type="text/javascript" src="js/datatables-1.9.1/jquery.dataTables.min.js"></script>
 <script type="text/javascript" src="js/jquery-ui-redmont-1.8.1/jquery-ui.min.js"></script>
 <script type="text/javascript" src="js/ckeditor/ckeditor.js"></script>
