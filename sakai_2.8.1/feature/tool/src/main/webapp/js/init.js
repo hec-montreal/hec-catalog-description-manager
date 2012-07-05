@@ -12,13 +12,13 @@ $(frame).css('height', iframeHeight);
 var myToolbar = [
 		{
 			name : 'document',
-			items : [ 'Source', '-', 'Save', 'NewPage', 'DocProps', 'Preview',
-					'Print', '-', 'Templates' ]
+			items : [ 'Source', '-','Print' ]
 		},
+ { items : [ 'Bold','Italic','Underline','-','FontSize' ] },
 		{
 			name : 'paragraph',
 			items : [ 'NumberedList', 'BulletedList', '-', 'Outdent', 'Indent',
-					'-', 'Blockquote', 'CreateDiv', '-', 'JustifyLeft',
+					'-', 'Blockquote', '-', 'JustifyLeft',
 					'JustifyCenter', 'JustifyRight', 'JustifyBlock', '-',
 					'BidiLtr', 'BidiRtl' ]
 		}, {
