@@ -3,27 +3,28 @@ package ca.hec.cdm.tool.controller;
 import java.text.DateFormat;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
-import java.util.Date;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
-import javax.annotation.PostConstruct;
 
+import javax.annotation.PostConstruct;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
 import lombok.Getter;
 import lombok.Setter;
 
+import org.apache.commons.logging.Log;
+import org.apache.commons.logging.LogFactory;
 import org.sakaiproject.util.ResourceLoader;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.orm.hibernate3.HibernateOptimisticLockingFailureException;
 import org.springframework.stereotype.Controller;
+import ca.hec.cdm.exception.DatabaseException;
+import ca.hec.cdm.exception.StaleDataException;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.servlet.ModelAndView;
 
-import ca.hec.cdm.exception.StaleDataException;
 import ca.hec.cdm.logic.SakaiProxy;
 import ca.hec.cdm.model.CatalogDescription;
 
@@ -39,7 +40,9 @@ public class CatalogDescriptionController {
     @Autowired
     private SakaiProxy sakaiProxy = null;
 
-    private ResourceLoader msgs = null;
+    private ResourceLoader msgs = null; 
+
+    private static Log log = LogFactory.getLog(CatalogDescriptionController.class);
 
     @PostConstruct
     public void init() {
@@ -76,10 +79,12 @@ public class CatalogDescriptionController {
    			returnStatus = "success";
     	}
     	catch (StaleDataException e) {	
+	    	log.error("Exception while saving catalog description: " + e);
     		returnMessage = msgs.getString("message_sav_stale");
     		returnStatus = "failure";
     	}
     	catch (Exception e) {
+	    	log.error("Exception while saving catalog description: " + e);
     		returnMessage = msgs.getString("message_sav_nok");
     		returnStatus = "failure";
     	}
