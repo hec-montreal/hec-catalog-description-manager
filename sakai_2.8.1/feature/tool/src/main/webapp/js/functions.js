@@ -47,23 +47,21 @@ function initDescriptionTable() {
 	$("td:last-child:contains('true')").css("background-image",
 			'url("/library/image/silk/accept.png")');
 	$("td:last-child:contains('true')").css("background-repeat", "no-repeat");
-	$("td:last-child:contains('true')").wrapInner(
-			'<span  class="hidden_description_flag">');
+	$("td:last-child:contains('true')").wrapInner("<span  class=\"hidden_description_flag\"></span>");
 
 	$("td:last-child:contains('false')").css("background-image",
 			'url("/library/image/silk/exclamation.png")');
 	$("td:last-child:contains('false')").css("background-repeat", "no-repeat");
-	$("td:last-child:contains('false')").wrapInner(
-			'<span  class="hidden_description_flag">');
+	$("td:last-child:contains('false')").wrapInner("<span  class=\"hidden_description_flag\"></span>");
 }
 
 /* Save a catalog description */
-function save(description, id, date) {
+function save(description, id) {
 
 	$.ajax({
 		url : 'save.json',
 		type : "POST",
-		data : 'description=' + description + '&id=' + id + '&last_modified_date=' + date,
+		data : 'description=' + description + '&id=' + id,
 		datatype : 'json',
 		success : function(data) {
 			$('#ajaxMessage').html(data.message);
@@ -100,7 +98,6 @@ function openDialogCatalogDescriptionCurrentRow(id) {
 			if (cd.status == 'success') {
 				var dialog_title = cd.courseid + ' - ' + cd.title;
 				var description = cd.description;
-				var last_modified_date = cd.last_modified_date;
 				$("#selected_course_acad_department").html(cd.acad_department);
 				$("#selected_course_acad_career").html(cd.acad_career);
 				$("#selected_course_credits").html(cd.credits);
@@ -108,7 +105,6 @@ function openDialogCatalogDescriptionCurrentRow(id) {
 				$("#selected_course_language").html(cd.language);
 				$("#cdm_editor").dialog('option', 'title', dialog_title);
 				$('#editor_area').val(description);
-				$('#last_modified_date').val(last_modified_date);
 				$("#cdm_editor").dialog('open');
 			} else {
 				$('#ajaxMessage').html(cd.message);
