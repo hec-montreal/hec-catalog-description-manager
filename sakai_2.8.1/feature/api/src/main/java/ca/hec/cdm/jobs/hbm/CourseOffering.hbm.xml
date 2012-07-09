@@ -1,0 +1,16 @@
+<?xml version="1.0"?>
+<!DOCTYPE hibernate-mapping PUBLIC
+      "-//Hibernate/Hibernate Mapping DTD 3.0//EN"
+          "http://hibernate.sourceforge.net/hibernate-mapping-3.0.dtd">
+
+<hibernate-mapping>
+	<class name="ca.hec.cdm.jobs.model.CourseOffering" table="PS_N_COUR_OFFER_VW">
+		<id name="catalog_nbr" type="string" column="CATALOG_NBR" length="10"></id>
+		<property name="course_title_long" type="string" column="COURSE_TITLE_LONG" length="100" not-null="true"/>
+		<property name="acad_org" type="string" column="ACAD_ORG" length="10"/>
+		<property name="acad_career" type="string" column="ACAD_CAREER" length="4" not-null="true"/>
+		<property name="requirement" type="string" column="DESCRLONG"/>
+		<property name="credits" type="float" column="UNITS_MINIMUM" not-null="true"/>
+		<property name="language" type="string" column="N_LANGUE_COURS" length="10"/>
+     </class>
+</hibernate-mapping>
