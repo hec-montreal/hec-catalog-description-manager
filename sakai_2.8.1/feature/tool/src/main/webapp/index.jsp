@@ -63,11 +63,12 @@
 	<thead>
 		<tr>
 			<th>Id</th>
-			<th><c:out value="${msgs.header_course_id}" /></th>
+			<th width="130px"><c:out value="${msgs.header_course_id}" /></th>
 			<th><c:out value="${msgs.header_course_title}" /></th>
 			<th><c:out value="${msgs.header_acad_career}" /></th>
 			<th><c:out value="${msgs.header_acad_department}" /></th>
-			<th><c:out value="${msgs.header_is_description}" /></th>
+			<th width="130px"><c:out value="${msgs.header_is_description}" /></th>			
+			<th width="140px"><c:out value="${msgs.header_date_modification}" /></th>
 		</tr>
 	</thead>
 	<tbody>

@@ -2199,6 +2199,26 @@ td.details {
 	cursor: pointer;
 }
 
+#catalog_description_table
+{ 
+text-align: center;
+}
+
+.td_image_description_true
+{ 
+background-image: url("/library/image/silk/accept.png");
+background-repeat: no-repeat;
+background-position:center; 
+}
+
+.td_image_description_false
+{ 
+background-image: url("/library/image/silk/exclamation.png");
+background-repeat: no-repeat;
+background-position:center; 
+}
+
+
 .dataTable {
 	border-spacing: 0px;
 	width: 100%;
@@ -2218,6 +2238,7 @@ td.details {
 
 .hidden_description_flag {
 	visibility: hidden;
+	
 }
 
 .tableau_title {
