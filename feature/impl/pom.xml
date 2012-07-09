@@ -56,7 +56,11 @@
        		<version>1.6.6</version>
        		<scope>provided</scope>
    		 </dependency>
-		
+
+		<dependency>
+			<groupId>commons-logging</groupId>
+			<artifactId>commons-logging</artifactId>
+		</dependency>
 	</dependencies>
 	<build>
 		<!-- configure the build to use the standard maven structure -->

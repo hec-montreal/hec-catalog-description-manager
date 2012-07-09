@@ -20,13 +20,23 @@
  ******************************************************************************/
 package ca.hec.cdm.jobs;
 
+import java.sql.Date;
+import java.util.List;
+
 import lombok.Getter;
 import lombok.Setter;
 
+import org.apache.commons.logging.Log;
+import org.apache.commons.logging.LogFactory;
 import org.quartz.Job;
 import org.quartz.JobExecutionContext;
 import org.quartz.JobExecutionException;
+
 import ca.hec.cdm.api.CatalogDescriptionDao;
+import ca.hec.cdm.exception.DatabaseException;
+import ca.hec.cdm.exception.StaleDataException;
+import ca.hec.cdm.jobs.model.CourseOffering;
+import ca.hec.cdm.model.CatalogDescription;
 
 
 /**
@@ -37,7 +47,15 @@ import ca.hec.cdm.api.CatalogDescriptionDao;
 public class CreateCatalogDescriptionJob implements Job{
 	
     @Getter @Setter
-    private CatalogDescriptionDao dao;
+    private CatalogDescriptionJobDao courseOfferingDao;
+    
+    @Getter @Setter
+    private CatalogDescriptionDao catalogDescriptionDao;
+    
+    CatalogDescription cd = null;
+    
+    
+    private static Log log = LogFactory.getLog(CreateCatalogDescriptionJob.class);
 
     
     public void init() {
@@ -45,6 +63,28 @@ public class CreateCatalogDescriptionJob implements Job{
     }
 
     public void execute(JobExecutionContext arg0) throws JobExecutionException {
+	List<CourseOffering> listCo =  courseOfferingDao.getListCourseOffering();
+	
+for (CourseOffering co : listCo){
+    cd = new   CatalogDescription();
+    cd.setCourseId(co.getCatalog_nbr());
+    cd.setTitle(co.getCourse_title_long());
+    cd.setDepartment(co.getAcad_org());
+    cd.setCareer(co.getAcad_career());
+    cd.setCredits(co.getCredits());
+    cd.setLanguage(co.getLanguage());
+    cd.setRequirements(co.getRequirement());   
+    cd.setCreatedDate(new Date(java.util.Calendar.getInstance().getTimeInMillis()));
+    
+    try {
+	catalogDescriptionDao.saveCatalogDescription(cd);
+    } catch (StaleDataException e) {
+	log.error("Exception durant la creation de description annuaire :" + e);
+    } catch (DatabaseException e) {
+	log.error("Exception durant la creation de description annuaire :" + e);
+    }
+    
+	}
     }
 
 }

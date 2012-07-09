@@ -25,7 +25,6 @@
 			<groupId>org.sakaiproject.kernel</groupId>
 			<artifactId>sakai-kernel-api</artifactId>
 		</dependency>
-		
 
 
 	</dependencies>

@@ -24,7 +24,8 @@
 	<bean id="ca.hec.cdm.jobs.CreateCatalogDescriptionJob"
 		class="ca.hec.cdm.jobs.CreateCatalogDescriptionJob"
 		init-method="init">
-		<property name="dao" ref="ca.hec.cdm.api.CatalogDescriptionDao" />
+		<property name="courseOfferingDao" ref="ca.hec.cdm.jobs.CatalogDescriptionJobDao" />
+		<property name="catalogDescriptionDao" ref="ca.hec.cdm.api.CatalogDescriptionDao" />
 	</bean>
 	
 	<bean id="CreateCatalogDescriptionJob"
