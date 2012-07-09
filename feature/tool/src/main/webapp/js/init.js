@@ -74,7 +74,8 @@ $(document).ready(function() {
 			"bSearchable" : false,
 			"bVisible" : false
 		},
-		/* Description */null ],
+		/* Description */null,
+		/* CreatedDate */null],
 
 		/* after init is complete, we set the last_column value :
 		 * - with a tick image if description is not null

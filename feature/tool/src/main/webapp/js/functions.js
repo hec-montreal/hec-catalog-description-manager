@@ -44,15 +44,11 @@ $.fn.dataTableExt.oApi.fnReloadAjax = function(oSettings, sNewSource,
  * - with a tick image if description is not null
  * - with an alert image if description is null */
 function initDescriptionTable() {
-	$("td:last-child:contains('true')").css("background-image",
-			'url("/library/image/silk/accept.png")');
-	$("td:last-child:contains('true')").css("background-repeat", "no-repeat");
-	$("td:last-child:contains('true')").wrapInner("<span  class=\"hidden_description_flag\"></span>");
+	$("td:nth-child(3):contains('true')").addClass("td_image_description_true");
+	$("td:nth-child(3):contains('true')").wrapInner("<span  class=\"hidden_description_flag\"></span>");
 
-	$("td:last-child:contains('false')").css("background-image",
-			'url("/library/image/silk/exclamation.png")');
-	$("td:last-child:contains('false')").css("background-repeat", "no-repeat");
-	$("td:last-child:contains('false')").wrapInner("<span  class=\"hidden_description_flag\"></span>");
+	$("td:nth-child(3):contains('false')").addClass("td_image_description_false");
+	$("td:nth-child(3):contains('false')").wrapInner("<span  class=\"hidden_description_flag\"></span>");
 }
 
 /* Save a catalog description */
