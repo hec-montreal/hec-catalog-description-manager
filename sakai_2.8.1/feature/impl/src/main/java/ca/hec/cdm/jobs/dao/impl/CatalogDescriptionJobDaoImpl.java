@@ -35,7 +35,7 @@ import ca.hec.cdm.jobs.model.CourseOffering;
 public class CatalogDescriptionJobDaoImpl  extends HibernateDaoSupport implements CatalogDescriptionJobDao {
 
     public List<CourseOffering> getListCourseOffering() {
-	return (List<CourseOffering>) getHibernateTemplate().find("from CourseOffering where acad_career='APRE'");
+	return (List<CourseOffering>) getHibernateTemplate().find("from CourseOffering");
 		
     }
     
