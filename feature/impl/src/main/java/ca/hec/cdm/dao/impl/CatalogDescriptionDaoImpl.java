@@ -14,6 +14,7 @@ import org.springframework.orm.hibernate3.support.HibernateDaoSupport;
 import ca.hec.cdm.api.CatalogDescriptionDao;
 import ca.hec.cdm.exception.DatabaseException;
 import ca.hec.cdm.exception.StaleDataException;
+import ca.hec.cdm.jobs.model.CourseOffering;
 import ca.hec.cdm.model.CatalogDescription;
 
 
@@ -62,5 +63,10 @@ public class CatalogDescriptionDaoImpl extends HibernateDaoSupport implements Ca
 			e.printStackTrace();
 			throw new DatabaseException();
 		}
+	}
+
+	
+	public List<String> getCourseId() {
+	    return (List<String>) getHibernateTemplate().find("select distinct cd.courseId from CatalogDescription cd");
 	}
 }

@@ -61,10 +61,9 @@ public class CreateCatalogDescriptionJob implements Job {
 
     }
 
-    
-    
     public void execute(JobExecutionContext arg0) throws JobExecutionException {
 	List<CourseOffering> listCo = courseOfferingDao.getListCourseOffering();
+	List<String> listCourseId = catalogDescriptionDao.getCourseId();
 
 	for (CourseOffering co : listCo) {
 	    cd = new CatalogDescription();
@@ -82,16 +81,23 @@ public class CreateCatalogDescriptionJob implements Job {
 	    cd.setStatus('I');
 	    cd.setCreatedBy("quartz job");
 
-	    try {
-		catalogDescriptionDao.saveCatalogDescription(cd);
-	    } catch (StaleDataException e) {
-		log.error("Exception durant la creation de description annuaire :"
-			+ e);
-	    } catch (DatabaseException e) {
-		log.error("Exception durant la creation de description annuaire :"
-			+ e);
+	    // we create catalog description only if it is not already created
+	    if (!listCourseId.contains(cd.getCourseId())) {
+		try {
+		    catalogDescriptionDao.saveCatalogDescription(cd);
+		    log.debug("the folowing catalog description was created successfully: "
+			    + cd.getCourseId());
+		} catch (StaleDataException e) {
+		    log.error("Exception during catalog description creation :"
+			    + e);
+		} catch (DatabaseException e) {
+		    log.error("Exception during catalog description creation :"
+			    + e);
+		}
+	    } else {
+		log.debug("the folowing catalog description wasn't created because it already exists: "
+			+ cd.getCourseId());
 	    }
-
 	}
     }
 
