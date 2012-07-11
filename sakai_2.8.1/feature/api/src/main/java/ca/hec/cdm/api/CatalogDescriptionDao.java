@@ -24,6 +24,14 @@ public interface CatalogDescriptionDao {
      * @return - the CatalogDescription
      */
     public CatalogDescription getCatalogDescription(Long id);
+    
+    /**
+     * Return the last version of a catalog description based on the course id
+     * 
+     * @param id - the course id of the catalog description
+     * @return - the last version of the CatalogDescription
+     */
+    public CatalogDescription getLastVersionCatalogDescription(String courseId);
 
     /**
      * Return a list of CatalogDescriptions by career
@@ -59,6 +67,12 @@ public interface CatalogDescriptionDao {
      * 
      * @return - the list of Course id
      */
-    public List<String> getCourseId();
+    public List<String> getListCourseId();
+    
+    /**
+     * Set all catalog description to "inactive" status
+     * 
+     */
+    public void setCatalogDescriptionToInactive();
 
 }
