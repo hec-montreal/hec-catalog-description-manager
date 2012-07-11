@@ -63,8 +63,12 @@ public class CreateCatalogDescriptionJob implements Job {
 
     public void execute(JobExecutionContext arg0) throws JobExecutionException {
 	List<CourseOffering> listCo = courseOfferingDao.getListCourseOffering();
-	List<String> listCourseId = catalogDescriptionDao.getCourseId();
+	List<String> listCourseId = catalogDescriptionDao.getListCourseId();
 
+	// First we set to "Inactive" status all catalog descriptions
+	catalogDescriptionDao.setCatalogDescriptionToInactive();
+
+	// Then we create or update catalog descriptions
 	for (CourseOffering co : listCo) {
 	    cd = new CatalogDescription();
 	    cd.setCourseId(formatCourseId(co.getCatalog_nbr()));
@@ -78,7 +82,7 @@ public class CreateCatalogDescriptionJob implements Job {
 		    .getTimeInMillis()));
 	    cd.setEffectiveDate(new Date(java.util.Calendar.getInstance()
 		    .getTimeInMillis()));
-	    cd.setStatus('I');
+	    cd.setActive(true);
 	    cd.setCreatedBy("quartz job");
 
 	    // we create catalog description only if it is not already created
@@ -94,9 +98,24 @@ public class CreateCatalogDescriptionJob implements Job {
 		    log.error("Exception during catalog description creation :"
 			    + e);
 		}
+		// otherwise, we update it to "Active" status
 	    } else {
-		log.debug("the folowing catalog description wasn't created because it already exists: "
-			+ cd.getCourseId());
+		CatalogDescription cdToUpdate =
+			catalogDescriptionDao
+				.getLastVersionCatalogDescription(cd
+					.getCourseId());
+		cdToUpdate.setActive(true);
+		try {
+		    catalogDescriptionDao.saveCatalogDescription(cdToUpdate);
+		    log.debug("the folowing catalog description was successfully updated to 'active' status: "
+			    + cd.getCourseId());
+		} catch (StaleDataException e) {
+		    log.error("Exception during catalog description update :"
+			    + e);
+		} catch (DatabaseException e) {
+		    log.error("Exception during catalog description update :"
+			    + e);
+		}
 	    }
 	}
     }
@@ -140,5 +159,4 @@ public class CreateCatalogDescriptionJob implements Job {
 	return formattedCourseId;
 
     }
-
 }

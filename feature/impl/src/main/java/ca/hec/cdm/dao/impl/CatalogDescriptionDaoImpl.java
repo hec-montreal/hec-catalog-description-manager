@@ -6,15 +6,14 @@ import java.util.List;
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
 import org.hibernate.criterion.DetachedCriteria;
+import org.hibernate.criterion.Order;
 import org.hibernate.criterion.Restrictions;
-
 import org.springframework.orm.hibernate3.HibernateOptimisticLockingFailureException;
 import org.springframework.orm.hibernate3.support.HibernateDaoSupport;
 
 import ca.hec.cdm.api.CatalogDescriptionDao;
 import ca.hec.cdm.exception.DatabaseException;
 import ca.hec.cdm.exception.StaleDataException;
-import ca.hec.cdm.jobs.model.CourseOffering;
 import ca.hec.cdm.model.CatalogDescription;
 
 
@@ -32,14 +31,16 @@ public class CatalogDescriptionDaoImpl extends HibernateDaoSupport implements Ca
 	
 	public List<CatalogDescription> getCatalogDescriptionsByCareer(String career) {
 		DetachedCriteria dc = DetachedCriteria.forClass(CatalogDescription.class)
-				.add(Restrictions.eq("career", career.toUpperCase()));
+				.add(Restrictions.eq("career", career.toUpperCase()))
+				.add(Restrictions.eq("active", true));
 		
 		return getHibernateTemplate().findByCriteria(dc);
 	}
 
 	public List<CatalogDescription> getCatalogDescriptionsByDepartment(String department) {
 		DetachedCriteria dc = DetachedCriteria.forClass(CatalogDescription.class)
-				.add(Restrictions.eq("department", department.toUpperCase()));
+				.add(Restrictions.eq("department", department.toUpperCase()))
+				.add(Restrictions.eq("active", true));
 		
 		List<CatalogDescription> catalogDescriptions = new ArrayList<CatalogDescription>();
 		for (Object o : getHibernateTemplate().findByCriteria(dc))
@@ -66,7 +67,18 @@ public class CatalogDescriptionDaoImpl extends HibernateDaoSupport implements Ca
 	}
 
 	
-	public List<String> getCourseId() {
+	public List<String> getListCourseId() {
 	    return (List<String>) getHibernateTemplate().find("select distinct cd.courseId from CatalogDescription cd");
+	}
+
+	public void setCatalogDescriptionToInactive() {
+	    getHibernateTemplate().bulkUpdate("update CatalogDescription cd set cd.active=false");
+	}
+
+	public CatalogDescription getLastVersionCatalogDescription(
+		String courseId) {
+	    DetachedCriteria dc = DetachedCriteria.forClass(CatalogDescription.class)
+			.add(Restrictions.eq("courseId", courseId)).addOrder(Order.desc("id"));
+	    return (CatalogDescription) getHibernateTemplate().findByCriteria(dc, 0, 1).get(0);
 	}
 }
