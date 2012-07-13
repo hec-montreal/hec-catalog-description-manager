@@ -74,5 +74,17 @@ public interface CatalogDescriptionDao {
      * 
      */
     public void setCatalogDescriptionToInactive();
+    
+    /**
+     * Get catalog description from department that have no description
+     * 
+     */
+    public List<CatalogDescription> getCatalogDescriptionsByDepartmentWithNoDescription(String department);
+    
+    /**
+     * Get all departments that have at least one catalog description with an empty description
+     * 
+     */
+    public List<String> getDepartmentNameWithAtLeastOneCaWithNoDescription();
 
 }
