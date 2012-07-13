@@ -38,10 +38,7 @@ import ca.hec.cdm.exception.StaleDataException;
 import ca.hec.cdm.jobs.model.CourseOffering;
 import ca.hec.cdm.model.CatalogDescription;
 
-/**
- * @author <a href="mailto:philippe.rancourt@hec.ca">Philippe Rancourt</a>
- * @version $Id: $
- */
+
 public class CreateCatalogDescriptionJob implements Job {
 
     @Getter
@@ -56,10 +53,6 @@ public class CreateCatalogDescriptionJob implements Job {
 
     private static Log log = LogFactory
 	    .getLog(CreateCatalogDescriptionJob.class);
-
-    public void init() {
-
-    }
 
     public void execute(JobExecutionContext arg0) throws JobExecutionException {
 	List<CourseOffering> listCo = courseOfferingDao.getListCourseOffering();

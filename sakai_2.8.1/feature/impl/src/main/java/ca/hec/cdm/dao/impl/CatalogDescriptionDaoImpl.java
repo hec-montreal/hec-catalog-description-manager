@@ -16,69 +16,100 @@ import ca.hec.cdm.exception.DatabaseException;
 import ca.hec.cdm.exception.StaleDataException;
 import ca.hec.cdm.model.CatalogDescription;
 
-
-public class CatalogDescriptionDaoImpl extends HibernateDaoSupport implements CatalogDescriptionDao 
-{
+public class CatalogDescriptionDaoImpl extends HibernateDaoSupport implements
+	CatalogDescriptionDao {
     private static Log log = LogFactory.getLog(CatalogDescriptionDaoImpl.class);
 
-	public void init() {
-		log.info("init");
-	}
+    public void init() {
+	log.info("init");
+    }
 
-	public CatalogDescription getCatalogDescription(Long id) {
-		return (CatalogDescription)getHibernateTemplate().get(CatalogDescription.class, id);
+    public CatalogDescription getCatalogDescription(Long id) {
+	return (CatalogDescription) getHibernateTemplate().get(
+		CatalogDescription.class, id);
+    }
+
+    public List<CatalogDescription> getCatalogDescriptionsByCareer(String career) {
+	DetachedCriteria dc =
+		DetachedCriteria.forClass(CatalogDescription.class)
+			.add(Restrictions.eq("career", career.toUpperCase()))
+			.add(Restrictions.eq("active", true));
+
+	return getHibernateTemplate().findByCriteria(dc);
+    }
+
+    public List<CatalogDescription> getCatalogDescriptionsByDepartment(
+	    String department) {
+	DetachedCriteria dc =
+		DetachedCriteria
+			.forClass(CatalogDescription.class)
+			.add(Restrictions.eq("department",
+				department.toUpperCase()))
+			.add(Restrictions.eq("active", true));
+
+	List<CatalogDescription> catalogDescriptions =
+		new ArrayList<CatalogDescription>();
+	for (Object o : getHibernateTemplate().findByCriteria(dc)) {
+	    catalogDescriptions.add((CatalogDescription) o);
 	}
+	return catalogDescriptions;
+    }
+
+    public void saveCatalogDescription(CatalogDescription cd)
+	    throws StaleDataException, DatabaseException {
+	try {
+	    getHibernateTemplate().saveOrUpdate(cd);
+	}
+	// TODO why arent these caught?
+	catch (HibernateOptimisticLockingFailureException e) {
+	    e.printStackTrace();
+	    throw new StaleDataException();
+	} catch (Exception e) {
+	    e.printStackTrace();
+	    throw new DatabaseException();
+	}
+    }
+
+    public List<String> getListCourseId() {
+	return (List<String>) getHibernateTemplate().find(
+		"select distinct cd.courseId from CatalogDescription cd");
+    }
+
+    public void setCatalogDescriptionToInactive() {
+	getHibernateTemplate().bulkUpdate(
+		"update CatalogDescription cd set cd.active=false");
+    }
+
+    public CatalogDescription getLastVersionCatalogDescription(String courseId) {
+	DetachedCriteria dc =
+		DetachedCriteria.forClass(CatalogDescription.class)
+			.add(Restrictions.eq("courseId", courseId))
+			.addOrder(Order.desc("id"));
+	return (CatalogDescription) getHibernateTemplate().findByCriteria(dc,
+		0, 1).get(0);
+    }
+
+    public List<CatalogDescription> getCatalogDescriptionsByDepartmentWithNoDescription(
+	    String department) {
+	DetachedCriteria dc =
+		DetachedCriteria
+			.forClass(CatalogDescription.class)
+			.add(Restrictions.eq("department",
+				department.toUpperCase()))
+			.add(Restrictions.eq("active", true))
+			.add(Restrictions.isNull("description"));
+
+	List<CatalogDescription> catalogDescriptions =
+		new ArrayList<CatalogDescription>();
+	for (Object o : getHibernateTemplate().findByCriteria(dc)) {
+	    catalogDescriptions.add((CatalogDescription) o);
+	}
+	return catalogDescriptions;
+    }
+    
+    public List<String> getDepartmentNameWithAtLeastOneCaWithNoDescription(){
+	return (List<String>) getHibernateTemplate().find(
+		"select distinct cd.department from CatalogDescription cd where cd.description is null");
 	
-	public List<CatalogDescription> getCatalogDescriptionsByCareer(String career) {
-		DetachedCriteria dc = DetachedCriteria.forClass(CatalogDescription.class)
-				.add(Restrictions.eq("career", career.toUpperCase()))
-				.add(Restrictions.eq("active", true));
-		
-		return getHibernateTemplate().findByCriteria(dc);
-	}
-
-	public List<CatalogDescription> getCatalogDescriptionsByDepartment(String department) {
-		DetachedCriteria dc = DetachedCriteria.forClass(CatalogDescription.class)
-				.add(Restrictions.eq("department", department.toUpperCase()))
-				.add(Restrictions.eq("active", true));
-		
-		List<CatalogDescription> catalogDescriptions = new ArrayList<CatalogDescription>();
-		for (Object o : getHibernateTemplate().findByCriteria(dc))
-		{
-			catalogDescriptions.add((CatalogDescription)o);
-		}
-		return catalogDescriptions;
-	}
-
-	public void saveCatalogDescription(CatalogDescription cd) 
-			throws StaleDataException, DatabaseException {
-		try{
-			getHibernateTemplate().saveOrUpdate(cd);
-		}
-		//TODO why arent these caught?
-		catch(HibernateOptimisticLockingFailureException e) {
-			e.printStackTrace();
-			throw new StaleDataException();
-		}
-		catch(Exception e) {
-			e.printStackTrace();
-			throw new DatabaseException();
-		}
-	}
-
-	
-	public List<String> getListCourseId() {
-	    return (List<String>) getHibernateTemplate().find("select distinct cd.courseId from CatalogDescription cd");
-	}
-
-	public void setCatalogDescriptionToInactive() {
-	    getHibernateTemplate().bulkUpdate("update CatalogDescription cd set cd.active=false");
-	}
-
-	public CatalogDescription getLastVersionCatalogDescription(
-		String courseId) {
-	    DetachedCriteria dc = DetachedCriteria.forClass(CatalogDescription.class)
-			.add(Restrictions.eq("courseId", courseId)).addOrder(Order.desc("id"));
-	    return (CatalogDescription) getHibernateTemplate().findByCriteria(dc, 0, 1).get(0);
-	}
+    }
 }

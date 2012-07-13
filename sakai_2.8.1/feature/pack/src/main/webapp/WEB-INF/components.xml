@@ -22,9 +22,14 @@
  	
  	<!-- Quartz Job -->
 	<bean id="ca.hec.cdm.jobs.CreateCatalogDescriptionJob"
-		class="ca.hec.cdm.jobs.CreateCatalogDescriptionJob"
-		init-method="init">
+		class="ca.hec.cdm.jobs.CreateCatalogDescriptionJob">
 		<property name="courseOfferingDao" ref="ca.hec.cdm.jobs.CatalogDescriptionJobDao" />
+		<property name="catalogDescriptionDao" ref="ca.hec.cdm.api.CatalogDescriptionDao" />
+	</bean>
+	<bean id="ca.hec.cdm.jobs.SendEmailNotificationJob"
+		class="ca.hec.cdm.jobs.SendEmailNotificationJob"
+		init-method="init">
+		<property name="emailService" ref="org.sakaiproject.email.api.EmailService" />
 		<property name="catalogDescriptionDao" ref="ca.hec.cdm.api.CatalogDescriptionDao" />
 	</bean>
 	
@@ -36,6 +41,19 @@
        </property>
        <property name="jobName">
           <value>Create Catalog Description Job</value>
+       </property>
+       <property name="schedulerManager">
+          <ref bean="org.sakaiproject.api.app.scheduler.SchedulerManager" />
+       </property>
+    </bean>
+    <bean id="SendEmailNotificationJob"
+       class="org.sakaiproject.component.app.scheduler.jobs.SpringJobBeanWrapper"
+       singleton="true" init-method="init">
+       <property name="beanId">
+          <value>ca.hec.cdm.jobs.SendEmailNotificationJob</value>
+       </property>
+       <property name="jobName">
+          <value>Send Email Notification for Empty Catalog Descriptions Job</value>
        </property>
        <property name="schedulerManager">
           <ref bean="org.sakaiproject.api.app.scheduler.SchedulerManager" />

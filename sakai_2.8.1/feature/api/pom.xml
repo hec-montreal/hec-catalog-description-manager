@@ -9,7 +9,7 @@
 	</parent>
 	<groupId>ca.hec.cdm</groupId>
 	<artifactId>cdm-api</artifactId>
-  <name>catalog-description-manager-api</name>
+	<name>catalog-description-manager-api</name>
 
 	<properties>
 		<deploy.target>shared</deploy.target>
@@ -31,11 +31,20 @@
 	<build>
 		<!-- configure the build to use the standard maven structure -->
 		<sourceDirectory>src/main/java</sourceDirectory>
+
+
+
 		<resources>
 			<resource>
 				<directory>${basedir}/src/main/java</directory>
 				<includes>
 					<include>**/*.hbm.xml</include>
+				</includes>
+			</resource>
+			<resource>
+				<directory>${basedir}/src/main/bundle</directory>
+				<includes>
+					<include>**/*.properties</include>
 				</includes>
 			</resource>
 		</resources>
