@@ -69,11 +69,11 @@ public class CatalogDescriptionEntityProviderImpl extends AbstractEntityProvider
 	}
 
 	public Object getEntity(EntityReference ref) {
-		return new String("a single entity");
+		return catalogDescriptionService.getCatalogDescription(ref.getId());
 	}
 
-	public boolean entityExists(String id) {
-		return false;
+	public boolean entityExists(String course_id) {
+		return catalogDescriptionService.descriptionExists(course_id);
 	}
 	
 	public List<SimpleCatalogDescription> simplifyCatalogDescriptions(List<CatalogDescription> catalogDescriptions) {

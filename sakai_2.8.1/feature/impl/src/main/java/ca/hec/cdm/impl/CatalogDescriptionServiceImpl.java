@@ -25,6 +25,10 @@ public class CatalogDescriptionServiceImpl implements CatalogDescriptionService 
 		return catalogDescriptionDao.getCatalogDescription(id);
 	}
 	
+	public CatalogDescription getCatalogDescription(String course_id) {
+		return catalogDescriptionDao.getCatalogDescription(course_id);
+	}
+	
 	public List<CatalogDescription> getCatalogDescriptionsByCareer(String career) {
 		return catalogDescriptionDao.getCatalogDescriptionsByCareer(career);
 	}
@@ -43,5 +47,9 @@ public class CatalogDescriptionServiceImpl implements CatalogDescriptionService 
 		} catch (DataAccessException e) {
 			throw new DatabaseException();
 		}
+	}
+
+	public boolean descriptionExists(String course_id) {
+		return catalogDescriptionDao.descriptionExists(course_id);
 	}
 }

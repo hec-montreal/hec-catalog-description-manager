@@ -13,13 +13,23 @@ public interface CatalogDescriptionService //extends EntityProducer
 	public void init();
 	
 	/**
-	 * 
-	 * @param 
-	 *        
-	 * @return 
+	 * Get a Catalog Description by database id
+	 *
+	 * @param id - the db id of the catalog description
+	 *
+	 * @return the catalog description with details
 	 */
 	public CatalogDescription getCatalogDescription(Long id);
 	
+	/**
+	 * Get a Catalog Description by course id
+	 *
+	 * @param id - the id of the catalog description
+	 *
+	 * @return the catalog description with details
+	 */
+	public CatalogDescription getCatalogDescription(String course_id);
+
 	/**
 	 * Access a list of catalog descriptions by career
 	 * 
@@ -27,7 +37,7 @@ public interface CatalogDescriptionService //extends EntityProducer
 	 *        
 	 * @return A list of catalog description objects that meet the criteria; may be empty
 	 */
-	public List getCatalogDescriptionsByCareer(String career);
+	public List<CatalogDescription> getCatalogDescriptionsByCareer(String career);
 	
 	/**
 	 * Access a list of catalog descriptions by department
@@ -36,15 +46,23 @@ public interface CatalogDescriptionService //extends EntityProducer
 	 *        
 	 * @return A list of catalog description objects that meet the criteria; may be empty
 	 */
-	public List getCatalogDescriptionsByDepartment(String department);
+	public List<CatalogDescription> getCatalogDescriptionsByDepartment(String department);
 	
 	/**
 	 * Update a CatalogDescription's description in the database
 	 * 
-	 * @param id - the database id of the catalog description to update
+	 * @param cd - the catalog description to update
 	 * @param description - the description to use for the update       
 	 * @throws StaleDataException 
 	 * @throws DatabaseException 
 	 */
 	public void updateDescription(CatalogDescription cd) throws StaleDataException, DatabaseException;
+
+	/**
+	 * Return whether or not the specified catalog description (by course_id) exists
+	 * 
+	 * @param course_id - the course id of the catalog description to update
+	 * @return true if it exists, false otherwise
+	 */
+	public boolean descriptionExists(String course_id);
 }
