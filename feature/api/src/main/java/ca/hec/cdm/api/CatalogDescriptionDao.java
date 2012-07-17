@@ -94,6 +94,12 @@ public interface CatalogDescriptionDao {
      * 
      */
     public List<String> getDepartmentNameWithAtLeastOneCaWithNoDescription();
+    
+    /**
+     * Get all departments that have at least one catalog description with an empty description
+     * 
+     */
+    public List<String> getCareerNameWithAtLeastOneCaWithNoDescription();
 
     /**
      * return whether or not the specified Catalog Description exists.
