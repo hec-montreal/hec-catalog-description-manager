@@ -74,8 +74,8 @@ public class CatalogDescriptionController {
     		cd.setLastModifiedDate(df.parse(last_modified_date));
     		
  			sakaiProxy.updateCatalogDescription(cd);
-    		
-   			returnMessage = msgs.getString("message_sav_ok");
+    		String[] argsMessage = {cd.getCourseId()};
+   			returnMessage = msgs.getFormattedMessage("message_sav_ok", argsMessage);
    			returnStatus = "success";
     	}
     	catch (StaleDataException e) {	

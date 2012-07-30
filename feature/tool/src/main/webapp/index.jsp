@@ -1,5 +1,8 @@
 <jsp:directive.include file="/templates/includes.jsp" />
 <jsp:directive.include file="/templates/header.jsp" />
+<div id="ajaxReturn">
+	<div id="ajaxMessage" class="return_message"></div>
+</div>
 <h3>
 	<c:out value="${msgs.message_home}" />
 </h3>
@@ -17,7 +20,7 @@
 			<a href="#"><c:out value="${msgs.label_course_info}" /></a>
 		</h3>
 		<div>
-			<table>
+			<table class="course_info">
 				<tr class="row_space" />
 				<tr>
 					<td><span class="td_title"><c:out
@@ -63,12 +66,12 @@
 	<thead>
 		<tr>
 			<th>Id</th>
-			<th width="130px"><c:out value="${msgs.header_course_id}" /></th>
+			<th width="150px"><span><c:out value="${msgs.header_course_id}" /></span></th>
 			<th><c:out value="${msgs.header_course_title}" /></th>
 			<th><c:out value="${msgs.header_acad_career}" /></th>
 			<th><c:out value="${msgs.header_acad_department}" /></th>
 			<th width="130px"><c:out value="${msgs.header_is_description}" /></th>			
-			<th width="140px"><c:out value="${msgs.header_date_modification}" /></th>
+			<th width="160px"><c:out value="${msgs.header_date_modification}" /></th>
 		</tr>
 	</thead>
 	<tbody>
@@ -80,9 +83,4 @@
 	value="<c:out value="${msgs.message_generic_error}" />" />
 
 
-
-
-<div id="ajaxReturn">
-	<div id="ajaxMessage" class="return_message"></div>
-</div>
 <jsp:directive.include file="/templates/footer.jsp" />

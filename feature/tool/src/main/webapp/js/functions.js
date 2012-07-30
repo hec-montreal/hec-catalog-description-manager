@@ -65,7 +65,7 @@ function save(description, id, last_modified_date) {
 
 			if (data.status == 'success') {
 				$('#ajaxReturn').addClass("info");
-				$('#ajaxReturn').fadeOut(4000);
+				//$('#ajaxReturn').fadeOut(4000);
 			} else {
 				$('#ajaxReturn').addClass("error");
 			}
