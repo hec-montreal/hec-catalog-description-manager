@@ -25,16 +25,14 @@ var myToolbar = [
 					'-', 'Blockquote', '-', 'JustifyLeft',
 					'JustifyCenter', 'JustifyRight', 'JustifyBlock', '-',
 					'BidiLtr', 'BidiRtl' ]
-		}, {
-			name : 'links',
-			items : [ 'Link', 'Unlink', 'Anchor' ]
-		}, ];
+		}];
 
 var config = {
 	height: editorHeight,
 	position : [ 'center', 'center' ],
 	toolbar_mySimpleToolbar : myToolbar,
-	toolbar : 'mySimpleToolbar'
+	toolbar : 'mySimpleToolbar',
+	fontSize_defaultLabel : '12'
 };
 
 $('#editor_area').ckeditor(config);	
