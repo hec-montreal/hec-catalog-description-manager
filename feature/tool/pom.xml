@@ -67,6 +67,10 @@
 			<groupId>ca.hec.cdm</groupId>
 			<artifactId>cdm-api</artifactId>
 		</dependency>
+		<dependency>
+			<groupId>ca.hec.portal</groupId>
+			<artifactId>portal-manager-api</artifactId>
+		</dependency>
 
 		<!-- we are running a webapp in a servlet container so we need the servlet 
 			API -->
@@ -106,7 +110,7 @@
 		<dependency>
 			<groupId>log4j</groupId>
 			<artifactId>log4j</artifactId>
-		</dependency>		
+		</dependency>
 		<dependency>
 			<groupId>commons-logging</groupId>
 			<artifactId>commons-logging</artifactId>
@@ -138,7 +142,7 @@
 
 	<build>
 		<!-- configure the build to use the standard maven structure -->
-		<sourceDirectory>src/main/java</sourceDirectory>		
+		<sourceDirectory>src/main/java</sourceDirectory>
 		<plugins>
 			<!-- configure the war plugin to correctly use the standard maven structure -->
 			<plugin>

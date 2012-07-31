@@ -22,6 +22,7 @@ import org.sakaiproject.entitybroker.util.AbstractEntityProvider;
 import ca.hec.cdm.api.CatalogDescriptionService;
 import ca.hec.cdm.model.CatalogDescription;
 import ca.hec.cdm.model.SimpleCatalogDescription;
+import ca.hec.portal.api.PortalManagerService;
 
 public class CatalogDescriptionEntityProviderImpl extends
 	AbstractEntityProvider implements CoreEntityProvider,
@@ -33,6 +34,9 @@ public class CatalogDescriptionEntityProviderImpl extends
     // should this be the proxy?
     @Setter
     private CatalogDescriptionService catalogDescriptionService;
+    
+    @Setter
+    private PortalManagerService portalManagerService;
 
     public String getEntityPrefix() {
 	return ENTITY_PREFIX;
@@ -107,8 +111,8 @@ public class CatalogDescriptionEntityProviderImpl extends
 
 	    scd.setTitle(cd.getTitle());
 	    scd.setDescription(cd.getDescription());
-	    scd.setDepartment(cd.getDepartment());
-	    scd.setCareer(cd.getCareer());
+	    scd.setDepartment(portalManagerService.getDescriptionDepartment(cd.getDepartment()));
+	    scd.setCareer(portalManagerService.getDescriptionCareer(cd.getCareer()));
 	    scd.setRequirements(cd.getRequirements());
 	    scd.setCourseId(cd.getCourseId());
 	    scd.setCredits("" + cd.getCredits());
