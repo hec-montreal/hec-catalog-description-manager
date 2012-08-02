@@ -18,8 +18,10 @@ import org.sakaiproject.entitybroker.entityprovider.capabilities.Resolvable;
 import org.sakaiproject.entitybroker.entityprovider.capabilities.Sampleable;
 import org.sakaiproject.entitybroker.entityprovider.extension.Formats;
 import org.sakaiproject.entitybroker.util.AbstractEntityProvider;
+import org.springframework.beans.factory.annotation.Autowired;
 
 import ca.hec.cdm.api.CatalogDescriptionService;
+import ca.hec.cdm.logic.SakaiProxy;
 import ca.hec.cdm.model.CatalogDescription;
 import ca.hec.cdm.model.SimpleCatalogDescription;
 import ca.hec.portal.api.PortalManagerService;
@@ -37,6 +39,10 @@ public class CatalogDescriptionEntityProviderImpl extends
     
     @Setter
     private PortalManagerService portalManagerService;
+    
+    @Setter
+    @Autowired
+    private SakaiProxy sakaiProxy;
 
     public String getEntityPrefix() {
 	return ENTITY_PREFIX;
@@ -116,6 +122,10 @@ public class CatalogDescriptionEntityProviderImpl extends
 	    scd.setRequirements(cd.getRequirements());
 	    scd.setCourseId(cd.getCourseId());
 	    scd.setCredits("" + cd.getCredits());
+	    
+	    // TODO: make this conditional, only if catalog description didn't have one in the db
+	    scd.setSpecificCourse(sakaiProxy.getSpecificCourse(cd.getCourseId()));
+	    
 
 	    simpleCatalogDescriptions.add(scd);
 	}
