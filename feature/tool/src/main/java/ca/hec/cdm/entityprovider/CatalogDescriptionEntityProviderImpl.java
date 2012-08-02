@@ -26,10 +26,8 @@ import ca.hec.cdm.model.CatalogDescription;
 import ca.hec.cdm.model.SimpleCatalogDescription;
 import ca.hec.portal.api.PortalManagerService;
 
-public class CatalogDescriptionEntityProviderImpl extends
-	AbstractEntityProvider implements CoreEntityProvider,
-	AutoRegisterEntityProvider, Resolvable, Sampleable, Outputable,
-	ActionsExecutable {
+public class CatalogDescriptionEntityProviderImpl extends AbstractEntityProvider 
+	implements CoreEntityProvider, AutoRegisterEntityProvider, Resolvable, Sampleable, Outputable, ActionsExecutable {
 
     public final static String ENTITY_PREFIX = "catalogDescription";
 
@@ -99,7 +97,7 @@ public class CatalogDescriptionEntityProviderImpl extends
     }
 
     public Object getEntity(EntityReference ref) {
-	return catalogDescriptionService.getCatalogDescription(ref.getId());
+	return simplifyCatalogDescription(catalogDescriptionService.getCatalogDescription(ref.getId()));
     }
 
     public boolean entityExists(String course_id) {
@@ -113,24 +111,26 @@ public class CatalogDescriptionEntityProviderImpl extends
 
 	// convert raw CatalogDescriptions into decorated catalog descriptions
 	for (CatalogDescription cd : catalogDescriptions) {
-	    SimpleCatalogDescription scd = new SimpleCatalogDescription();
-
-	    scd.setTitle(cd.getTitle());
-	    scd.setDescription(cd.getDescription());
-	    scd.setDepartment(portalManagerService.getDescriptionDepartment(cd.getDepartment()));
-	    scd.setCareer(portalManagerService.getDescriptionCareer(cd.getCareer()));
-	    scd.setRequirements(cd.getRequirements());
-	    scd.setCourseId(cd.getCourseId());
-	    scd.setCredits("" + cd.getCredits());
-	    scd.setLang(cd.getLanguage());
-	    
-	    // TODO: make this conditional, only if catalog description didn't have one in the db
-	    scd.setSpecificCourse(sakaiProxy.getSpecificCourse(cd.getCourseId()));
-	   
-	    simpleCatalogDescriptions.add(scd);
-	}
+	    simpleCatalogDescriptions.add(simplifyCatalogDescription(cd));	}
 
 	return simpleCatalogDescriptions;
+    }
+    
+    public SimpleCatalogDescription simplifyCatalogDescription(CatalogDescription cd) {
+	SimpleCatalogDescription scd = new SimpleCatalogDescription();
+	
+	scd.setTitle(cd.getTitle());
+	scd.setDescription(cd.getDescription());
+	scd.setDepartment(portalManagerService.getDescriptionDepartment(cd.getDepartment()));
+	scd.setCareer(portalManagerService.getDescriptionCareer(cd.getCareer()));
+	scd.setRequirements(cd.getRequirements());
+	scd.setCourseId(cd.getCourseId());
+	scd.setCredits("" + cd.getCredits());
+	    
+	// TODO: make this conditional, only if catalog description didn't have one in the db
+	scd.setSpecificCourse(sakaiProxy.getSpecificCourse(cd.getCourseId()));
+	
+	return scd;
     }
 
     public Object getSampleEntity() {
