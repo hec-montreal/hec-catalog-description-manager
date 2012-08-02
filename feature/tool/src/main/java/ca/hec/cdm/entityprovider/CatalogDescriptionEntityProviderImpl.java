@@ -111,7 +111,8 @@ public class CatalogDescriptionEntityProviderImpl extends AbstractEntityProvider
 
 	// convert raw CatalogDescriptions into decorated catalog descriptions
 	for (CatalogDescription cd : catalogDescriptions) {
-	    simpleCatalogDescriptions.add(simplifyCatalogDescription(cd));	}
+	simpleCatalogDescriptions.add(simplifyCatalogDescription(cd));	
+	}
 
 	return simpleCatalogDescriptions;
     }
