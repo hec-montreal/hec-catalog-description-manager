@@ -16,6 +16,7 @@ public class SimpleCatalogDescription implements Comparable<Object> {
 	private String career;
 	private String requirements;
 	private String credits;
+	private String lang;
 	private String specificCourse;
 
 	public int compareTo(Object o) {
