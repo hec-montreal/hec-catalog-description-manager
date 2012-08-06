@@ -127,7 +127,10 @@ public class CatalogDescriptionEntityProviderImpl extends AbstractEntityProvider
 	scd.setRequirements(cd.getRequirements());
 	scd.setCourseId(cd.getCourseId());
 	scd.setCredits("" + cd.getCredits());
-	scd.setLang(cd.getLanguage().substring(0, 2));
+	
+	String lang = cd.getLanguage();
+	if (lang != null)
+	    scd.setLang(lang.substring(0, 2));
 	    
 	// TODO: make this conditional, only if catalog description didn't have one in the db
 	scd.setSpecificCourse(sakaiProxy.getSpecificCourse(cd.getCourseId()));
