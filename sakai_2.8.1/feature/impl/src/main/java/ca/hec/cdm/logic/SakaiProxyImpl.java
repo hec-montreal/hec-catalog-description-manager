@@ -134,13 +134,13 @@ public class SakaiProxyImpl implements SakaiProxy {
      * {@inheritDoc}
      */
     public String getSpecificCourse(String courseId) {
-	List<Site> sites = siteService.getSites(SiteService.SelectionType.ANY, "course",
-		courseId, null, SiteService.SortType.CREATED_ON_DESC, null);
-	
-	for (Site s : sites) {
-	    if (osylSiteService.hasBeenPublished(s.getId()))
-		return s.getTitle();
-	}
+//	List<Site> sites = siteService.getSites(SiteService.SelectionType.ANY, "course",
+//		courseId, null, SiteService.SortType.CREATED_ON_DESC, null);
+//	
+//	for (Site s : sites) {
+//	    if (osylSiteService.hasBeenPublished(s.getId()))
+//		return s.getTitle();
+//	}
 	return "";
     }
 
