@@ -17,7 +17,6 @@ public class SimpleCatalogDescription implements Comparable<Object> {
 	private String requirements;
 	private String credits;
 	private String lang;
-	private String specificCourse;
 
 	public int compareTo(Object o) {
 	    // TODO Auto-generated method stub

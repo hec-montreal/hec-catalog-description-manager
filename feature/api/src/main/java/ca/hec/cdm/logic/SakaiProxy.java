@@ -91,4 +91,20 @@ public interface SakaiProxy {
 	 * @return the title of the most recently created course offering (that has been published)
 	 */
 	public String getSpecificCourse(String courseId);
+
+	/**
+	 * Gets the description of the specified department
+	 *
+	 * @param department	the department to find a description for
+	 * @return the description
+	 */
+	public String getDepartmentDescription(String department);
+
+	/**
+	 * Gets the career of the specified department
+	 *
+	 * @param career	the career to find a description for
+	 * @return the description
+	 */
+	public String getCareerDescription(String career);
 }

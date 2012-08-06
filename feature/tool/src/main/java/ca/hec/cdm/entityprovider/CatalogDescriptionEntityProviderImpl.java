@@ -24,7 +24,6 @@ import ca.hec.cdm.api.CatalogDescriptionService;
 import ca.hec.cdm.logic.SakaiProxy;
 import ca.hec.cdm.model.CatalogDescription;
 import ca.hec.cdm.model.SimpleCatalogDescription;
-import ca.hec.portal.api.PortalManagerService;
 
 public class CatalogDescriptionEntityProviderImpl extends AbstractEntityProvider 
 	implements CoreEntityProvider, AutoRegisterEntityProvider, Resolvable, Sampleable, Outputable, ActionsExecutable {
@@ -34,10 +33,7 @@ public class CatalogDescriptionEntityProviderImpl extends AbstractEntityProvider
     // should this be the proxy?
     @Setter
     private CatalogDescriptionService catalogDescriptionService;
-    
-    @Setter
-    private PortalManagerService portalManagerService;
-    
+        
     @Setter
     @Autowired
     private SakaiProxy sakaiProxy;
@@ -96,6 +92,19 @@ public class CatalogDescriptionEntityProviderImpl extends AbstractEntityProvider
 		.getCareerNameWithAtLeastOneCaWithNoDescription();
     }
 
+    @EntityCustomAction(action = "specific-course", viewKey = EntityView.VIEW_SHOW)
+    public Object getSpecificCourse(EntityView view, Map<String, Object> params) {
+	String courseId = view.getPathSegment(1);
+
+	// check that courseid is supplied
+	if (StringUtils.isBlank(courseId)) {
+	    throw new IllegalArgumentException(
+		    "CourseId must be set in order to get specific course via the URL /catalog-description/:ID:/specific-course/");
+	}
+
+	return sakaiProxy.getSpecificCourse(courseId);
+    }
+
     public Object getEntity(EntityReference ref) {
 	return simplifyCatalogDescription(catalogDescriptionService.getCatalogDescription(ref.getId()));
     }
@@ -111,7 +120,7 @@ public class CatalogDescriptionEntityProviderImpl extends AbstractEntityProvider
 
 	// convert raw CatalogDescriptions into decorated catalog descriptions
 	for (CatalogDescription cd : catalogDescriptions) {
-	simpleCatalogDescriptions.add(simplifyCatalogDescription(cd));	
+	    simpleCatalogDescriptions.add(simplifyCatalogDescription(cd));	
 	}
 
 	return simpleCatalogDescriptions;
@@ -122,8 +131,8 @@ public class CatalogDescriptionEntityProviderImpl extends AbstractEntityProvider
 	
 	scd.setTitle(cd.getTitle());
 	scd.setDescription(cd.getDescription());
-	scd.setDepartment(portalManagerService.getDescriptionDepartment(cd.getDepartment()));
-	scd.setCareer(portalManagerService.getDescriptionCareer(cd.getCareer()));
+	scd.setDepartment(sakaiProxy.getDepartmentDescription(cd.getDepartment()));
+	scd.setCareer(sakaiProxy.getCareerDescription(cd.getCareer()));
 	scd.setRequirements(cd.getRequirements());
 	scd.setCourseId(cd.getCourseId());
 	scd.setCredits("" + cd.getCredits());
@@ -132,9 +141,6 @@ public class CatalogDescriptionEntityProviderImpl extends AbstractEntityProvider
 	if (lang != null)
 	    scd.setLang(lang.substring(0, 2));
 	    
-	// TODO: make this conditional, only if catalog description didn't have one in the db
-	scd.setSpecificCourse(sakaiProxy.getSpecificCourse(cd.getCourseId()));
-	
 	return scd;
     }
 

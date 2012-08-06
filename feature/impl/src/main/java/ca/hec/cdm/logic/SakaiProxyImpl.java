@@ -20,6 +20,7 @@ import ca.hec.cdm.api.CatalogDescriptionService;
 import ca.hec.cdm.exception.DatabaseException;
 import ca.hec.cdm.exception.StaleDataException;
 import ca.hec.cdm.model.CatalogDescription;
+import ca.hec.portal.api.PortalManagerService;
 
 import org.sakaiquebec.opensyllabus.common.api.OsylSiteService;
 
@@ -134,13 +135,13 @@ public class SakaiProxyImpl implements SakaiProxy {
      * {@inheritDoc}
      */
     public String getSpecificCourse(String courseId) {
-//	List<Site> sites = siteService.getSites(SiteService.SelectionType.ANY, "course",
-//		courseId, null, SiteService.SortType.CREATED_ON_DESC, null);
-//	
-//	for (Site s : sites) {
-//	    if (osylSiteService.hasBeenPublished(s.getId()))
-//		return s.getTitle();
-//	}
+	List<Site> sites = siteService.getSites(SiteService.SelectionType.ANY, "course",
+		courseId, null, SiteService.SortType.CREATED_ON_DESC, null);
+	
+	for (Site s : sites) {
+	    if (osylSiteService.hasBeenPublished(s.getId()))
+		return s.getTitle();
+	}
 	return "";
     }
 
@@ -149,6 +150,14 @@ public class SakaiProxyImpl implements SakaiProxy {
      */
     public void init() {
     	log.info("init");
+    }
+
+    public String getDepartmentDescription(String department) {
+	return portalManagerService.getDepartmentDescription(department);
+    }
+
+    public String getCareerDescription(String career) {
+	return portalManagerService.getCareerDescription(career);
     }
 
     @Getter
@@ -186,4 +195,8 @@ public class SakaiProxyImpl implements SakaiProxy {
     @Getter
     @Setter
     private OsylSiteService osylSiteService;
+
+    @Getter
+    @Setter
+    private PortalManagerService portalManagerService;
 }

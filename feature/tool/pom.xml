@@ -67,10 +67,6 @@
 			<groupId>ca.hec.cdm</groupId>
 			<artifactId>cdm-api</artifactId>
 		</dependency>
-		<dependency>
-			<groupId>ca.hec.portal</groupId>
-			<artifactId>portal-manager-api</artifactId>
-		</dependency>
 
 		<!-- we are running a webapp in a servlet container so we need the servlet 
 			API -->
