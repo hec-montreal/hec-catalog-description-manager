@@ -12,10 +12,17 @@
   <name>catalog-description-manager-impl</name>
 	<packaging>jar</packaging>
 	<dependencies>
+
+		<!--  HEC dependencies -->
 		<dependency>
 			<groupId>ca.hec.cdm</groupId>
 			<artifactId>cdm-api</artifactId>
 		</dependency>
+		<dependency>
+			<groupId>ca.hec.portal</groupId>
+			<artifactId>portal-manager-api</artifactId>
+		</dependency>
+
 		<dependency>
 			<groupId>log4j</groupId>
 			<artifactId>log4j</artifactId>

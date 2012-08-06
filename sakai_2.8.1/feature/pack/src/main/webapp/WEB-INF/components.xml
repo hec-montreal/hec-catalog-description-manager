@@ -18,6 +18,7 @@
 		<property name="siteService" ref="org.sakaiproject.site.api.SiteService" />
 		<property name="osylSiteService" ref="org.sakaiquebec.opensyllabus.common.api.OsylSiteService" />
 		<property name="catalogDescriptionService" ref="ca.hec.cdm.api.CatalogDescriptionService" />
+		<property name="portalManagerService" ref="ca.hec.portal.api.PortalManagerService" />
  	</bean> 
  	
  	
