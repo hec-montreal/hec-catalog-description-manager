@@ -37,7 +37,6 @@
 
 	<bean parent="org.sakaiproject.entitybroker.entityprovider.AbstractEntityProvider" 
 		class="ca.hec.cdm.entityprovider.CatalogDescriptionEntityProviderImpl">
-			<property name="catalogDescriptionService" ref="ca.hec.cdm.api.CatalogDescriptionService"/>
 	</bean>	
 	
 	<bean id="messageSource" class="org.springframework.context.support.ResourceBundleMessageSource">

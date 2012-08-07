@@ -20,7 +20,6 @@ import org.sakaiproject.entitybroker.entityprovider.extension.Formats;
 import org.sakaiproject.entitybroker.util.AbstractEntityProvider;
 import org.springframework.beans.factory.annotation.Autowired;
 
-import ca.hec.cdm.api.CatalogDescriptionService;
 import ca.hec.cdm.logic.SakaiProxy;
 import ca.hec.cdm.model.CatalogDescription;
 import ca.hec.cdm.model.SimpleCatalogDescription;
@@ -30,10 +29,6 @@ public class CatalogDescriptionEntityProviderImpl extends AbstractEntityProvider
 
     public final static String ENTITY_PREFIX = "catalogDescription";
 
-    // should this be the proxy?
-    @Setter
-    private CatalogDescriptionService catalogDescriptionService;
-        
     @Setter
     @Autowired
     private SakaiProxy sakaiProxy;
@@ -58,7 +53,7 @@ public class CatalogDescriptionEntityProviderImpl extends AbstractEntityProvider
 		    "Department must be set in order to get the catalog descriptions via the URL /catalog-description/department/departmentId");
 	}
 
-	return simplifyCatalogDescriptions(catalogDescriptionService
+	return simplifyCatalogDescriptions(sakaiProxy
 		.getCatalogDescriptionsByDepartment(department));
     }
 
@@ -74,26 +69,12 @@ public class CatalogDescriptionEntityProviderImpl extends AbstractEntityProvider
 		    "Career must be set in order to get the catalog descriptions via the URL /catalog-description/career/careerId");
 	}
 
-	return simplifyCatalogDescriptions(catalogDescriptionService
+	return simplifyCatalogDescriptions(sakaiProxy
 		.getCatalogDescriptionsByCareer(career));
     }
 
-    @EntityCustomAction(action = "getDepartments", viewKey = EntityView.VIEW_LIST)
-    public List<?> getDepartments(EntityView view, Map<String, Object> params) {
-
-	return catalogDescriptionService
-		.getDepartmentNameWithAtLeastOneCaWithNoDescription();
-    }
-
-    @EntityCustomAction(action = "getCareers", viewKey = EntityView.VIEW_LIST)
-    public List<?> getCareers(EntityView view, Map<String, Object> params) {
-
-	return catalogDescriptionService
-		.getCareerNameWithAtLeastOneCaWithNoDescription();
-    }
-
     @EntityCustomAction(action = "specific-course", viewKey = EntityView.VIEW_SHOW)
-    public Object getSpecificCourse(EntityView view, Map<String, Object> params) {
+    public Object getSpecificCourse(EntityView view) {
 	String courseId = view.getPathSegment(1);
 
 	// check that courseid is supplied
@@ -106,11 +87,11 @@ public class CatalogDescriptionEntityProviderImpl extends AbstractEntityProvider
     }
 
     public Object getEntity(EntityReference ref) {
-	return simplifyCatalogDescription(catalogDescriptionService.getCatalogDescription(ref.getId()));
+	return simplifyCatalogDescription(sakaiProxy.getCatalogDescription(ref.getId()));
     }
 
     public boolean entityExists(String course_id) {
-	return catalogDescriptionService.descriptionExists(course_id);
+	return sakaiProxy.catalogDescriptionExists(course_id);
     }
 
     public List<SimpleCatalogDescription> simplifyCatalogDescriptions(

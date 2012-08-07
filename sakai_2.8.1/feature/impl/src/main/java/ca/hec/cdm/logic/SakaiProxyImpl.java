@@ -40,6 +40,10 @@ public class SakaiProxyImpl implements SakaiProxy {
     	return catalogDescriptionService.getCatalogDescription(id);
     }
 
+    public CatalogDescription getCatalogDescription(String courseId) {
+    	return catalogDescriptionService.getCatalogDescription(courseId);
+    }
+
     public List<CatalogDescription> getCatalogDescriptionsForUser() {
 		List<CatalogDescription> catalogDescriptions = new ArrayList<CatalogDescription>();
     	
@@ -158,6 +162,23 @@ public class SakaiProxyImpl implements SakaiProxy {
 
     public String getCareerDescription(String career) {
 	return portalManagerService.getCareerDescription(career);
+    }
+
+    public boolean catalogDescriptionExists(String course_id) {
+	return catalogDescriptionService.descriptionExists(course_id);
+    }
+
+    public List<CatalogDescription> getCatalogDescriptions() {
+	return catalogDescriptionService.getCatalogDescriptions();
+    }
+
+    public List<CatalogDescription> getCatalogDescriptionsByDepartment(
+	    String department) {
+	return catalogDescriptionService.getCatalogDescriptionsByDepartment(department);
+    }
+
+    public List<CatalogDescription> getCatalogDescriptionsByCareer(String career) {
+	return catalogDescriptionService.getCatalogDescriptionsByCareer(career);
     }
 
     @Getter

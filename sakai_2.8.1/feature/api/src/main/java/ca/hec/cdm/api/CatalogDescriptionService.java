@@ -29,6 +29,14 @@ public interface CatalogDescriptionService // extends EntityProducer
     public CatalogDescription getCatalogDescription(String course_id);
 
     /**
+     * Access a list of all catalog descriptions
+     * 
+     * @return A list of catalog description objects; may
+     *         be empty
+     */
+    public List<CatalogDescription> getCatalogDescriptions();
+
+    /**
      * Access a list of catalog descriptions by career
      * 
      * @param career - the career to search on
