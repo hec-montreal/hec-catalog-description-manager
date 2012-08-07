@@ -29,6 +29,10 @@ public class CatalogDescriptionServiceImpl implements CatalogDescriptionService 
 	return catalogDescriptionDao.getCatalogDescription(course_id);
     }
 
+    public List<CatalogDescription> getCatalogDescriptions() {
+	return catalogDescriptionDao.getCatalogDescriptions();
+    }
+
     public List<CatalogDescription> getCatalogDescriptionsByCareer(String career) {
 	return catalogDescriptionDao.getCatalogDescriptionsByCareer(career);
     }

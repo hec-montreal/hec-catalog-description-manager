@@ -14,6 +14,15 @@ import ca.hec.cdm.model.CatalogDescription;
  */
 public interface SakaiProxy {
 	
+
+	/**
+	 * check if a catalogDescription exists (by course id)
+	 *
+	 * @param String course_id - the id of the catalog description
+	 * @return true if it exists, false otherwise
+	 */
+	public boolean catalogDescriptionExists(String course_id);
+
 	/**
 	 * save catalogDescription
 	 *
@@ -32,11 +41,36 @@ public interface SakaiProxy {
 	/**
 	 * get catalogDescription
 	 *
-	 * @param id - the id of teh catalog description to retrieve
+	 * @param id - the database id of the catalog description to retrieve
 	 * @return - the catalog description corresponding to the Id
 	 */
 	public CatalogDescription getCatalogDescriptionById(Long id);
 	
+	/**
+	 * get catalogDescription by courseId
+	 *
+	 * @param courseId - the course id of the catalog description to retrieve
+	 * @return - the catalog description corresponding to the course Id
+	 */
+	public CatalogDescription getCatalogDescription(String id);
+
+	/**
+	 * get the list of catalogDescription for a department
+	 *
+	 * @param department - the department to search on
+	 * @return - the list of catalog description corresponding to the department
+	 */
+	public List<CatalogDescription> getCatalogDescriptionsByDepartment(
+		String department);
+
+	/**
+	 * get the list of catalogDescription for a career
+	 *
+	 * @param career - the career to search on
+	 * @return - the list of catalog description corresponding to the career
+	 */
+	public List<CatalogDescription> getCatalogDescriptionsByCareer(
+		String career);
 	/**
 	 * Get current siteid
 	 * @return

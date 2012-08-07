@@ -39,7 +39,14 @@ public interface CatalogDescriptionDao {
      * @param id - the course id of the catalog description
      * @return - the last version of the CatalogDescription
      */
-	public CatalogDescription getCatalogDescription(String course_id);
+    public CatalogDescription getCatalogDescription(String course_id);
+
+    /**
+     * Return all active catalog descriptions
+     * 
+     * @return - the list of CatalogDescription
+     */
+    public List<CatalogDescription> getCatalogDescriptions();
 
     /**
      * Return a list of CatalogDescriptions by career
@@ -107,5 +114,5 @@ public interface CatalogDescriptionDao {
      * @param course_id - the course_id of the catalog description
      * @return true if the catalog description exists, false otherwise
      */
-	public boolean descriptionExists(String course_id);
+    public boolean descriptionExists(String course_id);
 }
