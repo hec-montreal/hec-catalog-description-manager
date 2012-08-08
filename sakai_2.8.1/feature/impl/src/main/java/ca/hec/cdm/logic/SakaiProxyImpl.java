@@ -18,6 +18,7 @@ import org.sakaiproject.user.api.UserDirectoryService;
 
 import ca.hec.cdm.api.CatalogDescriptionService;
 import ca.hec.cdm.exception.DatabaseException;
+import ca.hec.cdm.exception.PermissionException;
 import ca.hec.cdm.exception.StaleDataException;
 import ca.hec.cdm.model.CatalogDescription;
 import ca.hec.portal.api.PortalManagerService;
@@ -31,9 +32,14 @@ public class SakaiProxyImpl implements SakaiProxy {
     private static final Logger log = Logger.getLogger(SakaiProxyImpl.class);
 
     public void updateCatalogDescription(CatalogDescription cd) 
-    		throws StaleDataException, DatabaseException {
+    		throws StaleDataException, DatabaseException, PermissionException {
     	
-   		catalogDescriptionService.updateDescription(cd);
+	if (getUserDepartments().contains(cd.getDepartment())) {
+	    catalogDescriptionService.updateDescription(cd);
+	}
+	else {
+	    throw new PermissionException();
+	}
     }
 
     public CatalogDescription getCatalogDescriptionById(Long id) {
@@ -45,15 +51,15 @@ public class SakaiProxyImpl implements SakaiProxy {
     }
 
     public List<CatalogDescription> getCatalogDescriptionsForUser() {
-		List<CatalogDescription> catalogDescriptions = new ArrayList<CatalogDescription>();
+	List<CatalogDescription> catalogDescriptions = new ArrayList<CatalogDescription>();
     	
-    	// add the catalog descriptions for all departments
-  		for(String dept : getUserDepartments())
-   		{
-			catalogDescriptions.addAll(catalogDescriptionService.getCatalogDescriptionsByDepartment(dept));
-   		}
+	// add the catalog descriptions for all departments
+	for(String dept : getUserDepartments())
+	{
+	    catalogDescriptions.addAll(catalogDescriptionService.getCatalogDescriptionsByDepartment(dept));
+	}
   		
-		return catalogDescriptions;
+	return catalogDescriptions;
     }
     
     private List<String> getUserDepartments() {
@@ -70,7 +76,7 @@ public class SakaiProxyImpl implements SakaiProxy {
     			String[] posteSplit = posteActif.split("\\|");
     			
   				// department is the parameter at index 1
-   				departments.add(posteSplit[1]);
+   				departments.add(posteSplit[1].toUpperCase());
     		}
     	}
     	

@@ -3,6 +3,7 @@ package ca.hec.cdm.logic;
 import java.util.List;
 
 import ca.hec.cdm.exception.DatabaseException;
+import ca.hec.cdm.exception.PermissionException;
 import ca.hec.cdm.exception.StaleDataException;
 import ca.hec.cdm.model.CatalogDescription;
 
@@ -30,7 +31,8 @@ public interface SakaiProxy {
 	 * @throws StaleDataException 
 	 * @throws DatabaseException
 	 */
-	public void updateCatalogDescription(CatalogDescription cd) throws StaleDataException, DatabaseException;
+	public void updateCatalogDescription(CatalogDescription cd) 
+		throws StaleDataException, DatabaseException, PermissionException;
 	
 	/**
 	 * get the list of catalogDescription for current user
