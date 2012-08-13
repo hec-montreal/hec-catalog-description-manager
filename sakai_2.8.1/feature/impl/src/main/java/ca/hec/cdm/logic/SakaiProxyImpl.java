@@ -10,7 +10,6 @@ import org.apache.log4j.Logger;
 import org.sakaiproject.authz.api.SecurityService;
 import org.sakaiproject.component.api.ServerConfigurationService;
 import org.sakaiproject.event.api.EventTrackingService;
-import org.sakaiproject.site.api.Site;
 import org.sakaiproject.site.api.SiteService;
 import org.sakaiproject.tool.api.SessionManager;
 import org.sakaiproject.tool.api.ToolManager;
@@ -22,8 +21,6 @@ import ca.hec.cdm.exception.PermissionException;
 import ca.hec.cdm.exception.StaleDataException;
 import ca.hec.cdm.model.CatalogDescription;
 import ca.hec.portal.api.PortalManagerService;
-
-import org.sakaiquebec.opensyllabus.common.api.OsylSiteService;
 
 /**
  * Implementation of {@link SakaiProxy}
@@ -142,20 +139,6 @@ public class SakaiProxyImpl implements SakaiProxy {
     }
 
     /**
-     * {@inheritDoc}
-     */
-    public String getSpecificCourse(String courseId) {
-	List<Site> sites = siteService.getSites(SiteService.SelectionType.ANY, "course",
-		courseId, null, SiteService.SortType.CREATED_ON_DESC, null);
-	
-	for (Site s : sites) {
-	    if (osylSiteService.hasBeenPublished(s.getId()))
-		return s.getTitle();
-	}
-	return "";
-    }
-
-    /**
      * init - perform any actions required here for when this bean starts up
      */
     public void init() {
@@ -218,10 +201,6 @@ public class SakaiProxyImpl implements SakaiProxy {
     @Getter
     @Setter
     private SiteService siteService;
-
-    @Getter
-    @Setter
-    private OsylSiteService osylSiteService;
 
     @Getter
     @Setter

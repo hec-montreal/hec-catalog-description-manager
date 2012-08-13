@@ -121,14 +121,6 @@ public interface SakaiProxy {
 	public String getToolSkinCSS(String skinRepo);
 
 	/**
-	 * Gets the specific course title associated to the given catalog description
-	 *
-	 * @param courseId		the course id of the catalog description
-	 * @return the title of the most recently created course offering (that has been published)
-	 */
-	public String getSpecificCourse(String courseId);
-
-	/**
 	 * Gets the description of the specified department
 	 *
 	 * @param department	the department to find a description for

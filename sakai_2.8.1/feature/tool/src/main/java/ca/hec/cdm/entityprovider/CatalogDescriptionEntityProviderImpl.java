@@ -73,19 +73,6 @@ public class CatalogDescriptionEntityProviderImpl extends AbstractEntityProvider
 		.getCatalogDescriptionsByCareer(career));
     }
 
-    @EntityCustomAction(action = "specific-course", viewKey = EntityView.VIEW_SHOW)
-    public Object getSpecificCourse(EntityView view) {
-	String courseId = view.getPathSegment(1);
-
-	// check that courseid is supplied
-	if (StringUtils.isBlank(courseId)) {
-	    throw new IllegalArgumentException(
-		    "CourseId must be set in order to get specific course via the URL /catalog-description/:ID:/specific-course/");
-	}
-
-	return sakaiProxy.getSpecificCourse(courseId);
-    }
-
     public Object getEntity(EntityReference ref) {
 	return simplifyCatalogDescription(sakaiProxy.getCatalogDescription(ref.getId()));
     }
