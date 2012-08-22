@@ -33,13 +33,13 @@
 			</dependency>
 			<dependency>
 				<groupId>ca.hec.portal</groupId>
-				<artifactId>portal-manager-api</artifactId>
+				<artifactId>hec-public-portal-manager-api</artifactId>
 				<version>1.0-SNAPSHOT</version>
 				<scope>provided</scope>
 			</dependency>
 			<dependency>
 				<groupId>ca.hec.portal</groupId>
-				<artifactId>portal-manager-impl</artifactId>
+				<artifactId>hec-public-portal-manager-impl</artifactId>
 				<version>1.0-SNAPSHOT</version>
 				<scope>runtime</scope>
 			</dependency>
