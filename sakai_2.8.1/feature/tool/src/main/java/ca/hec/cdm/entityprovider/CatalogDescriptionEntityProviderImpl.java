@@ -1,6 +1,7 @@
 package ca.hec.cdm.entityprovider;
 
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
@@ -13,10 +14,13 @@ import org.sakaiproject.entitybroker.entityprovider.CoreEntityProvider;
 import org.sakaiproject.entitybroker.entityprovider.annotations.EntityCustomAction;
 import org.sakaiproject.entitybroker.entityprovider.capabilities.ActionsExecutable;
 import org.sakaiproject.entitybroker.entityprovider.capabilities.AutoRegisterEntityProvider;
+import org.sakaiproject.entitybroker.entityprovider.capabilities.CollectionResolvable;
 import org.sakaiproject.entitybroker.entityprovider.capabilities.Outputable;
 import org.sakaiproject.entitybroker.entityprovider.capabilities.Resolvable;
 import org.sakaiproject.entitybroker.entityprovider.capabilities.Sampleable;
 import org.sakaiproject.entitybroker.entityprovider.extension.Formats;
+import org.sakaiproject.entitybroker.entityprovider.search.Restriction;
+import org.sakaiproject.entitybroker.entityprovider.search.Search;
 import org.sakaiproject.entitybroker.util.AbstractEntityProvider;
 import org.springframework.beans.factory.annotation.Autowired;
 
@@ -25,7 +29,8 @@ import ca.hec.cdm.model.CatalogDescription;
 import ca.hec.cdm.model.SimpleCatalogDescription;
 
 public class CatalogDescriptionEntityProviderImpl extends AbstractEntityProvider 
-	implements CoreEntityProvider, AutoRegisterEntityProvider, Resolvable, Sampleable, Outputable, ActionsExecutable {
+	implements CoreEntityProvider, AutoRegisterEntityProvider, 
+	Resolvable, CollectionResolvable, Outputable {
 
     public final static String ENTITY_PREFIX = "catalogDescription";
 
@@ -41,40 +46,19 @@ public class CatalogDescriptionEntityProviderImpl extends AbstractEntityProvider
 	return new String[] { Formats.JSON };
     }
 
-    @EntityCustomAction(action = "getCatalogDescriptionsByDepartment", viewKey = EntityView.VIEW_LIST)
-    public List<?> getCatalogDescriptionsByDepartment(EntityView view,
-	    Map<String, Object> params) {
-
-	String department = view.getPathSegment(2);
-
-	// check that department is supplied
-	if (StringUtils.isBlank(department)) {
-	    throw new IllegalArgumentException(
-		    "Department must be set in order to get the catalog descriptions via the URL /catalog-description/department/departmentId");
-	}
-
-	return simplifyCatalogDescriptions(sakaiProxy
-		.getCatalogDescriptionsByDepartment(department));
-    }
-
-    @EntityCustomAction(action = "getCatalogDescriptionsByCareer", viewKey = EntityView.VIEW_LIST)
-    public List<?> getCatalogDescriptionsByCareer(EntityView view,
-	    Map<String, Object> params) {
-
-	String career = view.getPathSegment(2);
-
-	// check that department is supplied
-	if (StringUtils.isBlank(career)) {
-	    throw new IllegalArgumentException(
-		    "Career must be set in order to get the catalog descriptions via the URL /catalog-description/career/careerId");
-	}
-
-	return simplifyCatalogDescriptions(sakaiProxy
-		.getCatalogDescriptionsByCareer(career));
-    }
-
     public Object getEntity(EntityReference ref) {
 	return simplifyCatalogDescription(sakaiProxy.getCatalogDescription(ref.getId()));
+    }
+
+    public List<?> getEntities(EntityReference ref, Search search) {
+	Map<String, String> criteria = new HashMap<String, String>();
+	
+	for (Restriction r : search.getRestrictions()) {
+	    if (r.getProperty().equals("department") ||
+		    r.getProperty().equals("career"))
+		criteria.put(r.getProperty(), r.getStringValue());
+	}
+	return simplifyCatalogDescriptions(sakaiProxy.getCatalogDescriptions(criteria));
     }
 
     public boolean entityExists(String course_id) {

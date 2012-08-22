@@ -1,6 +1,7 @@
 package ca.hec.cdm.api;
 
 import java.util.List;
+import java.util.Map;
 
 import ca.hec.cdm.exception.DatabaseException;
 import ca.hec.cdm.exception.StaleDataException;
@@ -26,14 +27,6 @@ public interface CatalogDescriptionDao {
     public CatalogDescription getCatalogDescription(Long id);
     
     /**
-     * Return the last version of a catalog description based on the course id
-     * 
-     * @param id - the course id of the catalog description
-     * @return - the last version of the CatalogDescription
-     */
-    public CatalogDescription getLastVersionCatalogDescription(String courseId);
-
-    /**
      * Return the active catalog description based on the course id
      * 
      * @param id - the course id of the catalog description
@@ -42,30 +35,20 @@ public interface CatalogDescriptionDao {
     public CatalogDescription getCatalogDescription(String course_id);
 
     /**
-     * Return all active catalog descriptions
+     * Return the last version of a catalog description based on the course id
+     * 
+     * @param id - the course id of the catalog description
+     * @return - the last version of the CatalogDescription
+     */
+    public CatalogDescription getLastVersionCatalogDescription(String courseId);
+
+    /**
+     * Return active catalog descriptions that correspond to the given criteria map
+     * (can be null for all)
      * 
      * @return - the list of CatalogDescription
      */
-    public List<CatalogDescription> getCatalogDescriptions();
-
-    /**
-     * Return a list of CatalogDescriptions by career
-     * 
-     * @param career - the career for which the catalog descriptions should be
-     *            returned
-     * @return - the list of CatalogDescriptions
-     */
-    public List<CatalogDescription> getCatalogDescriptionsByCareer(String career);
-
-    /**
-     * Return a list of CatalogDescriptions by department
-     * 
-     * @param department - the department for which the catalog descriptions
-     *            should be returned
-     * @return - the list of CatalogDescriptions
-     */
-    public List<CatalogDescription> getCatalogDescriptionsByDepartment(
-	    String department);
+    public List<CatalogDescription> getCatalogDescriptions(Map<String, String> criteria);
 
     /**
      * save the catalog description to the database

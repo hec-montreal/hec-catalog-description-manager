@@ -2,6 +2,7 @@ package ca.hec.cdm.dao.impl;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Map;
 
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
@@ -29,52 +30,6 @@ public class CatalogDescriptionDaoImpl extends HibernateDaoSupport implements
 		CatalogDescription.class, id);
     }
 
-    public List<CatalogDescription> getCatalogDescriptions() {
-	DetachedCriteria dc =
-		DetachedCriteria.forClass(CatalogDescription.class)
-			.add(Restrictions.eq("active", true));
-
-	List<CatalogDescription> catalogDescriptions =
-		new ArrayList<CatalogDescription>();
-	for (Object o : getHibernateTemplate().findByCriteria(dc)) {
-	    catalogDescriptions.add((CatalogDescription) o);
-	}
-	return catalogDescriptions;
-    }
-
-    public List<CatalogDescription> getCatalogDescriptionsByCareer(String career) {
-	DetachedCriteria dc =
-		DetachedCriteria.forClass(CatalogDescription.class)
-			.add(Restrictions.eq("career", career.toUpperCase()))
-			.add(Restrictions.eq("active", true));
-
-	List<CatalogDescription> catalogDescriptions =
-		new ArrayList<CatalogDescription>();
-	for (Object o : getHibernateTemplate().findByCriteria(dc)) {
-	    catalogDescriptions.add((CatalogDescription) o);
-	}
-	return catalogDescriptions;
-    }
-
-    public List<CatalogDescription> getCatalogDescriptionsByDepartment(
-	    String department) {
-	DetachedCriteria dc =
-		DetachedCriteria
-			.forClass(CatalogDescription.class)
-			.add(Restrictions.eq("department",
-				department.toUpperCase()))
-			.add(Restrictions.eq("active", true));
-
-	List<CatalogDescription> catalogDescriptions =
-		new ArrayList<CatalogDescription>();
-
-	for (Object o : getHibernateTemplate().findByCriteria(dc)) {
-	    catalogDescriptions.add((CatalogDescription) o);
-	}
-
-	return catalogDescriptions;
-    }
-
     public CatalogDescription getCatalogDescription(String course_id) {
 	// there should only ever be one active description, but it can't hurt
 	// to order by db id.
@@ -88,6 +43,28 @@ public class CatalogDescriptionDaoImpl extends HibernateDaoSupport implements
 
 	return (CatalogDescription) getHibernateTemplate().findByCriteria(dc)
 		.get(0);
+    }
+
+    public List<CatalogDescription> getCatalogDescriptions(Map<String, String> criteria) {
+	List<CatalogDescription> catalogDescriptions =
+		new ArrayList<CatalogDescription>();
+	
+	DetachedCriteria dc =
+		DetachedCriteria.forClass(CatalogDescription.class)
+			.add(Restrictions.eq("active", true));
+
+	// add each of the search criteria in the map to the Hibernate DetachedCriteria object
+	if (criteria != null) {
+	    for (Map.Entry<String, String> entry: criteria.entrySet()) {
+		dc.add(Restrictions.eq(entry.getKey(), entry.getValue()));
+	    }
+	}
+
+	for (Object o : getHibernateTemplate().findByCriteria(dc)) {
+	    catalogDescriptions.add((CatalogDescription) o);
+	}
+	
+	return catalogDescriptions;
     }
 
     public List<String> getListCourseId() {
