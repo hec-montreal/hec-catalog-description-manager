@@ -1,7 +1,9 @@
 package ca.hec.cdm.logic;
 
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 import lombok.Getter;
 import lombok.Setter;
@@ -28,6 +30,20 @@ import ca.hec.portal.api.PortalManagerService;
 public class SakaiProxyImpl implements SakaiProxy {
     private static final Logger log = Logger.getLogger(SakaiProxyImpl.class);
 
+    /**
+     * {@inheritDoc}
+     */
+    public boolean catalogDescriptionExists(String course_id) {
+	return catalogDescriptionService.descriptionExists(course_id);
+    }
+
+    /**
+     * {@inheritDoc}
+     */
+    public List<CatalogDescription> getCatalogDescriptions(Map<String, String> criteria) {
+	return catalogDescriptionService.getCatalogDescriptions(criteria);
+    }
+
     public void updateCatalogDescription(CatalogDescription cd) 
     		throws StaleDataException, DatabaseException, PermissionException {
     	
@@ -53,7 +69,9 @@ public class SakaiProxyImpl implements SakaiProxy {
 	// add the catalog descriptions for all departments
 	for(String dept : getUserDepartments())
 	{
-	    catalogDescriptions.addAll(catalogDescriptionService.getCatalogDescriptionsByDepartment(dept));
+	    Map<String, String> searchCriteria = new HashMap<String, String>();
+	    searchCriteria.put("department", dept);
+	    catalogDescriptions.addAll(catalogDescriptionService.getCatalogDescriptions(searchCriteria));
 	}
   		
 	return catalogDescriptions;
@@ -81,93 +99,24 @@ public class SakaiProxyImpl implements SakaiProxy {
     }
 
     /**
-     * {@inheritDoc}
-     */
-    public String getCurrentSiteId() {
-    	return toolManager.getCurrentPlacement().getContext();
-    }
-
-    /**
-     * {@inheritDoc}
-     */
-    public String getCurrentUserId() {
-    	return sessionManager.getCurrentSessionUserId();
-    }
-
-    /**
-     * {@inheritDoc}
-     */
-    public String getCurrentUserDisplayName() {
-    	return userDirectoryService.getCurrentUser().getDisplayName();
-    }
-
-    /**
-     * {@inheritDoc}
-     */
-    public boolean isSuperUser() {
-    	return securityService.isSuperUser();
-    }
-
-    /**
-     * {@inheritDoc}
-     */
-    public void postEvent(String event, String reference, boolean modify) {
-    	eventTrackingService.post(eventTrackingService.newEvent(event, reference, modify));
-    }
-
-    /**
-     * {@inheritDoc}
-     */
-    public String getSkinRepoProperty() {
-    	return serverConfigurationService.getString("skin.repo");
-    }
-
-    /**
-     * {@inheritDoc}
-     */
-    public String getToolSkinCSS(String skinRepo) {
-
-    	String skin = siteService.findTool(
-    			sessionManager.getCurrentToolSession().getPlacementId())
-    			.getSkin();
-
-    	if (skin == null) {
-    		skin = serverConfigurationService.getString("skin.default");
-    	}
-
-    	return skinRepo + "/" + skin + "/tool.css";
-    }
-
-    /**
      * init - perform any actions required here for when this bean starts up
      */
     public void init() {
     	log.info("init");
     }
 
+    /**
+     * {@inheritDoc}
+     */
     public String getDepartmentDescription(String department) {
 	return portalManagerService.getDepartmentDescription(department);
     }
 
+    /**
+     * {@inheritDoc}
+     */
     public String getCareerDescription(String career) {
 	return portalManagerService.getCareerDescription(career);
-    }
-
-    public boolean catalogDescriptionExists(String course_id) {
-	return catalogDescriptionService.descriptionExists(course_id);
-    }
-
-    public List<CatalogDescription> getCatalogDescriptions() {
-	return catalogDescriptionService.getCatalogDescriptions();
-    }
-
-    public List<CatalogDescription> getCatalogDescriptionsByDepartment(
-	    String department) {
-	return catalogDescriptionService.getCatalogDescriptionsByDepartment(department);
-    }
-
-    public List<CatalogDescription> getCatalogDescriptionsByCareer(String career) {
-	return catalogDescriptionService.getCatalogDescriptionsByCareer(career);
     }
 
     @Getter

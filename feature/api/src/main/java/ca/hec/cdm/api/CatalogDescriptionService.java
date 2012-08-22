@@ -1,6 +1,7 @@
 package ca.hec.cdm.api;
 
 import java.util.List;
+import java.util.Map;
 
 import ca.hec.cdm.exception.DatabaseException;
 import ca.hec.cdm.exception.StaleDataException;
@@ -29,31 +30,12 @@ public interface CatalogDescriptionService // extends EntityProducer
     public CatalogDescription getCatalogDescription(String course_id);
 
     /**
-     * Access a list of all catalog descriptions
+     * Access a list of catalog descriptions where each key in the criteria map is equal to the value.
      * 
      * @return A list of catalog description objects; may
      *         be empty
      */
-    public List<CatalogDescription> getCatalogDescriptions();
-
-    /**
-     * Access a list of catalog descriptions by career
-     * 
-     * @param career - the career to search on
-     * @return A list of catalog description objects that meet the criteria; may
-     *         be empty
-     */
-    public List<CatalogDescription> getCatalogDescriptionsByCareer(String career);
-
-    /**
-     * Access a list of catalog descriptions by department
-     * 
-     * @param department - the department to search on
-     * @return A list of catalog description objects that meet the criteria; may
-     *         be empty
-     */
-    public List<CatalogDescription> getCatalogDescriptionsByDepartment(
-	    String department);
+    public List<CatalogDescription> getCatalogDescriptions(Map<String, String> criteria);
 
     /**
      * Get all departments that have at least one catalog description with an

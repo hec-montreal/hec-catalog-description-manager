@@ -1,6 +1,7 @@
 package ca.hec.cdm.impl;
 
 import java.util.List;
+import java.util.Map;
 
 import org.springframework.dao.DataAccessException;
 import org.springframework.orm.hibernate3.HibernateOptimisticLockingFailureException;
@@ -29,18 +30,8 @@ public class CatalogDescriptionServiceImpl implements CatalogDescriptionService 
 	return catalogDescriptionDao.getCatalogDescription(course_id);
     }
 
-    public List<CatalogDescription> getCatalogDescriptions() {
-	return catalogDescriptionDao.getCatalogDescriptions();
-    }
-
-    public List<CatalogDescription> getCatalogDescriptionsByCareer(String career) {
-	return catalogDescriptionDao.getCatalogDescriptionsByCareer(career);
-    }
-
-    public List<CatalogDescription> getCatalogDescriptionsByDepartment(
-	    String department) {
-	return catalogDescriptionDao
-		.getCatalogDescriptionsByDepartment(department);
+    public List<CatalogDescription> getCatalogDescriptions(Map<String, String> criteria) {
+	return catalogDescriptionDao.getCatalogDescriptions(criteria);
     }
 
     public void updateDescription(CatalogDescription cd)
