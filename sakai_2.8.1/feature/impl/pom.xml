@@ -20,7 +20,7 @@
 		</dependency>
 		<dependency>
 			<groupId>ca.hec.portal</groupId>
-			<artifactId>portal-manager-api</artifactId>
+			<artifactId>hec-public-portal-manager-api</artifactId>
 		</dependency>
 
 		<dependency>
