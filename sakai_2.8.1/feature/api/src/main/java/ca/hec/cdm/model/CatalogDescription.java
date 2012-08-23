@@ -26,9 +26,7 @@ public class CatalogDescription implements Comparable {
 	private String requirements;
 	
 	private Float credits;
-	private Date effectiveDate;
 	private boolean active;
-	private Long ancestorId;
 	private String language;
 
 	private String lastModifiedBy;

@@ -47,6 +47,8 @@ public class SakaiProxyImpl implements SakaiProxy {
     public void updateCatalogDescription(CatalogDescription cd) 
     		throws StaleDataException, DatabaseException, PermissionException {
     	
+	cd.setLastModifiedBy(getCurrentUserDisplayName());
+	
 	if (getUserDepartments().contains(cd.getDepartment())) {
 	    catalogDescriptionService.updateDescription(cd);
 	}
@@ -119,6 +121,13 @@ public class SakaiProxyImpl implements SakaiProxy {
 	return portalManagerService.getCareerDescription(career);
     }
 
+    /**
+     * {@inheritDoc}
+     */
+    public String getCurrentUserDisplayName() {
+    	return userDirectoryService.getCurrentUser().getDisplayName();
+    }
+    
     @Getter
     @Setter
     private CatalogDescriptionService catalogDescriptionService;

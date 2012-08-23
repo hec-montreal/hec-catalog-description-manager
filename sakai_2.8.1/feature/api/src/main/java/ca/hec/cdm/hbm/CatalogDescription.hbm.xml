@@ -19,9 +19,7 @@
 		<property name="career" type="string" column="ACAD_CAREER" length="255" not-null="true"/>
 		<property name="requirements" type="text" column="REQUIREMENTS" not-null="false"/>
 		<property name="credits" type="float" column="CREDITS" not-null="true"/>
-		<property name="effectiveDate" type="date" column="EFFECTIVE_DATE" not-null="true"/>
 		<property name="active" type="boolean" column="IS_ACTIVE" not-null="true"/>
-		<property name="ancestorId" type="long" column="ANCESTOR_ID" not-null="false"/>
 		<property name="language" type="string" column="LANG" length="10" not-null="false"/>
 		<property name="lastModifiedBy" type="string" column="LAST_MODIFIED_BY" length="255" not-null="false"/>
 		<property name="createdBy" type="string" column="CREATED_BY" length="255" not-null="true"/>
