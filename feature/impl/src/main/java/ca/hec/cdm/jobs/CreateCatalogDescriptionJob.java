@@ -73,8 +73,6 @@ public class CreateCatalogDescriptionJob implements Job {
 	    cd.setRequirements(co.getRequirement());
 	    cd.setCreatedDate(new Date(java.util.Calendar.getInstance()
 		    .getTimeInMillis()));
-	    cd.setEffectiveDate(new Date(java.util.Calendar.getInstance()
-		    .getTimeInMillis()));
 	    cd.setActive(true);
 	    cd.setCreatedBy("quartz job");
 
