@@ -38,10 +38,39 @@ public interface CatalogDescriptionDao {
      * Return the last version of a catalog description based on the course id
      * 
      * @param id - the course id of the catalog description
-     * @return - the last version of the CatalogDescription
+     * @return - the last version of the CatalogDescription (null if nothing is found)
      */
     public CatalogDescription getLastVersionCatalogDescription(String courseId);
 
+    
+    /**
+     * Return active catalog descriptions that correspond to the given department
+     * (can be null for all)
+     * 
+     * @return - the list of CatalogDescription
+     */
+    public List<CatalogDescription> getCatalogDescriptionsByDepartment(String department);
+    
+    
+    /**
+     * Return active catalog descriptions that correspond to the given academic career
+     * (can be null for all)
+     * 
+     * @return - the list of CatalogDescription
+     */
+    public List<CatalogDescription> getCatalogDescriptionsByCareer(String career);
+    
+    
+    /**
+     * Return all active catalog descriptions for certificates programs
+     * (can be null for all)
+     * 
+     * @return - the list of CatalogDescription
+     */
+    
+    public List<CatalogDescription> getAllCatalogDescriptionsForCertificate();
+    
+    
     /**
      * Return active catalog descriptions that correspond to the given criteria map
      * (can be null for all)
@@ -74,10 +103,17 @@ public interface CatalogDescriptionDao {
     public void setCatalogDescriptionToInactive();
     
     /**
-     * Get catalog description from department that have no description
+     * Get catalog description from department that have no description and which are not certificate courses
      * 
      */
     public List<CatalogDescription> getCatalogDescriptionsByDepartmentWithNoDescription(String department);
+    
+    
+    /**
+     * Get catalog description for certificates courses that have no description
+     * 
+     */
+    public List<CatalogDescription> getAllCatalogDescriptionsForCertificatesWithNoDescription();
     
     /**
      * Get all departments that have at least one catalog description with an empty description
@@ -85,12 +121,7 @@ public interface CatalogDescriptionDao {
      */
     public List<String> getDepartmentNameWithAtLeastOneCaWithNoDescription();
     
-    /**
-     * Get all departments that have at least one catalog description with an empty description
-     * 
-     */
-    public List<String> getCareerNameWithAtLeastOneCaWithNoDescription();
-
+ 
     /**
      * return whether or not the specified Catalog Description exists.
      * 

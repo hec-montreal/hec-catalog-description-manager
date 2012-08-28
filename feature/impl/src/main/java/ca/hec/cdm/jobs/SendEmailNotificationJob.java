@@ -20,7 +20,6 @@
  ******************************************************************************/
 package ca.hec.cdm.jobs;
 
-import java.lang.reflect.Array;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -40,7 +39,7 @@ import org.sakaiproject.email.api.EmailMessage;
 import org.sakaiproject.email.api.EmailService;
 import org.sakaiproject.util.ResourceLoader;
 
-import ca.hec.cdm.api.CatalogDescriptionDao;
+import ca.hec.cdm.api.CatalogDescriptionService;
 import ca.hec.cdm.model.CatalogDescription;
 
 public class SendEmailNotificationJob implements Job {
@@ -51,7 +50,7 @@ public class SendEmailNotificationJob implements Job {
     
     @Getter
     @Setter
-    private CatalogDescriptionDao catalogDescriptionDao;
+    private CatalogDescriptionService catalogDescriptionService;
     
     private static Log log = LogFactory
 	    .getLog(SendEmailNotificationJob.class);
@@ -63,47 +62,93 @@ public class SendEmailNotificationJob implements Job {
     }
 
     public void execute(JobExecutionContext arg0) throws JobExecutionException {
-	List<String> listDepartments = catalogDescriptionDao.getDepartmentNameWithAtLeastOneCaWithNoDescription();
-	for (String department: listDepartments){
-	    List<CatalogDescription> listCatalogDescription = catalogDescriptionDao.getCatalogDescriptionsByDepartmentWithNoDescription(department);
-	    sendEmail(department, listCatalogDescription);
-	}
+	
+	sendEmailToCertificate();
+	
+	sendEmailToDepartments();
     }
 
-    public void sendEmail(String departName, List<CatalogDescription> listCatalogDescription) {
+    
+    private void sendEmailToCertificate() {
 	
-	//Get the recipient address from the department
-	String recipientAdress = ServerConfigurationService.getString("recipientAdress_" + departName);
-	String[] argsMessage = {departName};
-	String messageIntroduction = msgs.getFormattedMessage("email_template", argsMessage);
+	List<CatalogDescription> listCatalogDescription =
+		catalogDescriptionService
+			.getAllCatalogDescriptionsForCertificatesWithNoDescription();
+
+	if (listCatalogDescription != null
+		&& listCatalogDescription.size() != 0) {
+	    
+	    sendEmail("CERTIFICAT", listCatalogDescription);
+	}
+
+    }
+    
+    private void sendEmailToDepartments() {
+
+	List<String> listDepartments =
+		catalogDescriptionService
+			.getDepartmentNameWithAtLeastOneCaWithNoDescription();
+
+	for (String department : listDepartments) {
+
+	    List<CatalogDescription> listCatalogDescription =
+		    catalogDescriptionService
+			    .getCatalogDescriptionsByDepartmentWithNoDescription(department);
+
+	    if (listCatalogDescription != null
+		    && listCatalogDescription.size() != 0) {
+		sendEmail(department, listCatalogDescription);
+	    }
+	}
+    }
+    
+    private void sendEmail(String departName, List<CatalogDescription> listCatalogDescription) {
+	
+	// Get the recipient address from the department
+	String recipientAdress =
+		ServerConfigurationService.getString("recipientAdress_"
+			+ departName);
+	String[] argsMessage = { departName };
+	String messageIntroduction =
+		msgs.getFormattedMessage("email_template", argsMessage);
+	
 	String messageSubject = msgs.getString("email_subject");
 	List<EmailAddress> toRecipients = new ArrayList<EmailAddress>();
 	toRecipients.add(new EmailAddress(recipientAdress));
-	
-	//Create message Body
+
+	// Create message Body
 	StringBuilder messageBody = new StringBuilder();
 	messageBody.append(messageIntroduction);
-	
-	messageBody.append("<table border=\"1\" style=\"border-collapse:collapse;\"><thead><tr><th>" + msgs.getString("header_course_id") + "</th><th>" + msgs.getString("header_course_title") + "</th><th>" + msgs.getString("header_date_modification") + "</th></tr></thead><tbody>");
+
+	messageBody
+		.append("<table border=\"1\" style=\"border-collapse:collapse;\"><thead><tr><th>"
+			+ msgs.getString("header_course_id")
+			+ "</th><th>"
+			+ msgs.getString("header_course_title")
+			+ "</th><th>"
+			+ msgs.getString("header_date_modification")
+			+ "</th></tr></thead><tbody>");
 	for (CatalogDescription catalogDescription : listCatalogDescription) {
-	    messageBody.append("<tr><td>" + catalogDescription.getCourseId() + "</td><td>" + catalogDescription.getTitle() + "</td><td>" + catalogDescription.getCreatedDate() + "</td></tr>");
+	    messageBody.append("<tr><td>" + catalogDescription.getCourseId()
+		    + "</td><td>" + catalogDescription.getTitle() + "</td><td>"
+		    + catalogDescription.getCreatedDate() + "</td></tr>");
 	}
 	messageBody.append("</tbody></table>");
-	
-	//Initialize message
-		 EmailMessage message = new EmailMessage();
-		    message.setSubject(messageSubject);
-		    message.setContentType(ContentType.TEXT_HTML);
-		    message.setBody(messageBody.toString());
-		    message.setFrom("zonecours2@hec.ca");
-		    message.setRecipients(RecipientType.TO, toRecipients);
-	
+
+	// Initialize message
+	EmailMessage message = new EmailMessage();
+	message.setSubject(messageSubject);
+	message.setContentType(ContentType.TEXT_HTML);
+	message.setBody(messageBody.toString());
+	message.setFrom("zonecours2@hec.ca");
+	message.setRecipients(RecipientType.TO, toRecipients);
+
 	// send mail
 	try {
-	    
 	    emailService.send(message);
 	} catch (Exception e) {
-	    log.error("Could not send email to notify empty catalog description to " + departName + " :" + e);
+	    log.error("Could not send email to notify empty catalog description to "
+		    + departName + " :" + e);
 	    e.printStackTrace();
 	}
 

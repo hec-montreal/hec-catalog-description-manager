@@ -29,6 +29,36 @@ public interface CatalogDescriptionService // extends EntityProducer
      */
     public CatalogDescription getCatalogDescription(String course_id);
 
+
+    
+    /**
+     * Return a list of catalog descriptions by department
+     * 
+     * @return A list of catalog description objects; may
+     *         be empty
+     */
+    public List<CatalogDescription> getCatalogDescriptionsByDepartment(String department);
+    
+    
+    /**
+     * Return a list of catalog descriptions by career
+     * 
+     * @return A list of catalog description objects; may
+     *         be empty
+     */
+    public List<CatalogDescription> getCatalogDescriptionsByCareer(String career);
+
+    
+    /**
+     * Return all active catalog descriptions for certificates programs
+     * (can be null for all)
+     * 
+     * @return A list of catalog description objects; may
+     *         be empty
+     */    
+    public List<CatalogDescription> getAllCatalogDescriptionsForCertificate();
+
+    
     /**
      * Access a list of catalog descriptions where each key in the criteria map is equal to the value.
      * 
@@ -37,6 +67,8 @@ public interface CatalogDescriptionService // extends EntityProducer
      */
     public List<CatalogDescription> getCatalogDescriptions(Map<String, String> criteria);
 
+    
+    
     /**
      * Get all departments that have at least one catalog description with an
      * empty description
@@ -44,12 +76,20 @@ public interface CatalogDescriptionService // extends EntityProducer
     public List<String> getDepartmentNameWithAtLeastOneCaWithNoDescription();
 
     /**
-     * Get all departments that have at least one catalog description with an
-     * empty description
+     * Get catalog description from department that have no description and which are not certificate courses
+     * 
      */
-    public List<String> getCareerNameWithAtLeastOneCaWithNoDescription();
-
+    public List<CatalogDescription> getCatalogDescriptionsByDepartmentWithNoDescription(String department);
+   
     /**
+     * Get catalog description for certificates courses that have no description
+     * 
+     */
+    public List<CatalogDescription> getAllCatalogDescriptionsForCertificatesWithNoDescription();
+    
+    
+
+     /**
      * Update a CatalogDescription's description in the database
      * 
      * @param cd - the catalog description to update
