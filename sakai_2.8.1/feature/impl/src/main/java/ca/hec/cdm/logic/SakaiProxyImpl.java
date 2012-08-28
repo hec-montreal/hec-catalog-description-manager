@@ -28,8 +28,18 @@ import ca.hec.portal.api.PortalManagerService;
  * Implementation of {@link SakaiProxy}
  */
 public class SakaiProxyImpl implements SakaiProxy {
+    
     private static final Logger log = Logger.getLogger(SakaiProxyImpl.class);
+    
+    private static HashMap<String, String> departmentIdMap = null;
 
+    private static final String CERTIFICATE_DEPARTMENT_ID = "115";
+    
+    private static final String CERTIFICATE_ACADEMIC_CAREER_CODE = "CERT";
+   
+    private static final String LDAP_POSTE_ACTIF = "posteActif";
+    
+   
     /**
      * {@inheritDoc}
      */
@@ -44,19 +54,18 @@ public class SakaiProxyImpl implements SakaiProxy {
 	return catalogDescriptionService.getCatalogDescriptions(criteria);
     }
 
-    public void updateCatalogDescription(CatalogDescription cd) 
-    		throws StaleDataException, DatabaseException, PermissionException {
-    	
-	cd.setLastModifiedBy(getCurrentUserDisplayName());
-	
-	if (getUserDepartments().contains(cd.getDepartment())) {
+    public void updateCatalogDescription(CatalogDescription cd)
+	    throws StaleDataException, DatabaseException, PermissionException {
+
+	if (isUserUpdateAllowed(cd)) {
+	    cd.setLastModifiedBy(getCurrentUserDisplayName());
+
 	    catalogDescriptionService.updateDescription(cd);
-	}
-	else {
+	} else {
 	    throw new PermissionException();
 	}
     }
-
+    
     public CatalogDescription getCatalogDescriptionById(Long id) {
     	return catalogDescriptionService.getCatalogDescription(id);
     }
@@ -65,41 +74,133 @@ public class SakaiProxyImpl implements SakaiProxy {
     	return catalogDescriptionService.getCatalogDescription(courseId);
     }
 
+    
     public List<CatalogDescription> getCatalogDescriptionsForUser() {
+	
 	List<CatalogDescription> catalogDescriptions = new ArrayList<CatalogDescription>();
     	
-	// add the catalog descriptions for all departments
-	for(String dept : getUserDepartments())
-	{
-	    Map<String, String> searchCriteria = new HashMap<String, String>();
-	    searchCriteria.put("department", dept);
-	    catalogDescriptions.addAll(catalogDescriptionService.getCatalogDescriptions(searchCriteria));
+	List<String> posteActifs = getLDAPPosteActif();
+
+	// posteActifs is null if the property is not present
+	if (null != posteActifs) {
+	    
+	    for (String posteActif : posteActifs) {
+		
+		String deptId = getLDAPDepartmentId(posteActif);
+		
+		//if this is a certificate secretary : special case
+		if(deptId.equals(CERTIFICATE_DEPARTMENT_ID)){
+		    catalogDescriptions.addAll(catalogDescriptionService.getAllCatalogDescriptionsForCertificate());
+		}
+		else{
+		    catalogDescriptions.addAll(getCatalogDescriptionsForDepartment(deptId));		    
+		}
+		
+	    }//end for
 	}
+	
   		
 	return catalogDescriptions;
     }
     
-    private List<String> getUserDepartments() {
-    	List<String> departments = new ArrayList<String>();
-    	// for now sakai only retrieves one value even if LDAP has many for the same property, but that could change (or be changed).
-    	List<String> posteActifs = userDirectoryService.getCurrentUser().getProperties().getPropertyList("posteActif");
-    	
-    	// posteActifs is null if the property is not present
-    	if (null != posteActifs)
-    	{
-    		for(String posteActif : posteActifs)
-    		{
-    			// split the posteActif parameter at | 
-    			String[] posteSplit = posteActif.split("\\|");
-    			
-  				// department is the parameter at index 1
-   				departments.add(posteSplit[1].toUpperCase());
-    		}
-    	}
-    	
-    	return departments;
-    }
+    
+    private boolean isUserUpdateAllowed(CatalogDescription cd){
+	
+	boolean isAllowed = false;
+	
+	List<String> posteActifs = getLDAPPosteActif();
 
+	// posteActifs is null if the property is not present
+	if (null != posteActifs) {
+	    
+	    for (String posteActif : posteActifs) {
+		
+		String deptId = getLDAPDepartmentId(posteActif);
+		
+		//if this is a certificate secretary : special case
+		if(deptId.equals(CERTIFICATE_DEPARTMENT_ID)){
+		    
+		    if(cd.getCareer().equals(CERTIFICATE_ACADEMIC_CAREER_CODE)){
+			isAllowed = true;
+			break;
+		    }
+		}
+		else{
+		    String depCode = getDepartmentIdMap().get(deptId);
+		    
+		    if(depCode.equals(cd.getDepartment())){
+			isAllowed = true;
+			break;
+		    }
+		}
+		
+	    }//end for
+	}
+		
+	return isAllowed;
+    }
+   
+    
+    private List<CatalogDescription> getCatalogDescriptionsForDepartment(String deptId){
+	
+	//convert the department id into an academic department code
+	String depCode = getDepartmentIdMap().get(deptId);
+	
+	return catalogDescriptionService.getCatalogDescriptionsByDepartment(depCode);
+    }
+    
+    
+ 
+    private List<String> getLDAPPosteActif(){
+	
+	// for now sakai only retrieves one value even if LDAP has many for the
+	// same property, but that could change (or be changed).
+	return userDirectoryService.getCurrentUser().getProperties()
+			.getPropertyList(LDAP_POSTE_ACTIF);
+    }
+    
+    
+    private String getLDAPDepartmentId(String posteActif){
+
+	// split the posteActif parameter at |
+	String[] posteSplit = posteActif.split("\\|");
+
+	//department id is the parameter at index 4
+	return posteSplit[4];
+    }
+    
+    
+    private HashMap<String, String> getDepartmentIdMap(){
+	
+	if(departmentIdMap==null){
+	    departmentIdMap = new HashMap<String, String>();
+	    
+	    departmentIdMap.put("112", "BAA");
+	    departmentIdMap.put("120", "BUR.REGIST");
+	    departmentIdMap.put(CERTIFICATE_DEPARTMENT_ID, "CERTIFICAT");
+	    departmentIdMap.put("118", "DIPLOMES");
+	    departmentIdMap.put("116", "DOCTORAT");
+	    departmentIdMap.put("117", "MSC");
+	    departmentIdMap.put("103", "FINANCE");
+	    departmentIdMap.put("102", "GRH");
+	    departmentIdMap.put("107", "IEA");
+	    departmentIdMap.put("109", "MARKETING");
+	    departmentIdMap.put("113", "MBA");
+	    departmentIdMap.put("105", "MNGT");
+	    departmentIdMap.put("101", "MQG");
+	    departmentIdMap.put("119", "QUAL.COMM.");
+	    departmentIdMap.put("106", "SC.COMPT.");
+	    departmentIdMap.put("108", "TI");
+	    departmentIdMap.put("110", "DIR.PROG.");
+	    departmentIdMap.put("186", "INTERNAT");
+	    departmentIdMap.put("104", "GOL");
+	    departmentIdMap.put("152", "P.ETUD.SUP");
+	}
+	
+	return departmentIdMap;
+    }
+    
+    
     /**
      * init - perform any actions required here for when this bean starts up
      */

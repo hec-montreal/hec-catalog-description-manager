@@ -27,12 +27,20 @@
 		<property name="courseOfferingDao" ref="ca.hec.cdm.jobs.CatalogDescriptionJobDao" />
 		<property name="catalogDescriptionDao" ref="ca.hec.cdm.api.CatalogDescriptionDao" />
 	</bean>
+	
 	<bean id="ca.hec.cdm.jobs.SendEmailNotificationJob"
 		class="ca.hec.cdm.jobs.SendEmailNotificationJob"
 		init-method="init">
 		<property name="emailService" ref="org.sakaiproject.email.api.EmailService" />
+		<property name="catalogDescriptionService" ref="ca.hec.cdm.api.CatalogDescriptionService" />
+	</bean>
+	
+	<bean id="ca.hec.cdm.jobs.ImportZC1CatalogDescriptionJob"
+		class="ca.hec.cdm.jobs.ImportZC1CatalogDescriptionJob">
 		<property name="catalogDescriptionDao" ref="ca.hec.cdm.api.CatalogDescriptionDao" />
 	</bean>
+	
+	
 	
 	<bean id="CreateCatalogDescriptionJob"
        class="org.sakaiproject.component.app.scheduler.jobs.SpringJobBeanWrapper"
@@ -47,6 +55,7 @@
           <ref bean="org.sakaiproject.api.app.scheduler.SchedulerManager" />
        </property>
     </bean>
+    
     <bean id="SendEmailNotificationJob"
        class="org.sakaiproject.component.app.scheduler.jobs.SpringJobBeanWrapper"
        singleton="true" init-method="init">
@@ -60,4 +69,19 @@
           <ref bean="org.sakaiproject.api.app.scheduler.SchedulerManager" />
        </property>
     </bean>
+    
+     <bean id="ImportZC1CatalogDescriptionJob"
+       class="org.sakaiproject.component.app.scheduler.jobs.SpringJobBeanWrapper"
+       singleton="true" init-method="init">
+       <property name="beanId">
+          <value>ca.hec.cdm.jobs.ImportZC1CatalogDescriptionJob</value>
+       </property>
+       <property name="jobName">
+          <value>Import old ZC1 catalog descriptions</value>
+       </property>
+       <property name="schedulerManager">
+          <ref bean="org.sakaiproject.api.app.scheduler.SchedulerManager" />
+       </property>
+    </bean>
+    
 </beans>

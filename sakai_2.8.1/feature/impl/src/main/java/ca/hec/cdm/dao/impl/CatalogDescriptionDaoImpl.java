@@ -1,6 +1,7 @@
 package ca.hec.cdm.dao.impl;
 
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
@@ -19,8 +20,13 @@ import ca.hec.cdm.model.CatalogDescription;
 
 public class CatalogDescriptionDaoImpl extends HibernateDaoSupport implements
 	CatalogDescriptionDao {
+
+    private static final String CERTIFICATE = "CERT";
+    
     private static Log log = LogFactory.getLog(CatalogDescriptionDaoImpl.class);
 
+    
+    
     public void init() {
 	log.info("init");
     }
@@ -31,6 +37,9 @@ public class CatalogDescriptionDaoImpl extends HibernateDaoSupport implements
     }
 
     public CatalogDescription getCatalogDescription(String course_id) {
+	
+	CatalogDescription catDesc = null;
+	
 	// there should only ever be one active description, but it can't hurt
 	// to order by db id.
 	DetachedCriteria dc =
@@ -40,11 +49,36 @@ public class CatalogDescriptionDaoImpl extends HibernateDaoSupport implements
 				course_id.toUpperCase()))
 			.add(Restrictions.eq("active", true))
 			.addOrder(Order.desc("id"));
+	
+	List descList = getHibernateTemplate().findByCriteria(dc);
+	
+	if(descList!=null && descList.size()!=0){
+	    catDesc = (CatalogDescription)descList.get(0);
+	}
 
-	return (CatalogDescription) getHibernateTemplate().findByCriteria(dc)
-		.get(0);
+	return catDesc;
     }
 
+    
+    public List<CatalogDescription> getCatalogDescriptionsByDepartment(String department){
+	HashMap<String, String> criteria = new HashMap<String, String>();
+	criteria.put("department", department);
+	
+	return getCatalogDescriptions(criteria);
+    }
+    
+    public List<CatalogDescription> getCatalogDescriptionsByCareer(String career){
+	HashMap<String, String> criteria = new HashMap<String, String>();
+	criteria.put("career", career);
+	
+	return getCatalogDescriptions(criteria);
+    }
+    
+    public List<CatalogDescription> getAllCatalogDescriptionsForCertificate(){
+	return getCatalogDescriptionsByCareer(CERTIFICATE);
+    } 
+    
+   
     public List<CatalogDescription> getCatalogDescriptions(Map<String, String> criteria) {
 	List<CatalogDescription> catalogDescriptions =
 		new ArrayList<CatalogDescription>();
@@ -102,6 +136,25 @@ public class CatalogDescriptionDaoImpl extends HibernateDaoSupport implements
 		0, 1).get(0);
     }
 
+    public List<CatalogDescription> getAllCatalogDescriptionsForCertificatesWithNoDescription() {
+
+	DetachedCriteria dc =
+		DetachedCriteria
+			.forClass(CatalogDescription.class)
+			.add(Restrictions.eq("career", CERTIFICATE))
+			.add(Restrictions.eq("active", true))
+			.add(Restrictions.isNull("description"));
+
+	List<CatalogDescription> catalogDescriptions =
+		new ArrayList<CatalogDescription>();
+
+	for (Object o : getHibernateTemplate().findByCriteria(dc)) {
+	    catalogDescriptions.add((CatalogDescription) o);
+	}
+
+	return catalogDescriptions;
+    }
+
     public List<CatalogDescription> getCatalogDescriptionsByDepartmentWithNoDescription(
 	    String department) {
 
@@ -110,6 +163,7 @@ public class CatalogDescriptionDaoImpl extends HibernateDaoSupport implements
 			.forClass(CatalogDescription.class)
 			.add(Restrictions.eq("department",
 				department.toUpperCase()))
+			.add(Restrictions.ne("career", CERTIFICATE))
 			.add(Restrictions.eq("active", true))
 			.add(Restrictions.isNull("description"));
 
@@ -128,11 +182,7 @@ public class CatalogDescriptionDaoImpl extends HibernateDaoSupport implements
 		.find("select distinct cd.department from CatalogDescription cd where cd.description is null");
     }
 
-    public List<String> getCareerNameWithAtLeastOneCaWithNoDescription() {
-	return (List<String>) getHibernateTemplate()
-		.find("select distinct cd.career from CatalogDescription cd where cd.description is null");
-    }
-    
+     
     public boolean descriptionExists(String course_id) {
 	DetachedCriteria dc =
 		DetachedCriteria.forClass(CatalogDescription.class)

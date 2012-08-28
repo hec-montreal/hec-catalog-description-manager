@@ -30,10 +30,25 @@ public class CatalogDescriptionServiceImpl implements CatalogDescriptionService 
 	return catalogDescriptionDao.getCatalogDescription(course_id);
     }
 
-    public List<CatalogDescription> getCatalogDescriptions(Map<String, String> criteria) {
-	return catalogDescriptionDao.getCatalogDescriptions(criteria);
-    }
 
+    public List<CatalogDescription> getCatalogDescriptionsByDepartment(String department){
+	return catalogDescriptionDao.getCatalogDescriptionsByDepartment(department);
+    }
+    
+    
+    public List<CatalogDescription> getCatalogDescriptionsByCareer(String career){
+	return catalogDescriptionDao.getCatalogDescriptionsByCareer(career);
+    }
+    
+   public List<CatalogDescription> getCatalogDescriptions(Map<String, String> criteria) {
+	return catalogDescriptionDao.getCatalogDescriptions(criteria);
+   }
+
+   public List<CatalogDescription> getAllCatalogDescriptionsForCertificate(){
+       return catalogDescriptionDao.getAllCatalogDescriptionsForCertificate();
+   }
+   
+   
     public void updateDescription(CatalogDescription cd)
 	    throws StaleDataException, DatabaseException {
 	try {
@@ -57,9 +72,14 @@ public class CatalogDescriptionServiceImpl implements CatalogDescriptionService 
 		.getDepartmentNameWithAtLeastOneCaWithNoDescription();
     }
 
-    public List<String> getCareerNameWithAtLeastOneCaWithNoDescription() {
+    public List<CatalogDescription> getCatalogDescriptionsByDepartmentWithNoDescription(
+	    String department) {
 	return catalogDescriptionDao
-		.getCareerNameWithAtLeastOneCaWithNoDescription();
-    }    
+		.getCatalogDescriptionsByDepartmentWithNoDescription(department);
+    }
+
+    public List<CatalogDescription> getAllCatalogDescriptionsForCertificatesWithNoDescription() {
+	return catalogDescriptionDao.getAllCatalogDescriptionsForCertificate();
+    }
    
 }
