@@ -96,6 +96,13 @@ public interface CatalogDescriptionDao {
      */
     public List<String> getListCourseId();
     
+    
+    /** 
+     * @return all active catlog descriptions
+     */
+    public List<CatalogDescription> getAllCatalogDescriptions();
+    
+    
     /**
      * Set all catalog description to "inactive" status
      * 

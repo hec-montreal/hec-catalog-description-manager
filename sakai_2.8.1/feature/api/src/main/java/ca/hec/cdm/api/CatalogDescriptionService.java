@@ -68,6 +68,11 @@ public interface CatalogDescriptionService // extends EntityProducer
     public List<CatalogDescription> getCatalogDescriptions(Map<String, String> criteria);
 
     
+    /** 
+     * @return all active catlog descriptions
+     */
+    public List<CatalogDescription> getAllCatalogDescriptions();
+
     
     /**
      * Get all departments that have at least one catalog description with an
