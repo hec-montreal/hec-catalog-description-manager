@@ -74,6 +74,10 @@ public class CatalogDescriptionDaoImpl extends HibernateDaoSupport implements
 	return getCatalogDescriptions(criteria);
     }
     
+    public List<CatalogDescription> getAllCatalogDescriptions(){
+	return getCatalogDescriptions(null);
+    } 
+
     public List<CatalogDescription> getAllCatalogDescriptionsForCertificate(){
 	return getCatalogDescriptionsByCareer(CERTIFICATE);
     } 

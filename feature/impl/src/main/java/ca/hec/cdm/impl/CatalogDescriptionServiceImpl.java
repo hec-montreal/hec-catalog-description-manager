@@ -48,6 +48,11 @@ public class CatalogDescriptionServiceImpl implements CatalogDescriptionService 
        return catalogDescriptionDao.getAllCatalogDescriptionsForCertificate();
    }
    
+   public List<CatalogDescription> getAllCatalogDescriptions(){
+       return catalogDescriptionDao.getAllCatalogDescriptions();
+   }
+
+   
    
     public void updateDescription(CatalogDescription cd)
 	    throws StaleDataException, DatabaseException {

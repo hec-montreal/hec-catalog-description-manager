@@ -77,29 +77,39 @@ public class SakaiProxyImpl implements SakaiProxy {
     
     public List<CatalogDescription> getCatalogDescriptionsForUser() {
 	
-	List<CatalogDescription> catalogDescriptions = new ArrayList<CatalogDescription>();
+	List<CatalogDescription> catalogDescriptions = null;
     	
-	List<String> posteActifs = getLDAPPosteActif();
-
-	// posteActifs is null if the property is not present
-	if (null != posteActifs) {
-	    
-	    for (String posteActif : posteActifs) {
-		
-		String deptId = getLDAPDepartmentId(posteActif);
-		
-		//if this is a certificate secretary : special case
-		if(deptId.equals(CERTIFICATE_DEPARTMENT_ID)){
-		    catalogDescriptions.addAll(catalogDescriptionService.getAllCatalogDescriptionsForCertificate());
-		}
-		else{
-		    catalogDescriptions.addAll(getCatalogDescriptionsForDepartment(deptId));		    
-		}
-		
-	    }//end for
-	}
 	
-  		
+	if(isAdmin()){
+	    catalogDescriptions = catalogDescriptionService.getAllCatalogDescriptions();
+	}
+	else{
+	    catalogDescriptions = new ArrayList<CatalogDescription>();
+	    
+	    List<String> posteActifs = getLDAPPosteActif();
+
+	    // posteActifs is null if the property is not present
+	    if (null != posteActifs) {
+
+		for (String posteActif : posteActifs) {
+
+		    String deptId = getLDAPDepartmentId(posteActif);
+
+		    // if this is a certificate secretary : special case
+		    if (deptId.equals(CERTIFICATE_DEPARTMENT_ID)) {
+			catalogDescriptions.addAll(catalogDescriptionService
+				.getAllCatalogDescriptionsForCertificate());
+		    } else {
+			catalogDescriptions
+				.addAll(getCatalogDescriptionsForDepartment(deptId));
+		    }
+
+		}// end for
+		
+	    }//end if postActifs!=null
+	    
+	}
+	 		
 	return catalogDescriptions;
     }
     
@@ -135,6 +145,10 @@ public class SakaiProxyImpl implements SakaiProxy {
 		}
 		
 	    }//end for
+	}
+	
+	if(isAdmin()){
+	    isAllowed = true; 
 	}
 		
 	return isAllowed;
@@ -200,6 +214,17 @@ public class SakaiProxyImpl implements SakaiProxy {
 	return departmentIdMap;
     }
     
+    private String getCurrentUserDisplayName() {
+    	return userDirectoryService.getCurrentUser().getDisplayName();
+    }
+   
+    private String getCurrentUserId() {
+    	return userDirectoryService.getCurrentUser().getEid();
+    }
+
+    private boolean isAdmin(){
+	return (getCurrentUserId().equalsIgnoreCase("admin"));
+    }
     
     /**
      * init - perform any actions required here for when this bean starts up
@@ -222,12 +247,6 @@ public class SakaiProxyImpl implements SakaiProxy {
 	return portalManagerService.getCareerDescription(career);
     }
 
-    /**
-     * {@inheritDoc}
-     */
-    public String getCurrentUserDisplayName() {
-    	return userDirectoryService.getCurrentUser().getDisplayName();
-    }
     
     @Getter
     @Setter

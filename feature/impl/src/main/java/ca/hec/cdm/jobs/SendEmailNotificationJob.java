@@ -102,17 +102,18 @@ public class SendEmailNotificationJob implements Job {
 	}
     }
     
+    
     private void sendEmail(String departName, List<CatalogDescription> listCatalogDescription) {
 	
 	// Get the recipient address from the department
 	String recipientAdress =
 		ServerConfigurationService.getString("recipientAdress_"
 			+ departName);
-	String[] argsMessage = { departName };
-	String messageIntroduction =
-		msgs.getFormattedMessage("email_template", argsMessage);
+	
+	String messageIntroduction = msgs.getString("email_template");
 	
 	String messageSubject = msgs.getString("email_subject");
+	
 	List<EmailAddress> toRecipients = new ArrayList<EmailAddress>();
 	toRecipients.add(new EmailAddress(recipientAdress));
 
@@ -128,6 +129,7 @@ public class SendEmailNotificationJob implements Job {
 			+ "</th><th>"
 			+ msgs.getString("header_date_modification")
 			+ "</th></tr></thead><tbody>");
+	
 	for (CatalogDescription catalogDescription : listCatalogDescription) {
 	    messageBody.append("<tr><td>" + catalogDescription.getCourseId()
 		    + "</td><td>" + catalogDescription.getTitle() + "</td><td>"
@@ -142,10 +144,15 @@ public class SendEmailNotificationJob implements Job {
 	message.setBody(messageBody.toString());
 	message.setFrom("zonecours2@hec.ca");
 	message.setRecipients(RecipientType.TO, toRecipients);
+	
+	
+	List<EmailAddress> ccList = new ArrayList<EmailAddress>();
+	ccList.add(new EmailAddress("zonecours2@hec.ca"));	
+	message.setRecipients(RecipientType.CC, ccList);
 
-	// send mail
+	// send mail to department
 	try {
-	    emailService.send(message);
+	    emailService.send(message);	    
 	} catch (Exception e) {
 	    log.error("Could not send email to notify empty catalog description to "
 		    + departName + " :" + e);
