@@ -84,7 +84,7 @@ public class CatalogDescriptionServiceImpl implements CatalogDescriptionService 
     }
 
     public List<CatalogDescription> getAllCatalogDescriptionsForCertificatesWithNoDescription() {
-	return catalogDescriptionDao.getAllCatalogDescriptionsForCertificate();
+	return catalogDescriptionDao.getAllCatalogDescriptionsForCertificatesWithNoDescription();
     }
    
 }
