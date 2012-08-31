@@ -134,10 +134,19 @@ public class SendEmailNotificationJob implements Job {
 			    + "</th></tr></thead><tbody>");
 
 	    for (CatalogDescription catalogDescription : listCatalogDescription) {
-		messageBody.append("<tr><td>"
-			+ catalogDescription.getCourseId() + "</td><td>"
-			+ catalogDescription.getTitle() + "</td><td>"
-			+ catalogDescription.getCreatedDate() + "</td></tr>");
+		
+		String courseUrl = ServerConfigurationService.getServerUrl()+"/portail?cours="+catalogDescription.getCourseId();
+		
+		messageBody.append("<tr><td>");
+		messageBody.append("<a href='");
+		messageBody.append(courseUrl);
+		messageBody.append("'>");
+		messageBody.append(catalogDescription.getCourseId());
+		messageBody.append("</a></td><td>");
+		messageBody.append(catalogDescription.getTitle());
+		messageBody.append("</td><td>");
+		messageBody.append(catalogDescription.getCreatedDate());
+		messageBody.append("</td></tr>");
 	    }
 	    messageBody.append("</tbody></table>");
 
