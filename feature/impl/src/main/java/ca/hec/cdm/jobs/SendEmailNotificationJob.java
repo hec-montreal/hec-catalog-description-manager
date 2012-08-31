@@ -103,60 +103,70 @@ public class SendEmailNotificationJob implements Job {
     }
     
     
-    private void sendEmail(String departName, List<CatalogDescription> listCatalogDescription) {
-	
+    private void sendEmail(String departName,
+	    List<CatalogDescription> listCatalogDescription) {
+
 	// Get the recipient address from the department
 	String recipientAdress =
 		ServerConfigurationService.getString("recipientAdress_"
 			+ departName);
-	
-	String messageIntroduction = msgs.getString("email_template");
-	
-	String messageSubject = msgs.getString("email_subject");
-	
-	List<EmailAddress> toRecipients = new ArrayList<EmailAddress>();
-	toRecipients.add(new EmailAddress(recipientAdress));
 
-	// Create message Body
-	StringBuilder messageBody = new StringBuilder();
-	messageBody.append(messageIntroduction);
+	if (recipientAdress != null && !recipientAdress.equals("")) {
 
-	messageBody
-		.append("<table border=\"1\" style=\"border-collapse:collapse;\"><thead><tr><th>"
-			+ msgs.getString("header_course_id")
-			+ "</th><th>"
-			+ msgs.getString("header_course_title")
-			+ "</th><th>"
-			+ msgs.getString("header_date_modification")
-			+ "</th></tr></thead><tbody>");
-	
-	for (CatalogDescription catalogDescription : listCatalogDescription) {
-	    messageBody.append("<tr><td>" + catalogDescription.getCourseId()
-		    + "</td><td>" + catalogDescription.getTitle() + "</td><td>"
-		    + catalogDescription.getCreatedDate() + "</td></tr>");
-	}
-	messageBody.append("</tbody></table>");
+	    String messageIntroduction = msgs.getString("email_template");
 
-	// Initialize message
-	EmailMessage message = new EmailMessage();
-	message.setSubject(messageSubject);
-	message.setContentType(ContentType.TEXT_HTML);
-	message.setBody(messageBody.toString());
-	message.setFrom("zonecours2@hec.ca");
-	message.setRecipients(RecipientType.TO, toRecipients);
-	
-	
-	List<EmailAddress> ccList = new ArrayList<EmailAddress>();
-	ccList.add(new EmailAddress("zonecours2@hec.ca"));	
-	message.setRecipients(RecipientType.CC, ccList);
+	    String messageSubject = msgs.getString("email_subject");
 
-	// send mail to department
-	try {
-	    emailService.send(message);	    
-	} catch (Exception e) {
-	    log.error("Could not send email to notify empty catalog description to "
-		    + departName + " :" + e);
-	    e.printStackTrace();
+	    List<EmailAddress> toRecipients = new ArrayList<EmailAddress>();
+	    toRecipients.add(new EmailAddress(recipientAdress));
+
+	    // Create message Body
+	    StringBuilder messageBody = new StringBuilder();
+	    messageBody.append(messageIntroduction);
+
+	    messageBody
+		    .append("<table border=\"1\" style=\"border-collapse:collapse;\"><thead><tr><th>"
+			    + msgs.getString("header_course_id")
+			    + "</th><th>"
+			    + msgs.getString("header_course_title")
+			    + "</th><th>"
+			    + msgs.getString("header_date_modification")
+			    + "</th></tr></thead><tbody>");
+
+	    for (CatalogDescription catalogDescription : listCatalogDescription) {
+		messageBody.append("<tr><td>"
+			+ catalogDescription.getCourseId() + "</td><td>"
+			+ catalogDescription.getTitle() + "</td><td>"
+			+ catalogDescription.getCreatedDate() + "</td></tr>");
+	    }
+	    messageBody.append("</tbody></table>");
+
+	    // Initialize message
+	    EmailMessage message = new EmailMessage();
+	    message.setSubject(messageSubject);
+	    message.setContentType(ContentType.TEXT_HTML);
+	    message.setBody(messageBody.toString());
+	    message.setFrom("zonecours2@hec.ca");
+	    message.setRecipients(RecipientType.TO, toRecipients);
+
+	    List<EmailAddress> ccList = new ArrayList<EmailAddress>();
+	    ccList.add(new EmailAddress("zonecours2@hec.ca"));
+	    message.setRecipients(RecipientType.CC, ccList);
+
+	    // print the email in the log
+	    log.debug("----------------------------------------");
+	    log.debug("MAILTO: " + recipientAdress);
+	    log.debug("Subject: " + messageSubject);
+	    log.debug("Message: " + messageBody);
+
+	    // send mail to department
+	    try {
+		emailService.send(message);
+	    } catch (Exception e) {
+		log.error("Could not send email to notify empty catalog description to "
+			+ departName + " :" + e);
+		e.printStackTrace();
+	    }
 	}
 
     }
