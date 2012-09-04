@@ -77,7 +77,7 @@ $(document).ready(function() {
 			"bVisible" : false
 		},
 		/* Description */null,
-		/* CreatedDate */null],
+		/* CreatedDate */{"sType": "date"}],
 
 		/* after init is complete, we set the last_column value :
 		 * - with a tick image if description is not null
