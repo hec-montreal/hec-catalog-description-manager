@@ -1,6 +1,7 @@
 package ca.hec.cdm.dao.impl;
 
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -94,7 +95,8 @@ public class CatalogDescriptionDaoImpl extends HibernateDaoSupport implements
 	// add each of the search criteria in the map to the Hibernate DetachedCriteria object
 	if (criteria != null) {
 	    for (Map.Entry<String, String> entry: criteria.entrySet()) {
-		dc.add(Restrictions.eq(entry.getKey(), entry.getValue()));
+		List<String> listPossibleValues = Arrays.asList(entry.getValue().split(","));		
+		dc.add(Restrictions.in(entry.getKey(), listPossibleValues));
 	    }
 	}
 
