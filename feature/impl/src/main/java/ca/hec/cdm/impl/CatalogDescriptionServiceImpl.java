@@ -40,8 +40,12 @@ public class CatalogDescriptionServiceImpl implements CatalogDescriptionService 
 	return catalogDescriptionDao.getCatalogDescriptionsByCareer(career);
     }
     
-   public List<CatalogDescription> getCatalogDescriptions(Map<String, String> criteria) {
-	return catalogDescriptionDao.getCatalogDescriptions(criteria);
+    public List<CatalogDescription> getCatalogDescriptions(Map<String, String> criteria) {
+  	return catalogDescriptionDao.getCatalogDescriptions(criteria, null);
+     }
+    
+    public List<CatalogDescription> getCatalogDescriptions(Map<String, String> criteria, Map<String, String> searchCriteria) {
+	return catalogDescriptionDao.getCatalogDescriptions(criteria, searchCriteria);
    }
 
    public List<CatalogDescription> getAllCatalogDescriptionsForCertificate(){

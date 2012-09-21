@@ -34,7 +34,14 @@ public interface SakaiProxy {
 	 * get the list of catalogDescriptions for a given Hibernate query
 	 * @return - the list of catalog descriptions
 	 */
-	public List<CatalogDescription> getCatalogDescriptions(Map<String, String> criteria);
+	public List<CatalogDescription> getCatalogDescriptions(Map<String, String> eqCriteria, Map<String, String> searchCriteria);
+	
+
+	/**
+	 * get the list of catalogDescriptions for a given Hibernate query
+	 * @return - the list of catalog descriptions
+	 */
+	public List<CatalogDescription> getCatalogDescriptions(Map<String, String> eqCriteria);
 
 	/**
 	 * get the list of catalogDescription for current user

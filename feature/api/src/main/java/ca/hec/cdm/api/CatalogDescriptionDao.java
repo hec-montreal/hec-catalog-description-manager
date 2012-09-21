@@ -77,7 +77,7 @@ public interface CatalogDescriptionDao {
      * 
      * @return - the list of CatalogDescription
      */
-    public List<CatalogDescription> getCatalogDescriptions(Map<String, String> criteria);
+    public List<CatalogDescription> getCatalogDescriptions(Map<String, String> eqCriteria, Map<String, String> searchCriteria);
 
     /**
      * save the catalog description to the database

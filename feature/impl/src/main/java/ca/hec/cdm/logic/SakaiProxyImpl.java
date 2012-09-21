@@ -47,11 +47,19 @@ public class SakaiProxyImpl implements SakaiProxy {
 	return catalogDescriptionService.descriptionExists(course_id);
     }
 
+    
     /**
      * {@inheritDoc}
      */
-    public List<CatalogDescription> getCatalogDescriptions(Map<String, String> criteria) {
-	return catalogDescriptionService.getCatalogDescriptions(criteria);
+    public List<CatalogDescription> getCatalogDescriptions(Map<String, String> eqCriteria, Map<String, String> searchCriteria) {
+	return catalogDescriptionService.getCatalogDescriptions(eqCriteria, searchCriteria);
+    }
+    
+    /**
+     * {@inheritDoc}
+     */
+    public List<CatalogDescription> getCatalogDescriptions(Map<String, String> eqCriteria) {
+	return catalogDescriptionService.getCatalogDescriptions(eqCriteria, null);
     }
 
     public void updateCatalogDescription(CatalogDescription cd)

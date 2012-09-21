@@ -9,6 +9,7 @@ import java.util.Map;
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
 import org.hibernate.criterion.DetachedCriteria;
+import org.hibernate.criterion.Disjunction;
 import org.hibernate.criterion.Order;
 import org.hibernate.criterion.Restrictions;
 import org.springframework.orm.hibernate3.HibernateOptimisticLockingFailureException;
@@ -83,8 +84,17 @@ public class CatalogDescriptionDaoImpl extends HibernateDaoSupport implements
 	return getCatalogDescriptionsByCareer(CERTIFICATE);
     } 
     
-   
-    public List<CatalogDescription> getCatalogDescriptions(Map<String, String> criteria) {
+       
+    public List<CatalogDescription> getCatalogDescriptions(Map<String, String> eqCriteria) {		
+	return getCatalogDescriptions(eqCriteria, null);
+    }
+    
+    /** get catalog descriptions according to criterias passed in parameter
+     * @param eqCriteria:  criterias such as (department = XX) or (career = YY) used to filter results 
+     * @param searchCriteria: criterias from the search toolbar: (description like %KEYWORD%) or (title like %KEYWORD%)
+     * @return
+     */
+    public List<CatalogDescription> getCatalogDescriptions(Map<String, String> eqCriteria, Map<String, String> searchCriteria) {
 	List<CatalogDescription> catalogDescriptions =
 		new ArrayList<CatalogDescription>();
 	
@@ -93,11 +103,24 @@ public class CatalogDescriptionDaoImpl extends HibernateDaoSupport implements
 			.add(Restrictions.eq("active", true));
 
 	// add each of the search criteria in the map to the Hibernate DetachedCriteria object
-	if (criteria != null) {
-	    for (Map.Entry<String, String> entry: criteria.entrySet()) {
+	if (eqCriteria != null) {
+	    for (Map.Entry<String, String> entry: eqCriteria.entrySet()) {
 		List<String> listPossibleValues = Arrays.asList(entry.getValue().split(","));		
 		dc.add(Restrictions.in(entry.getKey(), listPossibleValues));
 	    }
+	}
+	
+	if (searchCriteria != null) {
+	    //We create a disjunction because the search return catalog descriptions that have at least one keyword in their description/title (OR operator between criterias)
+	    Disjunction searchCriteriasDisjunction =  Restrictions.disjunction();
+	    for (Map.Entry<String, String> entry: searchCriteria.entrySet()) {
+		List<String> listPossibleValues = Arrays.asList(entry.getValue().split(","));
+		for (String searchValue: listPossibleValues) {
+		    searchCriteriasDisjunction.add(Restrictions.ilike(entry.getKey(), "%" + searchValue + "%"));
+		}
+		
+	    }
+	    dc.add(searchCriteriasDisjunction);
 	}
 
 	for (Object o : getHibernateTemplate().findByCriteria(dc)) {
