@@ -89,15 +89,25 @@ public class CreateCatalogDescriptionJob implements Job {
 		    log.error("Exception during catalog description creation :"
 			    + e);
 		}
-		// otherwise, we update it to "Active" status
+		// otherwise, we update the catalog description and set "Active" status to true
 	    } else {
 		CatalogDescription cdToUpdate =
 			catalogDescriptionDao
 				.getLastVersionCatalogDescription(cd
 					.getCourseId());
+		
+		cdToUpdate.setTitle(cd.getTitle());
+		cdToUpdate.setDepartment(cd.getDepartment());
+		cdToUpdate.setCareer(cd.getCareer());
+		cdToUpdate.setCredits(cd.getCredits());
+		cdToUpdate.setLanguage(cd.getLanguage());
+		cdToUpdate.setRequirements(cd.getRequirements());
+		
 		cdToUpdate.setActive(true);
+		
 		try {
 		    catalogDescriptionDao.saveCatalogDescription(cdToUpdate);
+		
 		    log.debug("the folowing catalog description was successfully updated to 'active' status: "
 			    + cd.getCourseId());
 		} catch (StaleDataException e) {
