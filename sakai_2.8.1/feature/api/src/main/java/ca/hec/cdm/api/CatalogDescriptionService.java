@@ -58,14 +58,14 @@ public interface CatalogDescriptionService // extends EntityProducer
      */    
     public List<CatalogDescription> getAllCatalogDescriptionsForCertificate();
 
-    
+        
     /**
      * Access a list of catalog descriptions where each key in the criteria map is equal to the value.
      * 
      * @return A list of catalog description objects; may
      *         be empty
      */
-    public List<CatalogDescription> getCatalogDescriptions(Map<String, String> criteria);
+    public List<CatalogDescription> getCatalogDescriptions(Map<String, String> criteria, Map<String, String> searchCriteria);
 
     
     /** 
