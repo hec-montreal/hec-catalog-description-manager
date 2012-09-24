@@ -80,4 +80,8 @@ public interface SakaiProxy {
 	 * @return the description
 	 */
 	public String getCareerDescription(String career);
+
+	public String getCareerGroup(String career);
+
+	public String getDepartmentGroup(String department);
 }

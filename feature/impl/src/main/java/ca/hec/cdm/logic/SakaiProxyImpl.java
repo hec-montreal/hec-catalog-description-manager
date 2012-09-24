@@ -39,6 +39,42 @@ public class SakaiProxyImpl implements SakaiProxy {
    
     private static final String LDAP_POSTE_ACTIF = "posteActif";
     
+    @Getter
+    @Setter
+    private CatalogDescriptionService catalogDescriptionService;
+
+    @Getter
+    @Setter
+    private ToolManager toolManager;
+
+    @Getter
+    @Setter
+    private SessionManager sessionManager;
+
+    @Getter
+    @Setter
+    private UserDirectoryService userDirectoryService;
+
+    @Getter
+    @Setter
+    private SecurityService securityService;
+
+    @Getter
+    @Setter
+    private EventTrackingService eventTrackingService;
+
+    @Getter
+    @Setter
+    private ServerConfigurationService serverConfigurationService;
+
+    @Getter
+    @Setter
+    private SiteService siteService;
+
+    @Getter
+    @Setter
+    private PortalManagerService portalManagerService;
+    
    
     /**
      * {@inheritDoc}
@@ -256,39 +292,15 @@ public class SakaiProxyImpl implements SakaiProxy {
     }
 
     
-    @Getter
-    @Setter
-    private CatalogDescriptionService catalogDescriptionService;
+   
 
-    @Getter
-    @Setter
-    private ToolManager toolManager;
 
-    @Getter
-    @Setter
-    private SessionManager sessionManager;
+    public String getCareerGroup(String career) {
+	return portalManagerService.getCareerGroup(career);
+    }
 
-    @Getter
-    @Setter
-    private UserDirectoryService userDirectoryService;
 
-    @Getter
-    @Setter
-    private SecurityService securityService;
-
-    @Getter
-    @Setter
-    private EventTrackingService eventTrackingService;
-
-    @Getter
-    @Setter
-    private ServerConfigurationService serverConfigurationService;
-
-    @Getter
-    @Setter
-    private SiteService siteService;
-
-    @Getter
-    @Setter
-    private PortalManagerService portalManagerService;
+    public String getDepartmentGroup(String department) {
+	return portalManagerService.getDepartmentGroup(department);
+    }
 }
