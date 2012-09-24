@@ -155,11 +155,11 @@ public class SendEmailNotificationJob implements Job {
 	    message.setSubject(messageSubject);
 	    message.setContentType(ContentType.TEXT_HTML);
 	    message.setBody(messageBody.toString());
-	    message.setFrom("zonecours2@hec.ca");
+	    message.setFrom(getZoneCours2EMail());
 	    message.setRecipients(RecipientType.TO, toRecipients);
 
 	    List<EmailAddress> ccList = new ArrayList<EmailAddress>();
-	    ccList.add(new EmailAddress("zonecours2@hec.ca"));
+	    ccList.add(new EmailAddress(getZoneCours2EMail()));
 	    message.setRecipients(RecipientType.CC, ccList);
 
 	    // print the email in the log
@@ -176,8 +176,12 @@ public class SendEmailNotificationJob implements Job {
 			+ departName + " :" + e);
 		e.printStackTrace();
 	    }
-	}
+	}//end if
 
+    }
+    
+    private String getZoneCours2EMail(){
+	return ServerConfigurationService.getString("mail.zc2");
     }
 
 }
