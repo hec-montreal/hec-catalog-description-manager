@@ -108,6 +108,10 @@ public class CatalogDescriptionEntityProviderImpl extends
 	scd.setDepartment(sakaiProxy.getDepartmentDescription(cd
 		.getDepartment()));
 	scd.setCareer(sakaiProxy.getCareerDescription(cd.getCareer()));
+	scd.setDepartmentGroup(sakaiProxy.getDepartmentGroup(cd
+		.getDepartment()));
+	scd.setCareerGroup(sakaiProxy.getCareerGroup(cd
+		.getCareer()));
 	scd.setRequirements(cd.getRequirements());
 	scd.setCourseId(cd.getCourseId());
 	scd.setCredits("" + cd.getCredits());
