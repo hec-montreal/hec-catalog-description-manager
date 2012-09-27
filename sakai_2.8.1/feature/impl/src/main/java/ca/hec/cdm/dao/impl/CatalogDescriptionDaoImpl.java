@@ -8,10 +8,14 @@ import java.util.Map;
 
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
+import org.hibernate.Hibernate;
 import org.hibernate.criterion.DetachedCriteria;
 import org.hibernate.criterion.Disjunction;
 import org.hibernate.criterion.Order;
+import org.hibernate.criterion.ProjectionList;
+import org.hibernate.criterion.Projections;
 import org.hibernate.criterion.Restrictions;
+import org.hibernate.type.Type;
 import org.springframework.orm.hibernate3.HibernateOptimisticLockingFailureException;
 import org.springframework.orm.hibernate3.support.HibernateDaoSupport;
 
@@ -95,40 +99,100 @@ public class CatalogDescriptionDaoImpl extends HibernateDaoSupport implements
      * @return
      */
     public List<CatalogDescription> getCatalogDescriptions(Map<String, String> eqCriteria, Map<String, String> searchCriteria) {
+	
+
+	// add each of the search criteria in the map to the Hibernate DetachedCriteria object
+	if (eqCriteria != null && !eqCriteria.isEmpty() ) {
+	    return getCatalogDescriptionsByItem(eqCriteria); 
+	}
+	
+	if (searchCriteria != null) {
+	    return getCatalogDescriptionsSearch(searchCriteria);   
+	}
+
+	return new ArrayList<CatalogDescription>();
+    }
+    
+    public List<CatalogDescription> getCatalogDescriptionsSearch(Map<String, String> criteria) {
 	List<CatalogDescription> catalogDescriptions =
 		new ArrayList<CatalogDescription>();
 	
 	DetachedCriteria dc =
 		DetachedCriteria.forClass(CatalogDescription.class)
 			.add(Restrictions.eq("active", true));
-
-	// add each of the search criteria in the map to the Hibernate DetachedCriteria object
-	if (eqCriteria != null) {
-	    for (Map.Entry<String, String> entry: eqCriteria.entrySet()) {
+	
+	//We create a disjunction because the search return catalog descriptions that have at least one keyword in their description/title (OR operator between criterias)
+	    Disjunction searchCriteriasDisjunction =  Restrictions.disjunction();
+	    
+	    for (Map.Entry<String, String> entry: criteria.entrySet()) {
+		List<String> listPossibleValues = Arrays.asList(entry.getValue().split(","));
+		for (String searchValue: listPossibleValues) {
+		    searchCriteriasDisjunction.add(Restrictions.ilike(entry.getKey(), "%" + searchValue + "%"));		   
+		}		
+	    }
+	    
+	  //We create a projection that will store an accuracy integer for the result set (the higher the accuracy the higher the number)
+	    StringBuilder accuracyProjection = new StringBuilder();
+	    for (String searchValue: criteria.get("title").split(",")) {
+		 accuracyProjection.append("+ (title LIKE '%" + searchValue + "%') " );
+	    }
+	    
+	    accuracyProjection.append("  as accuracy " );
+	    accuracyProjection.deleteCharAt(0);
+	    
+	    dc.add(searchCriteriasDisjunction);
+	    
+	    ProjectionList projectList = Projections.projectionList();
+	    
+	    
+	    projectList.add(Projections.property("courseId"));
+	    projectList.add(Projections.property("title"));
+	    projectList.add(Projections.property("department"));
+	    projectList.add(Projections.property("career"));
+	    projectList.add(Projections.property("language"));
+	    projectList.add(Projections.property("description"));
+	    
+	    projectList.add(Projections.alias(Projections.sqlProjection(accuracyProjection.toString(), 
+	                new String[] { "accuracy" }, 
+	                new Type[] { Hibernate.INTEGER }),"accuracy"));
+	    
+	    dc.setProjection(projectList);
+	    
+	    //We sort the result set by accuracy
+	    dc.addOrder(Order.desc("accuracy"));
+	
+	for (Object cdproperties : getHibernateTemplate().findByCriteria(dc)) {
+	    CatalogDescription cd = new CatalogDescription();
+	    cd.setCourseId("" + ((Object[])cdproperties)[0]);
+	    cd.setTitle("" + ((Object[])cdproperties)[1]);
+	    cd.setDepartment("" + ((Object[])cdproperties)[2]);
+	    cd.setCareer("" + ((Object[])cdproperties)[3]);
+	    cd.setLanguage("" + ((Object[])cdproperties)[4]);
+	    catalogDescriptions.add(cd);
+	}
+	
+	return catalogDescriptions;
+	}
+    
+    public List<CatalogDescription> getCatalogDescriptionsByItem(Map<String, String> criteria) {
+	List<CatalogDescription> catalogDescriptions =
+		new ArrayList<CatalogDescription>();
+	
+	DetachedCriteria dc =
+		DetachedCriteria.forClass(CatalogDescription.class)
+			.add(Restrictions.eq("active", true));
+	
+	for (Map.Entry<String, String> entry: criteria.entrySet()) {
 		List<String> listPossibleValues = Arrays.asList(entry.getValue().split(","));		
 		dc.add(Restrictions.in(entry.getKey(), listPossibleValues));
 	    }
-	}
 	
-	if (searchCriteria != null) {
-	    //We create a disjunction because the search return catalog descriptions that have at least one keyword in their description/title (OR operator between criterias)
-	    Disjunction searchCriteriasDisjunction =  Restrictions.disjunction();
-	    for (Map.Entry<String, String> entry: searchCriteria.entrySet()) {
-		List<String> listPossibleValues = Arrays.asList(entry.getValue().split(","));
-		for (String searchValue: listPossibleValues) {
-		    searchCriteriasDisjunction.add(Restrictions.ilike(entry.getKey(), "%" + searchValue + "%"));
-		}
-		
-	    }
-	    dc.add(searchCriteriasDisjunction);
-	}
-
 	for (Object o : getHibernateTemplate().findByCriteria(dc)) {
 	    catalogDescriptions.add((CatalogDescription) o);
 	}
 	
 	return catalogDescriptions;
-    }
+	}
 
     public List<String> getListCourseId() {
 	return (List<String>) getHibernateTemplate().find(
