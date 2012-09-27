@@ -134,7 +134,7 @@ public class CatalogDescriptionDaoImpl extends HibernateDaoSupport implements
 	  //We create a projection that will store an accuracy integer for the result set (the higher the accuracy the higher the number)
 	    StringBuilder accuracyProjection = new StringBuilder();
 	    for (String searchValue: criteria.get("title").split(",")) {
-		 accuracyProjection.append("+ (title LIKE '%" + searchValue + "%') " );
+		 accuracyProjection.append("+ (CONTAINS(title,'%" + searchValue + "%')) " );
 	    }
 	    
 	    accuracyProjection.append("  as accuracy " );
