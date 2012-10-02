@@ -292,14 +292,16 @@ public class SakaiProxyImpl implements SakaiProxy {
     }
 
     
-   
-
-
+    /**
+     * {@inheritDoc}
+     */
     public String getCareerGroup(String career) {
 	return portalManagerService.getCareerGroup(career);
     }
 
-
+    /**
+     * {@inheritDoc}
+     */
     public String getDepartmentGroup(String department) {
 	return portalManagerService.getDepartmentGroup(department);
     }

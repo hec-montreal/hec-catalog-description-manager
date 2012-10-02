@@ -81,7 +81,21 @@ public interface SakaiProxy {
 	 */
 	public String getCareerDescription(String career);
 
+	/**
+	 * Gets the career group of the specified career
+	 * A career group can include several careers
+	 *
+	 * @param career	the career to find a career group for
+	 * @return the description
+	 */
 	public String getCareerGroup(String career);
 
+	/**
+	 * Gets the department group of the specified department
+	 * A department group can include several departments
+	 *
+	 * @param department	the department to find a description for
+	 * @return the description
+	 */
 	public String getDepartmentGroup(String department);
 }
