@@ -2,6 +2,7 @@ package ca.hec.cdm.entityprovider;
 
 import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.Collections;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -48,38 +49,56 @@ public class CatalogDescriptionEntityProviderImpl extends
 		.getId()));
     }
 
-    /** get catalog descriptions according to criterias passed in parameter
-     * We separate criterias into 2 categories:
-     * @eqCriteria:  criterias such as (department = XX) or (career = YY) used to filter results 
-     * @searchCriteria: criterias from the search toolbar: (description like %KEYWORD%) or (title like %KEYWORD%)
+    /**
+     * get catalog descriptions according to criterias passed in parameter We
+     * separate criterias into 2 categories:
+     * 
+     * @eqCriteria: criterias such as (department = XX) or (career = YY) used to
+     *              filter results
+     * @searchCriteria: criterias from the search toolbar: (description like
+     *                  %KEYWORD%) or (title like %KEYWORD%)
      * @return
      */
     public List<?> getEntities(EntityReference ref, Search search) {
 	Map<String, String> eqCriteria = new HashMap<String, String>();
 	Map<String, String> seachCriteria = new HashMap<String, String>();
 	List<String> seachScopesList = null;
-	    
-	    if  (search.getRestrictionByProperty("searchScope") != null){
-		String stringSearchScope = search.getRestrictionByProperty("searchScope").getStringValue();
-		seachScopesList = Arrays.asList(stringSearchScope.split(",")); 
-		}
-	
+	List<SimpleCatalogDescription> listSimpleCatalogDescriptions;
+
+	if (search.getRestrictionByProperty("searchScope") != null) {
+	    String stringSearchScope =
+		    search.getRestrictionByProperty("searchScope")
+			    .getStringValue();
+	    seachScopesList = Arrays.asList(stringSearchScope.split(","));
+	}
+
 	for (Restriction r : search.getRestrictions()) {
-	    if (r.getProperty().equals("department") ||
-		    r.getProperty().equals("career")||
-		    r.getProperty().equals("language")){
+	    if (r.getProperty().equals("department")
+		    || r.getProperty().equals("career")) {
 		eqCriteria.put(r.getProperty(), r.getStringValue());
 	    }
-	    
-	    if  (r.getProperty().equals("searchWords")){
+
+	    if (r.getProperty().equals("searchWords")) {
 		String stringSearch = r.getStringValue();
-		    for (String scope : seachScopesList){
-			  seachCriteria.put(scope, stringSearch); 
-		    }		
+		for (String scope : seachScopesList) {
+		    seachCriteria.put(scope, stringSearch);
+		}
 	    }
-		
 	}
-	return simplifyCatalogDescriptions(sakaiProxy.getCatalogDescriptions(eqCriteria, seachCriteria));
+
+	listSimpleCatalogDescriptions =
+		simplifyCatalogDescriptions(sakaiProxy.getCatalogDescriptions(
+			eqCriteria, seachCriteria));
+
+	// unless we have search criteria (in this case we sort by search
+	// criteria), we sort catalog descriptions according to the session #,
+	// course # and year (we get it from courseId parameter)
+	if (seachCriteria.isEmpty()) {
+	    Collections.sort(listSimpleCatalogDescriptions);
+	}
+
+	return listSimpleCatalogDescriptions;
+
     }
 
     public boolean entityExists(String course_id) {
@@ -108,10 +127,8 @@ public class CatalogDescriptionEntityProviderImpl extends
 	scd.setDepartment(sakaiProxy.getDepartmentDescription(cd
 		.getDepartment()));
 	scd.setCareer(sakaiProxy.getCareerDescription(cd.getCareer()));
-	scd.setDepartmentGroup(sakaiProxy.getDepartmentGroup(cd
-		.getDepartment()));
-	scd.setCareerGroup(sakaiProxy.getCareerGroup(cd
-		.getCareer()));
+	scd.setDepartmentGroup(sakaiProxy.getDepartmentGroup(cd.getDepartment()));
+	scd.setCareerGroup(sakaiProxy.getCareerGroup(cd.getCareer()));
 	scd.setRequirements(cd.getRequirements());
 	scd.setCourseId(cd.getCourseId());
 	scd.setCredits("" + cd.getCredits());

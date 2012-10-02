@@ -40,6 +40,10 @@
 		<property name="catalogDescriptionDao" ref="ca.hec.cdm.api.CatalogDescriptionDao" />
 	</bean>
 	
+	<bean id="ca.hec.cdm.util.Stopwords"
+		class="ca.hec.cdm.util.Stopwords">
+	</bean>
+	
 	
 	
 	<bean id="CreateCatalogDescriptionJob"

@@ -20,6 +20,7 @@
 	<!--  create a target bean using the Dao implementation -->
 	<bean id="ca.hec.cdm.CatalogDescriptionDaoTarget" class="ca.hec.cdm.dao.impl.CatalogDescriptionDaoImpl" singleton="true">
 		<property name="sessionFactory" ref="org.sakaiproject.springframework.orm.hibernate.GlobalSessionFactory" />
+		<property name="stopWordList" ref="ca.hec.cdm.util.Stopwords" />
 	</bean>
 	
 	<!--  create a bean for CatalogDescription Quartz job DAO ( accesses materialized views of PeopleSoft database)-->
