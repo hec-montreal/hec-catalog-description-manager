@@ -149,22 +149,28 @@ public class CatalogDescriptionDaoImpl extends HibernateDaoSupport implements
 		if (!stopWordList.isStopword(searchValue)) { // we don't add
 							     // stopWords to the
 							     // search
-		    searchCriteriasDisjunction.add(Restrictions.ilike(
-			    entry.getKey(), "%" + searchValue + "%"));
-		    if ("title".equals(entry.getKey())) { // we calculate the
-							  // accuracy with the
-							  // number of search
-							  // words that are in
-							  // the title
-			accuracyProjection.append("+ (CONTAINS(title,'%"
-				+ searchValue + "%')) ");
+		    // we don't have the same matching rule if the search word is the beginning of an course id
+		    if (isCourseIdSearch(searchValue)){
+			searchCriteriasDisjunction.add(Restrictions.ilike(
+				    "courseId", searchValue + "%"));
+		    }
+		    else{
+			searchCriteriasDisjunction.add(Restrictions.ilike(
+				    entry.getKey(), "%" + searchValue + "%"));
+			    if ("title".equals(entry.getKey())) { // we calculate the
+								  // accuracy with the
+								  // number of search
+								  // words that are in
+								  // the title
+				accuracyProjection.append("+ (CONTAINS(title,'%"
+					+ searchValue + "%')) ");
+			    }		    
 		    }
 		}
 	    }
 	}
 
-	accuracyProjection.append("  as accuracy ");
-	accuracyProjection.deleteCharAt(0);
+	
 
 	dc.add(searchCriteriasDisjunction);
 
@@ -177,14 +183,23 @@ public class CatalogDescriptionDaoImpl extends HibernateDaoSupport implements
 	projectList.add(Projections.property("language"));
 	projectList.add(Projections.property("description"));
 
-	projectList.add(Projections.alias(Projections.sqlProjection(
-		accuracyProjection.toString(), new String[] { "accuracy" },
-		new Type[] { Hibernate.INTEGER }), "accuracy"));
+	if (accuracyProjection.length() != 0){
+	    accuracyProjection.append("  as accuracy ");
+		accuracyProjection.deleteCharAt(0);
+		projectList.add(Projections.alias(Projections.sqlProjection(
+			accuracyProjection.toString(), new String[] { "accuracy" },
+			new Type[] { Hibernate.INTEGER }), "accuracy"));
+		// We sort the result set by accuracy
+		dc.addOrder(Order.desc("accuracy"));
+	}
+	else{
+	    dc.addOrder(Order.asc("courseId"));
+	}
+	
 
 	dc.setProjection(projectList);
 
-	// We sort the result set by accuracy
-	dc.addOrder(Order.desc("accuracy"));
+	
 
 	for (Object cdproperties : getHibernateTemplate().findByCriteria(dc)) {
 	    CatalogDescription cd = new CatalogDescription();
@@ -197,6 +212,11 @@ public class CatalogDescriptionDaoImpl extends HibernateDaoSupport implements
 	}
 
 	return catalogDescriptions;
+    }
+    
+    //we consider that if the first charcter of the searc word is a number, then it is a course id search
+    private boolean isCourseIdSearch(String searchWord){
+	return searchWord.matches("^[\\d].*");
     }
 
     public List<CatalogDescription> getCatalogDescriptionsByItem(
