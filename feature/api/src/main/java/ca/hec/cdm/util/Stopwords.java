@@ -694,6 +694,13 @@ public class Stopwords {
 	addStopWord("quelles");
 	addStopWord("sans");
 	addStopWord("soi");
+	//stopwords that appear befor ' charcarter (l', d', qu', ...)	
+	addStopWord("d");
+	addStopWord("l");
+	addStopWord("m");
+	addStopWord("n");
+	addStopWord("s");
+	addStopWord("qu");
     }
 
     public boolean isStopword(String str) {
