@@ -31,24 +31,45 @@ public class SimpleCatalogDescription implements
 	List<String> catalogDescriptionTitleSections =
 		Arrays.asList(courseId.split("-"));
 
-	Integer comparableNumSession = null;
 	String comparableNumCourse = null;
 	String comparableYearCourse = null;
+	String stringComparableNumSession = comparableCatalogDescriptionTitleSections.get(0);
+	boolean isComparableNumSessionNumeric = stringComparableNumSession.matches("^[\\d]+$");	
 
-	Integer numSession = null;
 	String numCourse = null;
 	String yearCourse = null;
+	String stringNumSession =  catalogDescriptionTitleSections.get(0);
+	boolean isNumSessionNumeric = stringNumSession.matches("^[\\d]+$");
+	
+	int resultComparaisonNumSession;
 
 	try {
-	    comparableNumSession =
-		    Integer.parseInt(comparableCatalogDescriptionTitleSections
-			    .get(0));
+	    //We compare number if the course num sessions are numbers
+	    if (isComparableNumSessionNumeric && isNumSessionNumeric) {
+		resultComparaisonNumSession =
+			Integer.valueOf(stringNumSession).compareTo(Integer.valueOf(stringComparableNumSession));
+	    }
+	    //We compare strings if the course num sessions are strings
+	    else if (!isComparableNumSessionNumeric && !isNumSessionNumeric) {
+		resultComparaisonNumSession =
+			stringNumSession.compareTo(stringComparableNumSession);
+	    }
+	    //if the first course session is a number and the second a string, the first goes upper
+	    else if (isComparableNumSessionNumeric && !isNumSessionNumeric) {
+		resultComparaisonNumSession = 1;
+	    }
+	    //if the first course session is a string and the second a number, the second goes upper
+	    else if (!isComparableNumSessionNumeric && isNumSessionNumeric) {
+		resultComparaisonNumSession = -1;
+	    }
+	    else{
+		resultComparaisonNumSession = 0;
+	    }
+
 	    comparableNumCourse =
 		    comparableCatalogDescriptionTitleSections.get(1);
 	    comparableYearCourse =
 		    comparableCatalogDescriptionTitleSections.get(2);
-	    numSession =
-		    Integer.parseInt(catalogDescriptionTitleSections.get(0));
 	    numCourse = catalogDescriptionTitleSections.get(1);
 	    yearCourse = catalogDescriptionTitleSections.get(2);
 	} catch (Exception e) {
@@ -56,8 +77,8 @@ public class SimpleCatalogDescription implements
 	    return 0;
 	}
 
-	if (numSession.compareTo(comparableNumSession) != 0) {
-	    return numSession.compareTo(comparableNumSession);
+	if (resultComparaisonNumSession != 0) {
+	    return resultComparaisonNumSession;
 	}
 
 	else if (numCourse.compareTo(comparableNumCourse) != 0) {
