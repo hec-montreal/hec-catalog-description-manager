@@ -112,7 +112,11 @@ public class CatalogDescriptionEntityProviderImpl extends
 
 	// convert raw CatalogDescriptions into decorated catalog descriptions
 	for (CatalogDescription cd : catalogDescriptions) {
-	    simpleCatalogDescriptions.add(simplifyCatalogDescription(cd));
+	    
+	    SimpleCatalogDescription simpleCd = simplifyCatalogDescription(cd);
+	    if (simpleCd.getDepartment() != null){
+		simpleCatalogDescriptions.add(simpleCd);
+	    }
 	}
 
 	return simpleCatalogDescriptions;
