@@ -87,7 +87,18 @@ public class CatalogDescriptionDaoImpl extends HibernateDaoSupport implements
     }
 
     public List<CatalogDescription> getAllCatalogDescriptions() {
-	return getCatalogDescriptions(null);
+	List<CatalogDescription> catalogDescriptions =
+		new ArrayList<CatalogDescription>();
+
+	DetachedCriteria dc =
+		DetachedCriteria.forClass(CatalogDescription.class).add(
+			Restrictions.eq("active", true));
+
+	for (Object o : getHibernateTemplate().findByCriteria(dc)) {
+	    catalogDescriptions.add((CatalogDescription) o);
+	}
+
+	return catalogDescriptions;
     }
 
     public List<CatalogDescription> getAllCatalogDescriptionsForCertificate() {
