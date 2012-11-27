@@ -135,7 +135,7 @@ public class SendEmailNotificationJob implements Job {
 
 	    for (CatalogDescription catalogDescription : listCatalogDescription) {
 		
-		String courseUrl = ServerConfigurationService.getServerUrl()+"/portail?cours="+catalogDescription.getCourseId();
+		String courseUrl = ServerConfigurationService.getServerUrl()+"/portail/#cours="+catalogDescription.getCourseId();
 		
 		messageBody.append("<tr><td>");
 		messageBody.append("<a href='");
