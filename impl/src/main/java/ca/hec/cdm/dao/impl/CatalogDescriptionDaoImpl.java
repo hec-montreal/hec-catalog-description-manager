@@ -157,6 +157,9 @@ public class CatalogDescriptionDaoImpl extends HibernateDaoSupport implements
 	    List<String> listPossibleValues =
 		    Arrays.asList(entry.getValue().split(","));
 	    for (String searchValue : listPossibleValues) {
+		//remove these bad characters.
+		searchValue = searchValue.replaceAll("[*()]", "");
+		
 		if (!stopWordList.isStopword(searchValue)) { // we don't add
 							     // stopWords to the
 							     // search
