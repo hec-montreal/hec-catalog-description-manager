@@ -31,6 +31,16 @@ public class SimpleCatalogDescription implements
 	List<String> catalogDescriptionTitleSections =
 		Arrays.asList(courseId.split("-"));
 
+	
+	// If there is not 3 parts in the catalog description (numSession - numCourse - yearCourse) then we put it at the end of the list
+	if (comparableCatalogDescriptionTitleSections.size() != 3){
+	    return -1;
+	}
+	if (catalogDescriptionTitleSections.size() != 3){
+	    return 1;
+	}
+	
+	
 	String comparableNumCourse = null;
 	String comparableYearCourse = null;
 	String stringComparableNumSession = comparableCatalogDescriptionTitleSections.get(0);
