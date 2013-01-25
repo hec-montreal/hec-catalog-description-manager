@@ -129,7 +129,7 @@ public class ImportZC1CatalogDescriptionJob implements Job {
 	
 	CatalogDescription cd = catalogDescriptionDao.getCatalogDescription(courseId);
 	
-	if(cd!=null){
+	if(cd!=null && cd.getDescription() != null){
 	    
 	    cd.setDescription(desc);
 		
