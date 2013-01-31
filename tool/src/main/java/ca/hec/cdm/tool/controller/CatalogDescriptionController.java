@@ -124,7 +124,15 @@ public class CatalogDescriptionController {
     		array.add("" + cd.getDepartment());
     		array.add("" + cd.getCareer());
     		array.add("" + isDescription);
+    		
+    		if (cd.getLastModifiedDate() != null){
     		array.add("" + DateFormat.getInstance().format(cd.getLastModifiedDate()));
+    		}
+    		else{
+    		array.add("");
+    		}
+    		
+    		
     		tableValue.add(array);
     	}
 
