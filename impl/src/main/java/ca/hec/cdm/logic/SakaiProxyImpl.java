@@ -124,7 +124,7 @@ public class SakaiProxyImpl implements SakaiProxy {
 	List<CatalogDescription> catalogDescriptions = null;
     	
 	
-	if(isAdmin()){
+	if(isSuperUser()){
 	    catalogDescriptions = catalogDescriptionService.getAllCatalogDescriptions();
 	}
 	else{
@@ -191,7 +191,7 @@ public class SakaiProxyImpl implements SakaiProxy {
 	    }//end for
 	}
 	
-	if(isAdmin()){
+	if(isSuperUser()){
 	    isAllowed = true; 
 	}
 		
@@ -261,13 +261,9 @@ public class SakaiProxyImpl implements SakaiProxy {
     private String getCurrentUserDisplayName() {
     	return userDirectoryService.getCurrentUser().getDisplayName();
     }
-   
-    private String getCurrentUserId() {
-    	return userDirectoryService.getCurrentUser().getEid();
-    }
-
-    private boolean isAdmin(){
-	return (getCurrentUserId().equalsIgnoreCase("admin"));
+    
+    private boolean isSuperUser(){
+	return (securityService.isSuperUser());
     }
     
     /**
