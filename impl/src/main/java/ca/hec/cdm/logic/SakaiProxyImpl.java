@@ -276,21 +276,6 @@ public class SakaiProxyImpl implements SakaiProxy {
     /**
      * {@inheritDoc}
      */
-    public String getDepartmentDescription(String department) {
-	return portalManagerService.getDepartmentDescription(department);
-    }
-
-    /**
-     * {@inheritDoc}
-     */
-    public String getCareerDescription(String career) {
-	return portalManagerService.getCareerDescription(career);
-    }
-
-    
-    /**
-     * {@inheritDoc}
-     */
     public String getCareerGroup(String career) {
 	return portalManagerService.getCareerGroup(career);
     }

@@ -1,6 +1,7 @@
 package ca.hec.cdm.logic;
 
 import java.util.List;
+import java.util.Locale;
 import java.util.Map;
 
 import ca.hec.cdm.exception.DatabaseException;
@@ -64,22 +65,6 @@ public interface SakaiProxy {
 	 * @return - the catalog description corresponding to the course Id
 	 */
 	public CatalogDescription getCatalogDescription(String id);
-
-	/**
-	 * Gets the description of the specified department
-	 *
-	 * @param department	the department to find a description for
-	 * @return the description
-	 */
-	public String getDepartmentDescription(String department);
-
-	/**
-	 * Gets the career of the specified department
-	 *
-	 * @param career	the career to find a description for
-	 * @return the description
-	 */
-	public String getCareerDescription(String career);
 
 	/**
 	 * Gets the career group of the specified career

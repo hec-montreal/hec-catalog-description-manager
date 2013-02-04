@@ -114,7 +114,7 @@ public class CatalogDescriptionEntityProviderImpl extends
 	for (CatalogDescription cd : catalogDescriptions) {
 	    
 	    SimpleCatalogDescription simpleCd = simplifyCatalogDescription(cd);
-	    if (simpleCd.getDepartment() != null){
+	    if (simpleCd.getDepartmentGroup() != null){
 		simpleCatalogDescriptions.add(simpleCd);
 	    }
 	}
@@ -128,9 +128,6 @@ public class CatalogDescriptionEntityProviderImpl extends
 
 	scd.setTitle(cd.getTitle());
 	scd.setDescription(cd.getDescription());
-	scd.setDepartment(sakaiProxy.getDepartmentDescription(cd
-		.getDepartment()));
-	scd.setCareer(sakaiProxy.getCareerDescription(cd.getCareer()));
 	scd.setDepartmentGroup(sakaiProxy.getDepartmentGroup(cd.getDepartment()));
 	scd.setCareerGroup(sakaiProxy.getCareerGroup(cd.getCareer()));
 	scd.setRequirements(cd.getRequirements());

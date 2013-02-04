@@ -9,13 +9,13 @@ import lombok.Data;
 
 /**
  * <p>
- * CatalogDescription is the base interface for catalog descriptions for use with the Catalog Description Manager tool.
+ * CatalogDescription is the object for catalog descriptions for use with the Catalog Description Manager tool.
  * 
  * Does not implement org.sakaiproject.entity.api.Entity, though it could (but be careful with getId() as it exists there too but returns int)
  * </p>
  */
 @Data
-public class CatalogDescription implements Comparable {
+public class CatalogDescription {
 	
 	private Long id;
 	private String courseId;
@@ -34,10 +34,4 @@ public class CatalogDescription implements Comparable {
 	
 	private String createdBy;
 	private Date createdDate; 
-	
-	public int compareTo(Object o) {
-		// TODO Auto-generated method stub
-		return 0;
-	}
-
 }

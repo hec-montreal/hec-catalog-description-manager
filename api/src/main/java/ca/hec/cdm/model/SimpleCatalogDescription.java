@@ -15,8 +15,6 @@ public class SimpleCatalogDescription implements
     private String courseId;
     private String title;
     private String description;
-    private String department;
-    private String career;
     private String requirements;
     private String credits;
     private String lang;
