@@ -59,7 +59,6 @@ public class CatalogDescriptionDaoImpl extends HibernateDaoSupport implements
 			.forClass(CatalogDescription.class)
 			.add(Restrictions.eq("courseId",
 				course_id.toUpperCase()))
-			.add(Restrictions.eq("active", true))
 			.addOrder(Order.desc("id"));
 
 	List descList = getHibernateTemplate().findByCriteria(dc);
