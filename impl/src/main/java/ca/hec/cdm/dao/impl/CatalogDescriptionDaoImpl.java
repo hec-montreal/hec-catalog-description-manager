@@ -337,8 +337,7 @@ public class CatalogDescriptionDaoImpl extends HibernateDaoSupport implements
     public boolean descriptionExists(String course_id) {
 	DetachedCriteria dc =
 		DetachedCriteria.forClass(CatalogDescription.class)
-			.add(Restrictions.eq("courseId", course_id))
-			.add(Restrictions.eq("active", true));
+			.add(Restrictions.eq("courseId", course_id));
 
 	if (getHibernateTemplate().findByCriteria(dc).isEmpty()) {
 	    return false;
