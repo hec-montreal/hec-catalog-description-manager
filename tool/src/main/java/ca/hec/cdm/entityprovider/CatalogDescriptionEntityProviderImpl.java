@@ -24,6 +24,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import ca.hec.cdm.logic.SakaiProxy;
 import ca.hec.cdm.model.CatalogDescription;
 import ca.hec.cdm.model.SimpleCatalogDescription;
+import ca.hec.commons.utils.FormatUtils;
 
 public class CatalogDescriptionEntityProviderImpl extends
 	AbstractEntityProvider implements CoreEntityProvider,
@@ -45,8 +46,17 @@ public class CatalogDescriptionEntityProviderImpl extends
     }
 
     public Object getEntity(EntityReference ref) {
-	return simplifyCatalogDescription(sakaiProxy.getCatalogDescription(ref
-		.getId()));
+	CatalogDescription returnedCatalogDescription = null;
+	returnedCatalogDescription =
+		sakaiProxy.getCatalogDescription(ref.getId());
+
+	if (returnedCatalogDescription == null) {
+	    returnedCatalogDescription =
+		    sakaiProxy.getCatalogDescription(FormatUtils
+			    .formatCourseId(ref.getId()));
+	}
+
+	return simplifyCatalogDescription(returnedCatalogDescription);
     }
 
     /**
@@ -102,7 +112,13 @@ public class CatalogDescriptionEntityProviderImpl extends
     }
 
     public boolean entityExists(String course_id) {
-	return sakaiProxy.catalogDescriptionExists(course_id);
+	if (sakaiProxy.catalogDescriptionExists(course_id) == true) {
+	    return true;
+	}
+	else{
+	    return sakaiProxy.catalogDescriptionExists(FormatUtils
+			.formatCourseId(course_id));
+	}
     }
 
     public List<SimpleCatalogDescription> simplifyCatalogDescriptions(
@@ -112,9 +128,9 @@ public class CatalogDescriptionEntityProviderImpl extends
 
 	// convert raw CatalogDescriptions into decorated catalog descriptions
 	for (CatalogDescription cd : catalogDescriptions) {
-	    
+
 	    SimpleCatalogDescription simpleCd = simplifyCatalogDescription(cd);
-	    if (simpleCd.getDepartmentGroup() != null){
+	    if (simpleCd.getDepartmentGroup() != null) {
 		simpleCatalogDescriptions.add(simpleCd);
 	    }
 	}
