@@ -37,6 +37,7 @@ import ca.hec.cdm.exception.DatabaseException;
 import ca.hec.cdm.exception.StaleDataException;
 import ca.hec.cdm.jobs.model.CourseOffering;
 import ca.hec.cdm.model.CatalogDescription;
+import ca.hec.commons.utils.FormatUtils;
 
 
 public class CreateCatalogDescriptionJob implements Job {
@@ -64,7 +65,7 @@ public class CreateCatalogDescriptionJob implements Job {
 	// Then we create or update catalog descriptions
 	for (CourseOffering co : listCo) {
 	    cd = new CatalogDescription();
-	    cd.setCourseId(formatCourseId(co.getCatalog_nbr()));
+	    cd.setCourseId(FormatUtils.formatCourseId(co.getCatalog_nbr()));
 	    cd.setTitle(co.getCourse_title_long());
 	    cd.setDepartment(co.getAcad_org());
 	    cd.setCareer(co.getAcad_career());
@@ -120,44 +121,5 @@ public class CreateCatalogDescriptionJob implements Job {
 	    }
 	}
     }
-
-    private String formatCourseId(String courseId) {
-	String cheminement;
-	String numero;
-	String annee;
-	String formattedCourseId;
-
-	if (courseId.length() == 6) {
-	    cheminement = courseId.substring(0, 1);
-	    numero = courseId.substring(1, 4);
-	    annee = courseId.substring(4);
-	}
-
-	else if (courseId.length() == 7) {
-	    if (courseId.endsWith("A") || courseId.endsWith("E")
-		    || courseId.endsWith("R")) {
-		cheminement = courseId.substring(0, 1);
-		numero = courseId.substring(1, 4);
-		annee = courseId.substring(4);
-	    } else {
-		cheminement = courseId.substring(0, 2);
-		numero = courseId.substring(2, 5);
-		annee = courseId.substring(5);
-	    }
-	}
-
-	else if (courseId.length() == 8) {
-	    cheminement = courseId.substring(0, 2);
-	    numero = courseId.substring(2, 5);
-	    annee = courseId.substring(5);
-	}
-
-	else {
-	    return courseId;
-	}
-
-	formattedCourseId = cheminement + "-" + numero + "-" + annee;
-	return formattedCourseId;
-
-    }
+    
 }

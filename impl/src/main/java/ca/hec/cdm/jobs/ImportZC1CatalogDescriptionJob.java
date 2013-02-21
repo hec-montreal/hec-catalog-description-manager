@@ -41,6 +41,7 @@ import ca.hec.cdm.api.CatalogDescriptionDao;
 import ca.hec.cdm.exception.DatabaseException;
 import ca.hec.cdm.exception.StaleDataException;
 import ca.hec.cdm.model.CatalogDescription;
+import ca.hec.commons.utils.FormatUtils;
 
 
 /**
@@ -85,7 +86,7 @@ public class ImportZC1CatalogDescriptionJob implements Job {
 		 String koid = rs.getString(1);
 		 Clob htmlClob = rs.getClob(2);
 		 
-		 String courseId = formatCourseId(koid);
+		 String courseId = FormatUtils.formatCourseId(koid);
 		 
 		 String html = htmlClob.getSubString((long)1, (int)htmlClob.length());
 		 String desc = formatHtml(html);
@@ -215,54 +216,5 @@ public class ImportZC1CatalogDescriptionJob implements Job {
 		
 	return desc;
     }
-    
-    
-    private String formatCourseId(String courseId) {
-	
-	String cheminement;
-	String numero;
-	String annee;
-	String formattedCourseId;
-
-	//ajouter pour la table plancours
-	if(courseId.substring(0,2).equalsIgnoreCase("a-")){
-	    courseId = courseId.substring(2);
-	}
-	
-	
-	if (courseId.length() == 6) {
-	    cheminement = courseId.substring(0, 1);
-	    numero = courseId.substring(1, 4);
-	    annee = courseId.substring(4);
-	}
-
-	else if (courseId.length() == 7) {
-	    if (courseId.endsWith("A") || courseId.endsWith("E")
-		    || courseId.endsWith("R")) {
-		cheminement = courseId.substring(0, 1);
-		numero = courseId.substring(1, 4);
-		annee = courseId.substring(4);
-	    } else {
-		cheminement = courseId.substring(0, 2);
-		numero = courseId.substring(2, 5);
-		annee = courseId.substring(5);
-	    }
-	}
-
-	else if (courseId.length() == 8) {
-	    cheminement = courseId.substring(0, 2);
-	    numero = courseId.substring(2, 5);
-	    annee = courseId.substring(5);
-	}
-
-	else {
-	    return courseId;
-	}
-
-	formattedCourseId = cheminement + "-" + numero + "-" + annee;
-	
-	return formattedCourseId;
-    }
-    
     
 }
