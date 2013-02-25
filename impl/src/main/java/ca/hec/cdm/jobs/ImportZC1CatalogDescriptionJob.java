@@ -1,4 +1,4 @@
-/******************************************************************************
+ /******************************************************************************
  * $Id: $
  ******************************************************************************
  *
@@ -41,183 +41,228 @@ import ca.hec.cdm.api.CatalogDescriptionDao;
 import ca.hec.cdm.exception.DatabaseException;
 import ca.hec.cdm.exception.StaleDataException;
 import ca.hec.cdm.model.CatalogDescription;
-import ca.hec.commons.utils.FormatUtils;
+
 
 /**
- * A one-time job to transfer the catalog descriptions from zc1 database to zc2
- * database
- * 
+ * A one-time job to transfer the catalog descriptions from zc1 database to zc2 database
+ *
  * @author <a href="mailto:philippe.rancourt@hec.ca">Philippe Rancourt</a>
  * @version $Id: $
  */
 public class ImportZC1CatalogDescriptionJob implements Job {
 
+  
     @Getter
     @Setter
     private CatalogDescriptionDao catalogDescriptionDao;
 
+ 
     private static Log log = LogFactory
 	    .getLog(ImportZC1CatalogDescriptionJob.class);
 
-    private static final String ZC1_REQUEST =
-	    "select PLANCOURS.KOID, PLANZONE.HTML from PLANZONE, PLANCOURS where PLANCOURS.koid=PLANZONE.koid and PLANCOURS.TYPE = 'annuaire'";
-
+    
+    private static final String ZC1_REQUEST = "select PLANCOURS.KOID, PLANZONE.HTML from PLANZONE, PLANCOURS where PLANCOURS.koid=PLANZONE.koid and PLANCOURS.TYPE = 'annuaire'"; 
+    
+    
     private int savedDesc = 0;
-
+    
     private int unknownDesc = 0;
-
+    
     private int noDesc = 0;
-
+    
     public void execute(JobExecutionContext arg0) throws JobExecutionException {
-
+	
 	Connection connex = getZC1Connection();
 	PreparedStatement ps = null;
-
-	try {
-	    ps = connex.prepareStatement(ZC1_REQUEST);
-
-	    ResultSet rs = ps.executeQuery();
-
-	    while (rs.next()) {
-
-		String koid = rs.getString(1);
-		Clob htmlClob = rs.getClob(2);
-
-		// ajouter pour la table plancours
-		if (koid.substring(0, 2).equalsIgnoreCase("a-")) {
-		    koid = koid.substring(2);
-		}
-
-		String courseId = FormatUtils.formatCourseId(koid);
-
-		String html =
-			htmlClob.getSubString((long) 1, (int) htmlClob.length());
-		String desc = formatHtml(html);
-
-		if (desc != null) {
-
-		    /**
-		     * log.error(
-		     * "----------------------------------------------------------------------------------"
-		     * ); log.error("course id: "+courseId);
-		     * log.error("desc: "+desc);
-		     **/
-
-		    saveInZC2(courseId, desc);
-		} else {
-		    noDesc++;
-		}
-
-	    }// end while
-
-	    log.error("----------------------------------------------------------------------------------");
-	    log.error("FIN DE LA JOB");
-	    log.error("saved desc:" + savedDesc);
-	    log.error("unknow desc:" + unknownDesc);
-	    log.error("no desc found:" + noDesc);
-	} catch (SQLException sqex) {
-	    log.error("Error database: " + sqex.toString());
-	} finally {
-	    try {
-		ps.close();
-	    } catch (Exception ex) {
-	    }
-	    try {
-		connex.close();
-	    } catch (Exception ex) {
-	    }
+	
+	try{	
+	     ps = connex.prepareStatement(ZC1_REQUEST);
+	    	    
+	     ResultSet rs = ps.executeQuery();
+	     	     
+	     while(rs.next()){
+		 
+		 String koid = rs.getString(1);
+		 Clob htmlClob = rs.getClob(2);
+		 
+		 String courseId = formatCourseId(koid);
+		 
+		 String html = htmlClob.getSubString((long)1, (int)htmlClob.length());
+		 String desc = formatHtml(html);
+		 
+		 if(desc!=null){
+		     
+		    /** log.error("----------------------------------------------------------------------------------");
+		     log.error("course id: "+courseId);
+		     log.error("desc: "+desc);**/
+		     
+		     saveInZC2(courseId, desc);
+		 }
+		 else{
+		     noDesc++;
+		 }
+		 
+	     }//end while
+	
+	     log.error("----------------------------------------------------------------------------------");
+	     log.error("FIN DE LA JOB");
+	     log.error("saved desc:"+savedDesc);
+	     log.error("unknow desc:"+unknownDesc);
+	     log.error("no desc found:"+noDesc);
 	}
-
+	catch(SQLException sqex){
+	    log.error("Error database: "+sqex.toString());
+	}
+	finally{
+	    try{
+		ps.close();
+	    }catch(Exception ex){}
+	    try{
+		connex.close();
+	    }catch(Exception ex){}	    
+	}
+	
     }
-
-    private void saveInZC2(String courseId, String desc) {
-
-	CatalogDescription cd =
-		catalogDescriptionDao.getCatalogDescription(courseId);
-
-	if (cd != null && cd.getDescription() != null) {
-
+    
+    
+    private void saveInZC2(String courseId, String desc){
+	
+	CatalogDescription cd = catalogDescriptionDao.getCatalogDescription(courseId);
+	
+	if(cd!=null && cd.getDescription() != null){
+	    
 	    cd.setDescription(desc);
-
-	    try {
+		
+	    try{
 		catalogDescriptionDao.saveCatalogDescription(cd);
 		savedDesc++;
-	    } catch (StaleDataException staleEx) {
-		log.error("Error Stale Data:" + staleEx.toString());
-	    } catch (DatabaseException dex) {
-		log.error("Error database dao:" + dex.toString());
 	    }
-	} else {
-	    log.error("Uknown desc:" + courseId);
+	    catch(StaleDataException staleEx){
+		log.error("Error Stale Data:"+staleEx.toString());
+	    }
+	    catch(DatabaseException dex){
+		log.error("Error database dao:"+dex.toString());
+	    }    	    
+	}
+	else{
+	    log.error("Uknown desc:"+courseId);
 	    unknownDesc++;
 	}
-
+		
     }
 
-    private Connection getZC1Connection() {
-
-	String driverName =
-		ServerConfigurationService
-			.getString("hec.zonecours.conn.portail.driver.name");
-	String url =
-		ServerConfigurationService
-			.getString("hec.zonecours.conn.portail.url");
-	String user =
-		ServerConfigurationService
-			.getString("hec.zonecours.conn.portail.user");
-	String password =
-		ServerConfigurationService
-			.getString("hec.zonecours.conn.portail.password");
-
+    
+    
+    private Connection getZC1Connection(){
+			
+	String driverName = ServerConfigurationService
+		.getString("hec.zonecours.conn.portail.driver.name");
+        String url = ServerConfigurationService
+        		.getString("hec.zonecours.conn.portail.url");
+        String user = ServerConfigurationService
+        		.getString("hec.zonecours.conn.portail.user");
+        String password = ServerConfigurationService
+        		.getString("hec.zonecours.conn.portail.password");
+	
 	Connection zc1con = null;
-
-	try {
+	
+	try{
 	    Class.forName(driverName);
-
+	    
 	    zc1con = DriverManager.getConnection(url, user, password);
-	} catch (ClassNotFoundException cnf) {
-	    log.error("Driver not found !");
-	} catch (SQLException sqlex) {
-	    log.error("Database connection error:" + sqlex.toString());
 	}
+	catch(ClassNotFoundException cnf){
+	    log.error("Driver not found !");
+	}
+	catch(SQLException sqlex){
+	    log.error("Database connection error:"+sqlex.toString());	    
+	}
+
 
 	return zc1con;
     }
 
+    
     private String formatHtml(String html) {
-
+	
 	String desc = null;
-
+	
 	int annuaireMarker = html.indexOf("encadreTableAnnuaireBlanc");
-
-	if (annuaireMarker != -1) {
-
-	    html =
-		    html.substring(annuaireMarker
-			    + "encadreTableAnnuaireBlanc".length());
-
+	
+	if(annuaireMarker!=-1){
+	    
+	    html = html.substring(annuaireMarker+"encadreTableAnnuaireBlanc".length());
+	    
+	    
 	    int beginDiv = html.indexOf("<div class='texte'>");
-
-	    if (beginDiv != -1) {
-
-		html =
-			html.substring(beginDiv
-				+ "<div class='texte'>".length());
-
+	    
+	    if(beginDiv!=-1){
+		
+		html = html.substring(beginDiv+"<div class='texte'>".length());
+		
 		int endDiv = html.indexOf("</div>");
-
-		if (endDiv != -1) {
-
+		
+		if(endDiv!=-1){
+		    
 		    html = html.substring(0, endDiv);
-
+		    
 		    desc = html.trim();
 		}
-
+		
 	    }
-
+	    
 	}
-
+		
 	return desc;
     }
+    
+    
+    private String formatCourseId(String courseId) {
+	
+	String cheminement;
+	String numero;
+	String annee;
+	String formattedCourseId;
 
+	//ajouter pour la table plancours
+	if(courseId.substring(0,2).equalsIgnoreCase("a-")){
+	    courseId = courseId.substring(2);
+	}
+	
+	
+	if (courseId.length() == 6) {
+	    cheminement = courseId.substring(0, 1);
+	    numero = courseId.substring(1, 4);
+	    annee = courseId.substring(4);
+	}
+
+	else if (courseId.length() == 7) {
+	    if (courseId.endsWith("A") || courseId.endsWith("E")
+		    || courseId.endsWith("R")) {
+		cheminement = courseId.substring(0, 1);
+		numero = courseId.substring(1, 4);
+		annee = courseId.substring(4);
+	    } else {
+		cheminement = courseId.substring(0, 2);
+		numero = courseId.substring(2, 5);
+		annee = courseId.substring(5);
+	    }
+	}
+
+	else if (courseId.length() == 8) {
+	    cheminement = courseId.substring(0, 2);
+	    numero = courseId.substring(2, 5);
+	    annee = courseId.substring(5);
+	}
+
+	else {
+	    return courseId;
+	}
+
+	formattedCourseId = cheminement + "-" + numero + "-" + annee;
+	
+	return formattedCourseId;
+    }
+    
+    
 }
