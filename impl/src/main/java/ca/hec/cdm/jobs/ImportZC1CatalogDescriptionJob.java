@@ -139,11 +139,12 @@ public class ImportZC1CatalogDescriptionJob implements Job {
 		catalogDescriptionDao.getCatalogDescription(courseId);
 
 	if (cd != null ) {
-	    if (cd.getDescription() != null){
+	    if (cd.getDescription() == null){
 		cd.setDescription(desc);
 
 		    try {
 			catalogDescriptionDao.saveCatalogDescription(cd);
+			log.error("Saved catalog description:" + courseId);
 			savedDesc++;
 		    } catch (StaleDataException staleEx) {
 			log.error("Error Stale Data:" + staleEx.toString());
