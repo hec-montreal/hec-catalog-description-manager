@@ -107,6 +107,7 @@ public class ImportZC1CatalogDescriptionJob implements Job {
 
 		    saveInZC2(courseId, desc);
 		} else {
+		    log.error("No description found in ZC1 for: " + courseId);
 		    noDesc++;
 		}
 
