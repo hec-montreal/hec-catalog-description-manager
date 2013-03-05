@@ -97,14 +97,6 @@ public class ImportZC1CatalogDescriptionJob implements Job {
 		String desc = formatHtml(html);
 
 		if (desc != null) {
-
-		    /**
-		     * log.error(
-		     * "----------------------------------------------------------------------------------"
-		     * ); log.error("course id: "+courseId);
-		     * log.error("desc: "+desc);
-		     **/
-
 		    saveInZC2(courseId, desc);
 		} else {
 		    log.error("No description found in ZC1 for: " + courseId);
@@ -198,21 +190,23 @@ public class ImportZC1CatalogDescriptionJob implements Job {
 
 	String desc = null;
 
-	int annuaireMarker = html.indexOf("encadreTableAnnuaireBlanc");
+	String annuaireMarkerId = "encadreTableAnnuaireBlanc";
+	int annuaireMarker = html.indexOf(annuaireMarkerId);
 
+	if (annuaireMarker == -1) {
+	    annuaireMarkerId = "contenu11";
+	    annuaireMarker = html.indexOf(annuaireMarkerId);
+	}
+	
 	if (annuaireMarker != -1) {
-
-	    html =
-		    html.substring(annuaireMarker
-			    + "encadreTableAnnuaireBlanc".length());
+	    html = html.substring(annuaireMarker, annuaireMarkerId.length());
 
 	    int beginDiv = html.indexOf("<div class='texte'>");
 
 	    if (beginDiv != -1) {
 
-		html =
-			html.substring(beginDiv
-				+ "<div class='texte'>".length());
+		html = html.substring(beginDiv
+			+ "<div class='texte'>".length());
 
 		int endDiv = html.indexOf("</div>");
 
