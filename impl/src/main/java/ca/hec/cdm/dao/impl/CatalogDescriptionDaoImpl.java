@@ -90,8 +90,7 @@ public class CatalogDescriptionDaoImpl extends HibernateDaoSupport implements
 		new ArrayList<CatalogDescription>();
 
 	DetachedCriteria dc =
-		DetachedCriteria.forClass(CatalogDescription.class).add(
-			Restrictions.eq("active", true));
+		DetachedCriteria.forClass(CatalogDescription.class);
 
 	for (Object o : getHibernateTemplate().findByCriteria(dc)) {
 	    catalogDescriptions.add((CatalogDescription) o);
