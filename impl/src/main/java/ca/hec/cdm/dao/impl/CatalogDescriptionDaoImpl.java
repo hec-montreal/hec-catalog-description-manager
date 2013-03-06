@@ -241,9 +241,11 @@ public class CatalogDescriptionDaoImpl extends HibernateDaoSupport implements
 			Restrictions.eq("active", true));
 
 	for (Map.Entry<String, String> entry : criteria.entrySet()) {
-	    List<String> listPossibleValues =
-		    Arrays.asList(entry.getValue().split(","));
-	    dc.add(Restrictions.in(entry.getKey(), listPossibleValues));
+	    // comma separated values
+	    String values = entry.getValue();
+
+	    if (values != null)
+		dc.add(Restrictions.in(entry.getKey(), Arrays.asList(values.split(","))));
 	}
 
 	for (Object o : getHibernateTemplate().findByCriteria(dc)) {

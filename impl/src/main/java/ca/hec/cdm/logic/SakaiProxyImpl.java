@@ -204,7 +204,7 @@ public class SakaiProxyImpl implements SakaiProxy {
 	//convert the department id into an academic department code
 	String depCode = getDepartmentIdMap().get(deptId);
 	
-	return catalogDescriptionService.getCatalogDescriptionsByDepartment(depCode);
+	return catalogDescriptionService.getCatalogDescriptionsByDepartment((depCode==null)?"":depCode);
     }
     
     
@@ -253,6 +253,10 @@ public class SakaiProxyImpl implements SakaiProxy {
 	    departmentIdMap.put("186", "INTERNAT");
 	    departmentIdMap.put("104", "GOL");
 	    departmentIdMap.put("152", "P.ETUD.SUP");
+	    
+	    // les employees de Formation cadres international
+	    // ont besoin acces au cours de la direction DES
+	    departmentIdMap.put("216", "DIPLOMES");
 	}
 	
 	return departmentIdMap;
