@@ -199,7 +199,7 @@ public class ImportZC1CatalogDescriptionJob implements Job {
 	}
 	
 	if (annuaireMarker != -1) {
-	    html = html.substring(annuaireMarker, annuaireMarkerId.length());
+	    html = html.substring(annuaireMarker + annuaireMarkerId.length());
 
 	    int beginDiv = html.indexOf("<div class='texte'>");
 
