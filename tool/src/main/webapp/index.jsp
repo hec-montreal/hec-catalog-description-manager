@@ -61,10 +61,6 @@
 	</div>
 </div>
 
-
-<input type="checkbox" id="showInactives_checkbox">Afficher les descriptions inactives<br>
-
-
 <table id="catalog_description_table">
 	<thead>
 		<tr>
