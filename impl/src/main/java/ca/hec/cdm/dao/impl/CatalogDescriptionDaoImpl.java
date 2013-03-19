@@ -78,30 +78,61 @@ public class CatalogDescriptionDaoImpl extends HibernateDaoSupport implements
 	return getCatalogDescriptions(criteria);
     }
 
+
+    public List<CatalogDescription> getCatalogDescriptionsByDepartment(
+	    String department, boolean showInactives) {
+	HashMap<String, String> criteria = new HashMap<String, String>();
+	criteria.put("department", department);
+	if (showInactives){
+	    criteria.put("showInactives", "true");
+	}
+
+	return getCatalogDescriptions(criteria);
+    }
+
     public List<CatalogDescription> getCatalogDescriptionsByCareer(String career) {
 	HashMap<String, String> criteria = new HashMap<String, String>();
 	criteria.put("career", career);
 
 	return getCatalogDescriptions(criteria);
     }
-
-    public List<CatalogDescription> getAllCatalogDescriptions() {
-	List<CatalogDescription> catalogDescriptions =
-		new ArrayList<CatalogDescription>();
-
-	DetachedCriteria dc =
-		DetachedCriteria.forClass(CatalogDescription.class);
-
-	for (Object o : getHibernateTemplate().findByCriteria(dc)) {
-	    catalogDescriptions.add((CatalogDescription) o);
+    
+    public List<CatalogDescription> getCatalogDescriptionsByCareer(String career, boolean showInactives) {
+   	HashMap<String, String> criteria = new HashMap<String, String>();
+   	criteria.put("career", career);
+   	if (showInactives){
+	    criteria.put("showInactives", "true");
 	}
 
-	return catalogDescriptions;
-    }
+   	return getCatalogDescriptions(criteria);
+       }
+   
 
+    public List<CatalogDescription> getAllCatalogDescriptionsForCertificate(
+	    boolean showInactives) {
+	return getCatalogDescriptionsByCareer(CERTIFICATE, showInactives);
+    }
+    
     public List<CatalogDescription> getAllCatalogDescriptionsForCertificate() {
 	return getCatalogDescriptionsByCareer(CERTIFICATE);
     }
+    
+
+    
+    
+    public List<CatalogDescription> getAllCatalogDescriptions() {
+   	List<CatalogDescription> catalogDescriptions =
+   		new ArrayList<CatalogDescription>();
+
+   	DetachedCriteria dc =
+   		DetachedCriteria.forClass(CatalogDescription.class);
+
+   	for (Object o : getHibernateTemplate().findByCriteria(dc)) {
+   	    catalogDescriptions.add((CatalogDescription) o);
+   	}
+
+   	return catalogDescriptions;
+       }
 
     public List<CatalogDescription> getCatalogDescriptions(
 	    Map<String, String> eqCriteria) {
@@ -237,8 +268,12 @@ public class CatalogDescriptionDaoImpl extends HibernateDaoSupport implements
 		new ArrayList<CatalogDescription>();
 
 	DetachedCriteria dc =
-		DetachedCriteria.forClass(CatalogDescription.class).add(
-			Restrictions.eq("active", true));
+		DetachedCriteria.forClass(CatalogDescription.class);
+	
+	//unless we explicitly set the property to "true", we will retrieve only active descriptions
+	if (! ("true".equals(criteria.get("showInactives")))){
+	    dc.add(Restrictions.eq("active", true));
+	}			
 
 	for (Map.Entry<String, String> entry : criteria.entrySet()) {
 	    // comma separated values
@@ -346,5 +381,4 @@ public class CatalogDescriptionDaoImpl extends HibernateDaoSupport implements
 	    return true;
 	}
     }
-
 }

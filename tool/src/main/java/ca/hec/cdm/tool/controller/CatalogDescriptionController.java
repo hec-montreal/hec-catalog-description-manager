@@ -106,8 +106,11 @@ public class CatalogDescriptionController {
     public ModelAndView listCatalogDescription(HttpServletRequest request,
 	    HttpServletResponse response) throws Exception {
 
-    	List<CatalogDescription> listCd =    			
-    			sakaiProxy.getCatalogDescriptionsForUser();
+	boolean showInactives = ("true".equals(request.getParameter("showInactives")));
+	
+		
+	List<CatalogDescription> listCd =    			
+    			sakaiProxy.getCatalogDescriptionsForUser(showInactives);
 
     	List<Object> tableValue = new ArrayList<Object>();
 

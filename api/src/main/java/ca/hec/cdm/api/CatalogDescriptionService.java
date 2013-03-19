@@ -39,6 +39,11 @@ public interface CatalogDescriptionService // extends EntityProducer
      */
     public List<CatalogDescription> getCatalogDescriptionsByDepartment(String department);
     
+    /**
+     * Return a list of catalog descriptions by department with flag to indicate if we return or not inactive catalog descriptions 
+     */
+    public List<CatalogDescription> getCatalogDescriptionsByDepartment(String department, boolean showInactives);
+    
     
     /**
      * Return a list of catalog descriptions by career
@@ -57,6 +62,11 @@ public interface CatalogDescriptionService // extends EntityProducer
      *         be empty
      */    
     public List<CatalogDescription> getAllCatalogDescriptionsForCertificate();
+    
+    /**
+     * Return a list of catalog descriptions for certificates programs with flag to indicate if we return or not inactive catalog descriptions 
+     */
+    public List<CatalogDescription> getAllCatalogDescriptionsForCertificate(boolean showInactives);
 
         
     /**

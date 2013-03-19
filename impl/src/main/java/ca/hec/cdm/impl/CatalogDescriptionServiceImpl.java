@@ -30,34 +30,52 @@ public class CatalogDescriptionServiceImpl implements CatalogDescriptionService 
 	return catalogDescriptionDao.getCatalogDescription(course_id);
     }
 
-
-    public List<CatalogDescription> getCatalogDescriptionsByDepartment(String department){
-	return catalogDescriptionDao.getCatalogDescriptionsByDepartment(department);
+    public List<CatalogDescription> getCatalogDescriptionsByDepartment(
+	    String department, boolean showInactives) {
+	return catalogDescriptionDao.getCatalogDescriptionsByDepartment(
+		department, showInactives);
     }
-    
-    
-    public List<CatalogDescription> getCatalogDescriptionsByCareer(String career){
+
+    public List<CatalogDescription> getCatalogDescriptionsByDepartment(
+	    String department) {
+	return catalogDescriptionDao
+		.getCatalogDescriptionsByDepartment(department);
+    }
+
+    public List<CatalogDescription> getCatalogDescriptionsByCareer(String career) {
 	return catalogDescriptionDao.getCatalogDescriptionsByCareer(career);
     }
-    
-    public List<CatalogDescription> getCatalogDescriptions(Map<String, String> criteria) {
-  	return catalogDescriptionDao.getCatalogDescriptions(criteria, null);
-     }
-    
-    public List<CatalogDescription> getCatalogDescriptions(Map<String, String> criteria, Map<String, String> searchCriteria) {
-	return catalogDescriptionDao.getCatalogDescriptions(criteria, searchCriteria);
-   }
 
-   public List<CatalogDescription> getAllCatalogDescriptionsForCertificate(){
-       return catalogDescriptionDao.getAllCatalogDescriptionsForCertificate();
-   }
-   
-   public List<CatalogDescription> getAllCatalogDescriptions(){
-       return catalogDescriptionDao.getAllCatalogDescriptions();
-   }
+    public List<CatalogDescription> getCatalogDescriptionsByCareer(
+	    String career, boolean showInactives) {
+	return catalogDescriptionDao.getCatalogDescriptionsByCareer(career, showInactives);
+    }
 
-   
-   
+    public List<CatalogDescription> getCatalogDescriptions(
+	    Map<String, String> criteria) {
+	return catalogDescriptionDao.getCatalogDescriptions(criteria, null);
+    }
+
+    public List<CatalogDescription> getCatalogDescriptions(
+	    Map<String, String> criteria, Map<String, String> searchCriteria) {
+	return catalogDescriptionDao.getCatalogDescriptions(criteria,
+		searchCriteria);
+    }
+
+    public List<CatalogDescription> getAllCatalogDescriptionsForCertificate(
+	    boolean showInactives) {
+	return catalogDescriptionDao
+		.getAllCatalogDescriptionsForCertificate(showInactives);
+    }
+
+    public List<CatalogDescription> getAllCatalogDescriptionsForCertificate() {
+	return catalogDescriptionDao.getAllCatalogDescriptionsForCertificate();
+    }
+
+    public List<CatalogDescription> getAllCatalogDescriptions() {
+	return catalogDescriptionDao.getAllCatalogDescriptions();
+    }
+
     public void updateDescription(CatalogDescription cd)
 	    throws StaleDataException, DatabaseException {
 	try {
@@ -88,7 +106,8 @@ public class CatalogDescriptionServiceImpl implements CatalogDescriptionService 
     }
 
     public List<CatalogDescription> getAllCatalogDescriptionsForCertificatesWithNoDescription() {
-	return catalogDescriptionDao.getAllCatalogDescriptionsForCertificatesWithNoDescription();
+	return catalogDescriptionDao
+		.getAllCatalogDescriptionsForCertificatesWithNoDescription();
     }
-   
+
 }

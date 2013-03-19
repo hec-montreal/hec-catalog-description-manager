@@ -51,6 +51,11 @@ public interface CatalogDescriptionDao {
      */
     public List<CatalogDescription> getCatalogDescriptionsByDepartment(String department);
     
+    /**
+     * Return active catalog descriptions that correspond to the given department with flag to indicate if we return or not inactive catalog descriptions     
+     */
+    public List<CatalogDescription> getCatalogDescriptionsByDepartment(String department, boolean showInactives);
+    
     
     /**
      * Return active catalog descriptions that correspond to the given academic career
@@ -59,6 +64,11 @@ public interface CatalogDescriptionDao {
      * @return - the list of CatalogDescription
      */
     public List<CatalogDescription> getCatalogDescriptionsByCareer(String career);
+    
+    /**
+     * Return active catalog descriptions that correspond to the given academic career with flag to indicate if we return or not inactive catalog descriptions
+     */
+    public List<CatalogDescription> getCatalogDescriptionsByCareer(String career, boolean showInactives);
     
     
     /**
@@ -69,6 +79,12 @@ public interface CatalogDescriptionDao {
      */
     
     public List<CatalogDescription> getAllCatalogDescriptionsForCertificate();
+    
+    /**
+     * Return all active catalog descriptions for certificates programs  with flag to indicate if we return or not inactive catalog descriptions
+     */
+    
+    public List<CatalogDescription> getAllCatalogDescriptionsForCertificate(boolean showInactives);
     
     
     /**

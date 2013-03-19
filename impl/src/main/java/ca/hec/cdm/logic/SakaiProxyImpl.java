@@ -119,7 +119,7 @@ public class SakaiProxyImpl implements SakaiProxy {
     }
 
     
-    public List<CatalogDescription> getCatalogDescriptionsForUser() {
+    public List<CatalogDescription> getCatalogDescriptionsForUser(boolean showInactives) {
 	
 	List<CatalogDescription> catalogDescriptions = null;
     	
@@ -142,10 +142,10 @@ public class SakaiProxyImpl implements SakaiProxy {
 		    // if this is a certificate secretary : special case
 		    if (deptId.equals(CERTIFICATE_DEPARTMENT_ID)) {
 			catalogDescriptions.addAll(catalogDescriptionService
-				.getAllCatalogDescriptionsForCertificate());
+				.getAllCatalogDescriptionsForCertificate(showInactives));
 		    } else {
 			catalogDescriptions
-				.addAll(getCatalogDescriptionsForDepartment(deptId));
+				.addAll(getCatalogDescriptionsForDepartment(deptId, showInactives));
 		    }
 
 		}// end for
@@ -199,12 +199,12 @@ public class SakaiProxyImpl implements SakaiProxy {
     }
    
     
-    private List<CatalogDescription> getCatalogDescriptionsForDepartment(String deptId){
+    private List<CatalogDescription> getCatalogDescriptionsForDepartment(String deptId, boolean showInactives){
 	
 	//convert the department id into an academic department code
 	String depCode = getDepartmentIdMap().get(deptId);
 	
-	return catalogDescriptionService.getCatalogDescriptionsByDepartment((depCode==null)?"":depCode);
+	return catalogDescriptionService.getCatalogDescriptionsByDepartment((depCode==null)?"":depCode, showInactives);
     }
     
     

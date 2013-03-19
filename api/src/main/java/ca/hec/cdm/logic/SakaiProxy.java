@@ -48,7 +48,7 @@ public interface SakaiProxy {
 	 * get the list of catalogDescription for current user
 	 * @return - the list of catalog descriptions for the current user
 	 */
-	public List<CatalogDescription> getCatalogDescriptionsForUser();
+	public List<CatalogDescription> getCatalogDescriptionsForUser(boolean showInactives);
 	
 	/**
 	 * get catalogDescription

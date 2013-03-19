@@ -48,7 +48,7 @@ function initDescriptionTable() {
 	$("td:nth-child(3):contains('true')").wrapInner("<span  class=\"hidden_description_flag\"></span>");
 
 	$("td:nth-child(3):contains('false')").addClass("td_image_description_false");
-	$("td:nth-child(3):contains('false')").wrapInner("<span  class=\"hidden_description_flag\"></span>");
+	$("td:nth-child(3):contains('false')").wrapInner("<span  class=\"hidden_description_flag\"></span>");	
 }
 
 /* Save a catalog description */

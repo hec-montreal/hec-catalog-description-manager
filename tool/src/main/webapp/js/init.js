@@ -47,12 +47,18 @@ $(document).ready(function() {
 		"sPaginationType" : "full_numbers",
 		"bDestroy" : true,
 		"bAutoWidth": false,
+		"sDom": '<"H"lf<"#showInactives_checkbox_div" and ">r>t<"F"ip>',
 		"fnServerData" : function(sSource, aoData, fnCallback) {
+			var showInactives = $("#showInactives_checkbox").prop("checked");
+			if (!showInactives){
+				showInactives = "false";
+			}
+			var data_string = 'showInactives=' + showInactives;
 			$.ajax({
 				"dataType" : 'json',
 				"type" : "POST",
 				"url" : sSource,
-				"data" : aoData,
+				"data" : data_string,
 				"success" : fnCallback,
 				"error" : function(xhr, ajaxOptions, thrownError) {
 					var genericError = $('#genericError').val();
@@ -84,7 +90,15 @@ $(document).ready(function() {
 		 * - with an alert image if description is null
 		 */
 		"fnInitComplete" : function(oSettings, json) {
-			initDescriptionTable();
+			initDescriptionTable();			
+			
+			// we add the "inactive check box" to the table header 
+			$("#showInactives_checkbox_div").html("<input type=\"checkbox\" id=\"showInactives_checkbox\"><span>" + messageBundle["table_showInactives_checkbox"] + "</span>");
+			$('#showInactives_checkbox').on("click", function(event) {
+				oTable.fnReloadAjax(null, function() {
+							initDescriptionTable();
+						}, null);
+			});
 		},
 		"fnDrawCallback" : function(oSettings, json) {
 			initDescriptionTable();
@@ -115,6 +129,15 @@ $('#catalog_description_table').on("click", "tbody tr", function(event) {
 	$('#course_id').val(id_row);
 	openDialogCatalogDescriptionCurrentRow(id_row);
 });
+
+$('#showInactives_checkbox').on("click", function(event) {
+
+	oTable.fnReloadAjax(null, function() {
+				initDescriptionTable();
+			}, null);
+});
+
+
 
 /***************************** Binding 'click' event on table buttons (save and cancel) **********************************/
 $("#save_button").on("click", function(event) {
