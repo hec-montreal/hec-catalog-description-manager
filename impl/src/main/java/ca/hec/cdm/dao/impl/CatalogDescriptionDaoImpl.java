@@ -273,14 +273,16 @@ public class CatalogDescriptionDaoImpl extends HibernateDaoSupport implements
 	//unless we explicitly set the property to "true", we will retrieve only active descriptions
 	if (! ("true".equals(criteria.get("showInactives")))){
 	    dc.add(Restrictions.eq("active", true));
-	}			
+	}
 
 	for (Map.Entry<String, String> entry : criteria.entrySet()) {
 	    // comma separated values
 	    String values = entry.getValue();
 
-	    if (values != null)
+	    if (!("showInactives".equals(entry.getKey())) && values != null){
 		dc.add(Restrictions.in(entry.getKey(), Arrays.asList(values.split(","))));
+	    }
+		
 	}
 
 	for (Object o : getHibernateTemplate().findByCriteria(dc)) {
