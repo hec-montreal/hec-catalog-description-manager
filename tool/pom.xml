@@ -30,11 +30,12 @@
 		<dependency>
 			<groupId>org.springframework</groupId>
 			<artifactId>spring-web</artifactId>
-			<scope>compile</scope>
+			<version>${sakai.spring.version}</version>	
 		</dependency>
 		<dependency>
 			<groupId>org.springframework</groupId>
 			<artifactId>spring-webmvc</artifactId>
+			<version>${sakai.spring.version}</version>			
 			<scope>compile</scope>
 		</dependency>
 		<dependency>
