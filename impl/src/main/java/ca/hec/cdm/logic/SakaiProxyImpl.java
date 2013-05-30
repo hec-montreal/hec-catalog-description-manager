@@ -1,6 +1,7 @@
 package ca.hec.cdm.logic;
 
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -180,11 +181,10 @@ public class SakaiProxyImpl implements SakaiProxy {
 		    }
 		}
 		else{
-		    String depCode = getDepartmentIdMap().get(deptId);
-		    
-		    if(depCode.equals(cd.getDepartment())){
-			isAllowed = true;
-			break;
+		    List<String> depCodes = getDepartmentCodes(deptId);
+		    if(depCodes.contains(cd.getDepartment())){
+		    	isAllowed = true;
+		    	break;
 		    }
 		}
 		
@@ -200,11 +200,15 @@ public class SakaiProxyImpl implements SakaiProxy {
    
     
     private List<CatalogDescription> getCatalogDescriptionsForDepartment(String deptId, boolean showInactives){
-	
-	//convert the department id into an academic department code
-	String depCode = getDepartmentIdMap().get(deptId);
-	
-	return catalogDescriptionService.getCatalogDescriptionsByDepartment((depCode==null)?"":depCode, showInactives);
+
+		// convert the department id into an academic department code
+		// il est possible de passer plusieurs départements séparés par des virgules 
+		String depCodes = serverConfigurationService.getString("poste.actif." + deptId);
+		if (depCodes == null) {
+			depCodes = "";
+		}
+		
+		return catalogDescriptionService.getCatalogDescriptionsByDepartment(depCodes, showInactives);
     }
     
     
@@ -227,40 +231,16 @@ public class SakaiProxyImpl implements SakaiProxy {
 	return posteSplit[4];
     }
     
-    
-    private HashMap<String, String> getDepartmentIdMap(){
+    /**
+     * Retourne la liste des services d'enseignement associés à un numéro de poste actif
+     * @param posteActif
+     * @return liste de services d'enseignement
+     */
+    private List<String> getDepartmentCodes(String posteActif){
 	
-	if(departmentIdMap==null){
-	    departmentIdMap = new HashMap<String, String>();
+	   return Arrays.asList(serverConfigurationService.getString("poste.actif." + posteActif).split(","));
 	    
-	    departmentIdMap.put("112", "BAA");
-	    departmentIdMap.put("120", "BUR.REGIST");
-	    departmentIdMap.put(CERTIFICATE_DEPARTMENT_ID, "CERTIFICAT");
-	    departmentIdMap.put("118", "DIPLOMES");
-	    departmentIdMap.put("116", "DOCTORAT");
-	    departmentIdMap.put("117", "MSC");
-	    departmentIdMap.put("103", "FINANCE");
-	    departmentIdMap.put("102", "GRH");
-	    departmentIdMap.put("107", "IEA");
-	    departmentIdMap.put("109", "MARKETING");
-	    departmentIdMap.put("113", "MBA");
-	    departmentIdMap.put("105", "MNGT");
-	    departmentIdMap.put("101", "MQG");
-	    departmentIdMap.put("119", "QUAL.COMM.");
-	    departmentIdMap.put("106", "SC.COMPT.");
-	    departmentIdMap.put("108", "TI");
-	    departmentIdMap.put("110", "DIR.PROG.");
-	    departmentIdMap.put("186", "INTERNAT");
-	    departmentIdMap.put("104", "GOL");
-	    departmentIdMap.put("152", "P.ETUD.SUP");
-	    
-	    // les employees de Formation cadres international
-	    // ont besoin acces au cours de la direction DES
-	    departmentIdMap.put("216", "DIPLOMES");
 	}
-	
-	return departmentIdMap;
-    }
     
     private String getCurrentUserDisplayName() {
     	return userDirectoryService.getCurrentUser().getDisplayName();
