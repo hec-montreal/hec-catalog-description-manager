@@ -19,7 +19,6 @@ import org.apache.commons.logging.LogFactory;
 import org.sakaiproject.util.ResourceLoader;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
-import ca.hec.cdm.exception.DatabaseException;
 import ca.hec.cdm.exception.StaleDataException;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
@@ -58,7 +57,8 @@ public class CatalogDescriptionController {
     @RequestMapping(value = "/save.json", method = RequestMethod.POST)
     public ModelAndView saveCatalogDescription(HttpServletRequest request,
 	    HttpServletResponse response) throws Exception {
-    	
+
+    	CatalogDescription cd = null;
     	String description = request.getParameter("description");
     	// last_modified_date is important for hibernate optimistic locking
     	String last_modified_date = request.getParameter("last_modified_date");
@@ -69,7 +69,7 @@ public class CatalogDescriptionController {
     	String returnStatus = null;
 
     	try {
-    		CatalogDescription cd = sakaiProxy.getCatalogDescriptionById(id_long);
+    		cd = sakaiProxy.getCatalogDescriptionById(id_long);
     		cd.setDescription(description);
     		cd.setLastModifiedDate(df.parse(last_modified_date));
     		
@@ -78,13 +78,14 @@ public class CatalogDescriptionController {
    			returnMessage = msgs.getFormattedMessage("message_sav_ok", argsMessage);
    			returnStatus = "success";
     	}
-    	catch (StaleDataException e) {	
-	    	log.error("Exception while saving catalog description: " + e);
+    	catch (StaleDataException e) {
+	    	log.error("StaleDataException while saving catalog description: " + cd.getCourseId());
     		returnMessage = msgs.getString("message_sav_stale");
     		returnStatus = "failure";
     	}
     	catch (Exception e) {
-	    	log.error("Exception while saving catalog description: " + e);
+	    	log.error("Exception while saving catalog description");
+	    	e.printStackTrace();
     		returnMessage = msgs.getString("message_sav_nok");
     		returnStatus = "failure";
     	}

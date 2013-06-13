@@ -160,9 +160,12 @@ public class SakaiProxyImpl implements SakaiProxy {
     
     
     private boolean isUserUpdateAllowed(CatalogDescription cd){
-	
-	boolean isAllowed = false;
-	
+
+    if(isSuperUser()){
+    	return true;
+    }
+
+    boolean isAllowed = false;
 	List<String> posteActifs = getLDAPPosteActif();
 
 	// posteActifs is null if the property is not present
@@ -190,11 +193,7 @@ public class SakaiProxyImpl implements SakaiProxy {
 		
 	    }//end for
 	}
-	
-	if(isSuperUser()){
-	    isAllowed = true; 
-	}
-		
+
 	return isAllowed;
     }
    
