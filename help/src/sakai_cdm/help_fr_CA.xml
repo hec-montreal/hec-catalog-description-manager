@@ -1,19 +1,39 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!DOCTYPE beans PUBLIC "-//SPRING//DTD BEAN//EN" "http://www.springframework.org/dtd/spring-beans.dtd">
 <beans>
-  
-    <bean id="org.sakaiproject.api.app.help.TableOfContents" class="org.sakaiproject.component.app.help.model.TableOfContentsBean">
-        <property name="name">
-            <value>root</value>
-        </property>
-        <property name="categories">
-            <list>
-                <bean id="cdmCategory" class="org.sakaiproject.component.app.help.model.CategoryBean">
-                    <property name="name">
-                        <value>Gestionnaire de description annuaire</value>
-                    </property>
-                </bean>
-            </list>
-        </property>
-    </bean>
+	<bean id="cdmHelp" class="org.sakaiproject.component.app.help.model.ResourceBean">
+		<property name="docId">
+			<value>cdm_fr_ca</value>
+		</property>
+		<property name="name">
+			<value>Aide</value>
+		</property>
+		<property name="location">
+			<value>/sakai_cdm/cdm_fr_CA.html</value>
+		</property>
+		<property name="defaultForTool">
+			<value>sakai.cdm</value>
+		</property>
+	</bean>
+	<bean id="org.sakaiproject.api.app.help.TableOfContents"
+		class="org.sakaiproject.component.app.help.model.TableOfContentsBean">
+		<property name="name">
+			<value>root</value>
+		</property>
+		<property name="categories">
+			<list>
+				<bean id="cdmCategory"
+					class="org.sakaiproject.component.app.help.model.CategoryBean">
+					<property name="name">
+						<value>Gestionnaire de description annuaire</value>
+					</property>
+					<property name="resources">
+						<list>
+							<ref bean="cdmHelp" />
+						</list>
+					</property>
+				</bean>
+			</list>
+		</property>
+	</bean>
 </beans>
