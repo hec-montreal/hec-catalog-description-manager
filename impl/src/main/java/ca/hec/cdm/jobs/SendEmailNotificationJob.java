@@ -160,6 +160,7 @@ public class SendEmailNotificationJob implements Job {
 
 	    List<EmailAddress> ccList = new ArrayList<EmailAddress>();
 	    ccList.add(new EmailAddress(getZoneCours2EMail()));
+	    ccList.addAll(getCCAddresses());
 	    message.setRecipients(RecipientType.CC, ccList);
 
 	    // print the email in the log
@@ -184,4 +185,17 @@ public class SendEmailNotificationJob implements Job {
 	return ServerConfigurationService.getString("mail.zc2");
     }
 
+    private List<EmailAddress> getCCAddresses(){
+    	List<EmailAddress> ccList = new ArrayList<EmailAddress>();
+    	String addresses = ServerConfigurationService.getString("recipientCCAdress");
+    	
+    	if (addresses == null)
+    		return new ArrayList<EmailAddress>();
+    	String [] add = addresses.split(",");
+    	for (int i=0; i<add.length; i++){
+    		ccList.add(new EmailAddress(add[i]));
+    	}
+    	
+    	return ccList;
+    }
 }
