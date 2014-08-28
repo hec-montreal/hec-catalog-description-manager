@@ -173,8 +173,15 @@ public class SendEmailNotificationJob implements Job {
 	    try {
 		emailService.send(message);
 	    } catch (Exception e) {
-		log.error("Could not send email to notify empty catalog description to "
-			+ departName + " :" + e);
+			log.error("Could not send email to notify empty catalog description to "
+				+ departName + " :" + e);
+			//SEND MESSAGE TO ZC2 ANYWAY
+			try{
+				toRecipients = new ArrayList<EmailAddress>();
+			    toRecipients.add(new EmailAddress(getZoneCours2EMail()));
+				message.setRecipients(RecipientType.TO, toRecipients);
+				emailService.send(message);
+			} catch (Exception ex){}
 		e.printStackTrace();
 	    }
 	}//end if
