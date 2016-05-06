@@ -19,13 +19,13 @@
 	</bean>
 
 	<!--  create a target bean using the Dao implementation -->
-	<bean id="ca.hec.cdm.CatalogDescriptionDaoTarget" class="ca.hec.cdm.dao.impl.CatalogDescriptionDaoImpl" singleton="true">
+	<bean id="ca.hec.cdm.CatalogDescriptionDaoTarget" class="ca.hec.cdm.dao.impl.CatalogDescriptionDaoImpl" >
 		<property name="sessionFactory" ref="org.sakaiproject.springframework.orm.hibernate.GlobalSessionFactory" />
 		<property name="stopWordList" ref="ca.hec.cdm.util.Stopwords" />
 	</bean>
 	
 	<!--  create a bean for CatalogDescription Quartz job DAO ( accesses materialized views of PeopleSoft database)-->
-	<bean id="ca.hec.cdm.CatalogDescriptionJobDaoTarget" class="ca.hec.cdm.jobs.dao.impl.CatalogDescriptionJobDaoImpl" singleton="true">
+	<bean id="ca.hec.cdm.CatalogDescriptionJobDaoTarget" class="ca.hec.cdm.jobs.dao.impl.CatalogDescriptionJobDaoImpl" >
 		<property name="sessionFactory" ref="org.sakaiproject.springframework.orm.hibernate.GlobalSessionFactory" />
 	</bean>
 		
@@ -33,7 +33,7 @@
 	 and the HBM defined data -->
 	<bean id="ca.hec.cdm.api.CatalogDescriptionDao"
 		class="org.springframework.transaction.interceptor.TransactionProxyFactoryBean"
-		singleton="true">
+		>
 			<property name="transactionManager" ref="org.sakaiproject.springframework.orm.hibernate.GlobalTransactionManager" />
 			<property name="target" ref="ca.hec.cdm.CatalogDescriptionDaoTarget"/>
 			<property name="transactionAttributes">
@@ -47,7 +47,7 @@
 	 and the HBM defined data -->
 	<bean id="ca.hec.cdm.jobs.CatalogDescriptionJobDao"
 		class="org.springframework.transaction.interceptor.TransactionProxyFactoryBean"
-		singleton="true">
+		>
 			<property name="transactionManager" ref="org.sakaiproject.springframework.orm.hibernate.GlobalTransactionManager" />
 			<property name="target" ref="ca.hec.cdm.CatalogDescriptionJobDaoTarget"/>
 			<property name="transactionAttributes">
@@ -61,6 +61,6 @@
 	<bean id="ca.hec.cdm.api.CatalogDescriptionService"
 			class="ca.hec.cdm.impl.CatalogDescriptionServiceImpl"
 			init-method="init"
-			singleton="true">
+			>
  		<property name="catalogDescriptionDao" ref="ca.hec.cdm.api.CatalogDescriptionDao"/>
 	</bean></beans>

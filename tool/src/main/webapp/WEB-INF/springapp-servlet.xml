@@ -28,9 +28,6 @@
 		</property>
 	</bean>
 
-	<bean class="org.springframework.web.servlet.mvc.annotation.DefaultAnnotationHandlerMapping" />
-
-	<bean class="org.springframework.web.servlet.mvc.annotation.AnnotationMethodHandlerAdapter" />
 
 	<bean parent="org.sakaiproject.entitybroker.entityprovider.AbstractEntityProvider" 
 		class="ca.hec.cdm.entityprovider.CatalogDescriptionEntityProviderImpl"/>

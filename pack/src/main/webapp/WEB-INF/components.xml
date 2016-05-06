@@ -48,7 +48,7 @@
 	
 	<bean id="CreateCatalogDescriptionJob"
        class="org.sakaiproject.component.app.scheduler.jobs.SpringJobBeanWrapper"
-       singleton="true" init-method="init">
+        init-method="init">
        <property name="beanId">
           <value>ca.hec.cdm.jobs.CreateCatalogDescriptionJob</value>
        </property>
@@ -62,7 +62,7 @@
     
     <bean id="SendEmailNotificationJob"
        class="org.sakaiproject.component.app.scheduler.jobs.SpringJobBeanWrapper"
-       singleton="true" init-method="init">
+        init-method="init">
        <property name="beanId">
           <value>ca.hec.cdm.jobs.SendEmailNotificationJob</value>
        </property>
@@ -76,7 +76,7 @@
     
      <bean id="ImportZC1CatalogDescriptionJob"
        class="org.sakaiproject.component.app.scheduler.jobs.SpringJobBeanWrapper"
-       singleton="true" init-method="init">
+        init-method="init">
        <property name="beanId">
           <value>ca.hec.cdm.jobs.ImportZC1CatalogDescriptionJob</value>
        </property>
