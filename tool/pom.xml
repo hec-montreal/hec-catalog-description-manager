@@ -17,10 +17,6 @@
 			<id>spring-json</id>
 			<url>http://spring-json.sourceforge.net/repository</url>
 		</repository>
-		<repository>
-			<id>codehaus</id>
-			<url>http://repository.codehaus.org/org/codehaus</url>
-		</repository>
 	</repositories>
 	<dependencies>
 		<dependency>
