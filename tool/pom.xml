@@ -12,12 +12,6 @@
 	<name>catalog-description-manager-tool</name>
 	<version>1.1-SNAPSHOT</version>
 	<packaging>war</packaging>
-	<repositories>
-		<repository>
-			<id>codehaus</id>
-			<url>http://repository.codehaus.org/org/codehaus</url>
-		</repository>
-	</repositories>
 	<dependencies>
 		<dependency>
 			<groupId>org.springframework</groupId>
