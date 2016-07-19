@@ -5,7 +5,7 @@
 <meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
 <link media="all" href="/library/skin/tool_base.css" rel="stylesheet"
 	type="text/css" />
-<link media="all" href="/library/skin/default/tool.css" rel="stylesheet"
+<link media="all" href="/library/skin/morpheus-default/tool.css" rel="stylesheet"
 	type="text/css" />
 <link media="all" href="css/cdm.css" rel="stylesheet"
 	type="text/css" />
