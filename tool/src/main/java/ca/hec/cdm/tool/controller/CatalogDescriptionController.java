@@ -22,6 +22,8 @@ import org.springframework.stereotype.Controller;
 import ca.hec.cdm.exception.StaleDataException;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
+import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.servlet.ModelAndView;
 
 import ca.hec.cdm.logic.SakaiProxy;
@@ -55,14 +57,13 @@ public class CatalogDescriptionController {
      * user It returns a JSON object containing the status of the save opeation.
      */
     @RequestMapping(value = "/save.json", method = RequestMethod.POST)
-    public ModelAndView saveCatalogDescription(HttpServletRequest request,
-	    HttpServletResponse response) throws Exception {
+    public @ResponseBody Map<String, String> saveCatalogDescription(
+    		@RequestParam String description,
+        	// last_modified_date is important for hibernate optimistic locking
+    		@RequestParam String last_modified_date,
+    		@RequestParam String id) throws Exception {
 
     	CatalogDescription cd = null;
-    	String description = request.getParameter("description");
-    	// last_modified_date is important for hibernate optimistic locking
-    	String last_modified_date = request.getParameter("last_modified_date");
-    	String id = request.getParameter("id");
     	Long id_long = Long.decode(id);
 
     	String returnMessage = null;
@@ -94,7 +95,7 @@ public class CatalogDescriptionController {
     	model.put("message", returnMessage);
     	model.put("status", returnStatus);
 
-    	return new ModelAndView("jsonView", model);
+    	return model;
     }
 
     /*
@@ -104,14 +105,14 @@ public class CatalogDescriptionController {
      * populate the table
      */
     @RequestMapping(value = "/list.json")
-    public ModelAndView listCatalogDescription(HttpServletRequest request,
-	    HttpServletResponse response) throws Exception {
+    public @ResponseBody Map<String, Object> listCatalogDescription(
+    		@RequestParam String showInactives) throws Exception {
 
-	boolean showInactives = ("true".equals(request.getParameter("showInactives")));
+	boolean showInactivesBool = ("true".equals(showInactives));
 	
 		
 	List<CatalogDescription> listCd =    			
-    			sakaiProxy.getCatalogDescriptionsForUser(showInactives);
+    			sakaiProxy.getCatalogDescriptionsForUser(showInactivesBool);
 
     	List<Object> tableValue = new ArrayList<Object>();
 
@@ -146,7 +147,7 @@ public class CatalogDescriptionController {
     	model.put("iTotalRecords", listCd.size());
     	model.put("iTotalDisplayRecords", listCd.size());
 
-    	return new ModelAndView("jsonView", model);
+    	return model;
     }
 
     /*
@@ -156,10 +157,8 @@ public class CatalogDescriptionController {
      * associated with the clicked row
      */
     @RequestMapping(value = "/get.json")
-    public ModelAndView getCatalogDescription(HttpServletRequest request,
-	    HttpServletResponse response) throws Exception {
+    public @ResponseBody Map<String, String> getCatalogDescription(@RequestParam String id) throws Exception {
 	
-    	String id = request.getParameter("id");
     	Long id_long = Long.decode(id);
 
     	CatalogDescription cd = sakaiProxy.getCatalogDescriptionById(id_long);
@@ -183,26 +182,21 @@ public class CatalogDescriptionController {
     		model.put("message", msgs.getString("message_get_nok"));
     	}
 
-    	return new ModelAndView("jsonView", model);
+    	return model;
     }
 
     /*
      * Called to get tool bundles (for use in javascript function)
      */
     @RequestMapping(value = "/bundle.json")
-    public ModelAndView getBundle(HttpServletRequest request,
-	    HttpServletResponse response) throws Exception {
+    public @ResponseBody Map<String, String> getBundle() {
 
 	Map<String, String> msgsBundle = new HashMap<String, String>();
 	for (Object key : msgs.keySet()) {
 	    msgsBundle.put((String) key, (String) msgs.get(key));
 	}
 
-	Map<String, Object> model = new HashMap<String, Object>();
-
-	model.put("data", msgsBundle);
-
-	return new ModelAndView("jsonView", model);
+	return msgsBundle;
     }
 
 }
