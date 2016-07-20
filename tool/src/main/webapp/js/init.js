@@ -1,7 +1,6 @@
 /*****************************Initialisation of frame sizes  **********************************/
 var iframeHeight = 500;
 var dialogWidth = $(window).width() * 0.9;
-var dialogHeight = 450;
 var editorHeight = 180;
 
 $(window).resize(function(){
@@ -113,7 +112,7 @@ $("#cdm_editor").dialog({
 	resizable : true,
 	draggable : true,
 	width : dialogWidth,
-	height : dialogHeight,
+	height : "auto",
 	autoResize:true
 });
 $("#save_button").button();
