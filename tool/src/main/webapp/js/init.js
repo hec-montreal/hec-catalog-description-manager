@@ -113,7 +113,10 @@ $("#cdm_editor").dialog({
 	draggable : true,
 	width : dialogWidth,
 	height : "auto",
-	autoResize:true
+	create: function(event, ui){
+        $('.ui-dialog').wrap('<div class="hec-cdm-dialog" />');
+    },
+    autoResize:true
 });
 $("#save_button").button();
 $("#cancel_button").button();

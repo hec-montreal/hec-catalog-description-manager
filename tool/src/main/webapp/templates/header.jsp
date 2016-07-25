@@ -20,4 +20,4 @@
 <title>Sakai-Spring</title>
 </head>
 <body>
-	<div class="portletBody">
+	<div id="hec-catalog-description-manager" class="portletBody">
