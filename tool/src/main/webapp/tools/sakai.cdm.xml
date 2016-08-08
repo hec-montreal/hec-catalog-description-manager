@@ -3,7 +3,7 @@
 	<tool id="sakai.cdm"
 		title="Catalog description manager tool"
 		description="Tools that manages descriptions of catalog courses">
-		<configuration name="help.url" value="https://confluence.hec.ca:8443/display/aidezc2/Gestionnaire+de+descriptions+annuaires"/>
+		<configuration name="help.url" value="https://confluence.hec.ca:8443/display/NouveauCours/Gestionnaire+de+descriptions+annuaires"/>
     </tool>
 </registration>
 
