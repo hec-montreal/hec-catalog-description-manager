@@ -9,7 +9,7 @@
 		<property name="course_title_long" type="string" column="COURSE_TITLE_LONG" length="100" not-null="true"/>
 		<property name="acad_org" type="string" column="ACAD_ORG" length="10"/>
 		<property name="acad_career" type="string" column="ACAD_CAREER" length="4" not-null="true"/>
-		<property name="requirement" type="string" column="DESCRLONG"/>
+		<property name="requirement" type="string" column="REQUIREMENTS"/>
 		<property name="credits" type="float" column="UNITS_MINIMUM" not-null="true"/>
 		<property name="language" type="string" column="N_LANGUE_COURS" length="10"/>
      </class>
