@@ -22,6 +22,9 @@ package ca.hec.cdm.jobs.dao.impl;
 
 import java.util.List;
 
+import org.hibernate.criterion.DetachedCriteria;
+import org.hibernate.criterion.Order;
+import org.hibernate.criterion.Restrictions;
 import org.springframework.orm.hibernate3.support.HibernateDaoSupport;
 
 import ca.hec.cdm.jobs.CatalogDescriptionJobDao;
@@ -39,7 +42,26 @@ public class CatalogDescriptionJobDaoImpl  extends HibernateDaoSupport implement
 		
     }
     
-    
+    public CourseOffering getCourseOffering(String catalogNbr) {
+        CourseOffering offering = null;
+
+        // there should only ever be one description, but it can't hurt
+        // to order by db id.
+        DetachedCriteria dc =
+                DetachedCriteria
+                        .forClass(CourseOffering.class)
+                        .add(Restrictions.eq("catalogNbr",
+                                catalogNbr.toUpperCase()))
+                        .addOrder(Order.desc("id"));
+
+        List offList = getHibernateTemplate().findByCriteria(dc);
+
+        if (offList != null && offList.size() != 0) {
+            offering = (CourseOffering) offList.get(0);
+        }
+
+        return offering;
+    }
 
 }
 

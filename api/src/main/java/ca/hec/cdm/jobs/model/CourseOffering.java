@@ -32,7 +32,9 @@ public class CourseOffering implements Comparable<Object>{
     private String requirement;
     private Float credits;
     private String language;
-    
+    private String shortDescription;
+    private String longDescription;
+    private String themes;
     
     public int compareTo(Object o) {
 	// TODO Auto-generated method stub

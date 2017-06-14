@@ -33,5 +33,7 @@ public interface CatalogDescriptionJobDao {
     
     public List<CourseOffering> getListCourseOffering();
 
+    public CourseOffering getCourseOffering(String catalogNbr);
+
 }
 
