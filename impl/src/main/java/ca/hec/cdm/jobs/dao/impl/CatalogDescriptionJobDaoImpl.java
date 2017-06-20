@@ -50,9 +50,8 @@ public class CatalogDescriptionJobDaoImpl  extends HibernateDaoSupport implement
         DetachedCriteria dc =
                 DetachedCriteria
                         .forClass(CourseOffering.class)
-                        .add(Restrictions.eq("catalogNbr",
-                                catalogNbr.toUpperCase()))
-                        .addOrder(Order.desc("id"));
+                        .add(Restrictions.eq("catalog_nbr",
+                                catalogNbr.toUpperCase()));
 
         List offList = getHibernateTemplate().findByCriteria(dc);
 
